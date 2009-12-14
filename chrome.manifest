@@ -1,0 +1,6 @@
+content wat jar:chrome/wat.jar!/content/
+overlay chrome://messenger/content/messenger.xul chrome://wat/content/windowOverlay.xul
+# overlay chrome://messenger/content/mailWindowOverlay.xul chrome://wat/content/windowOverlay.xul
+locale	wat en-US       jar:chrome/wat.jar!/locale/en-US/
+locale	wat ja          jar:chrome/wat.jar!/locale/ja/
+skin    wat classic/1.0 jar:chrome/wat.jar!/skin/

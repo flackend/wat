@@ -1,0 +1,7 @@
+<!ENTITY wat.menu.label "WAT">
+<!ENTITY wat.addon.label "Addon">
+<!ENTITY wat.jsConsole.label "ErrorConsole">
+<!ENTITY wat.aboutConfig.label "about:config">
+<!ENTITY wat.option.label "Option">
+<!ENTITY wat.dialog.title "WAT Option">
+

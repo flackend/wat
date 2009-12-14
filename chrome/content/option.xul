@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+lisence MPL 1.1/GPL 2.0/LGPL 2.1
+-->
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://wat/skin/wat.css" type="text/css"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://wat/locale/wat.dtd">
+
+<dialog id="watDialog"
+        title="&wat.dialog.title;"
+        buttons="accept,cancel"
+        ondialogaccept="return wat.commit();"
+        ondialogcancel="return wat.cancel();"
+        onload="wat.init();"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script type="application/x-javascript" src="chrome://wat/content/watOption.js"/>
+</dialog>
+<!--
+vim: sw=2 ts=2 et:
+-->
