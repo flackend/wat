@@ -47,7 +47,7 @@ let WAT = (function(){
       args[pageName + "Page"] = url;
       if (pageName == "content"){
         let uri = makeURI(url, null, null);
-        let reg = new RegExp("^" + uri.prePath.replace(/\./g, "\\."));
+        let reg = new RegExp("^" + uri.prePath.replace(/\./g, "\\.") + "($|/)");
         args.clickHandler = function contentClickHandler(aEvent){
           specialTabs.siteClickHandler(aEvent, reg);
         }
