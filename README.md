@@ -41,7 +41,7 @@ Get Start
 ScreenShots
 -----------
 
- * ![WAT ContextMenu on Link](./raw/img/master/wat_contextmenu.png)
- * ![WAT ToolbarMenu](./raw/img/master/wat_menu.png)
- * ![WAT OptionWindow](./raw/img/master/wat_option.png)
+ * ![WAT ContextMenu on Link](http://github.com/teramako/wat/raw/master/img/wat_contextmenu.png)
+ * ![WAT ToolbarMenu](http://github.com/teramako/wat/raw/master/img/wat_menu.png)
+ * ![WAT OptionWindow](http://github.com/teramako/wat/raw/master/img/wat_option.png)
   
