@@ -15,7 +15,7 @@ lisence MPL 1.1/GPL 2.0/LGPL 2.1
 <vbox flex="1">
   <separator class="thin"/>
   <hbox>
-    <label value="Version: 0.1a"/>
+    <label value="Version: ####VERSION####"/>
     <vbox flex="1">
       <grid flex="1">
         <columns>

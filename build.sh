@@ -3,28 +3,34 @@
 ZIP=zip
 JAR=wat.jar
 VERSION=0.1a
-
+TMPDIR=tmp
 XPI=wat-${VERSION}.xpi
-# make jar
-if [ -f "chrome/${JAR}" ];then
-	rm chrome/${JAR}
+
+if [ -d ${TMPDIR} ];then
+	rm -rf ${TMPDIR}
 fi
+mkdir ${TMPDIR}
+cp -pr chrome defaults chrome.manifest install.rdf license.txt ${TMPDIR}
+
+echo "replacing ####VERSION#### to $VERSION"
+find ${TMPDIR} -type f | xargs perl -i.bk -pe 's/####VERSION####/'${VERSION}'/g'
+find ${TMPDIR} -type f -name "*.bk" | xargs rm
+
 echo "creating ${JAR}"
-(cd chrome; zip ${JAR} -r content locale skin;)
+(cd tmp/chrome; zip ${JAR} -r content locale skin;)
 
 if [ -f ${XPI} ];then
 	rm ${XPI}
 fi
 
-PREF=`find defaults -type d -o -name "*.js"`
+PREF=`(cd tmp; find defaults -type d -o -name "*.js";)`
 
 echo "creating ${XPI}"
-zip -2 ${XPI} \
+(cd ${TMPDIR}; zip -2 ../${XPI} \
 	chrome \
 	chrome/${JAR} \
 	chrome.manifest \
 	${PREF} \
 	install.rdf \
-	license.txt
-
+	license.txt;)
 

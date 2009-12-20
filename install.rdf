@@ -2,7 +2,7 @@
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
   <Description about="urn:mozilla:install-manifest">
     <em:name>WAT</em:name>
-    <em:version>0.1a</em:version>
+    <em:version>####VERSION####</em:version>
     <em:description>Web Application Tab for Thunderbird</em:description>
     <em:creator>teramako</em:creator>
     <em:id>wat@teramako</em:id>
