@@ -11,6 +11,6 @@
 <!ENTITY wat.option.button.delete "Delete">
 <!ENTITY wat.option.button.up "Up">
 <!ENTITY wat.option.button.down "Down">
-<!ENTITY wat.openURL.label "Open in tab">
+<!ENTITY wat.openURL.label "Open URL in tab">
 <!ENTITY wat.openURL.acceptButton.label "Open">
 
