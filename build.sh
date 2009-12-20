@@ -16,7 +16,6 @@ if [ -f ${XPI} ];then
 	rm ${XPI}
 fi
 
-JSM=`find modules -type d -o -name "*.jsm" `
 PREF=`find defaults -type d -o -name "*.js"`
 
 echo "creating ${XPI}"
@@ -24,7 +23,6 @@ zip -2 ${XPI} \
 	chrome \
 	chrome/${JAR} \
 	chrome.manifest \
-	${JSM} \
 	${PREF} \
 	install.rdf \
 	license.txt
