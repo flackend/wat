@@ -17,6 +17,18 @@ let WAT = (function(){
     popupElm = document.getElementById("wat_menuPopup");
     menuSep = document.getElementById("wat_menu_sep");
     self.regenerateMenu();
+
+    let openTabMenu = document.getElementById("wat_openNewTabMenu");
+    document.getElementById("mailContext").addEventListener("popupshowing", function(evt){
+      let xulMenu = evt.target;
+      let target = document.popupNode;
+      if (target instanceof HTMLAnchorElement){
+        openTabMenu.removeAttribute("hidden");
+      } else {
+        openTabMenu.setAttribute("hidden", "true");
+      }
+      return true;
+    },false);
   }
   function removeAllElementUntilSep(parentElm, sepId){
     for (let i=0, len=parentElm.childNodes.length; i<len; i++){
@@ -30,7 +42,7 @@ let WAT = (function(){
   let self = {
     tabMail: null,
     openTab: function WAT_openTab (url){
-      let pageName = (url.indexOf("chrome://") == 0) ? "chrome" : "content";
+      let pageName = (url.indexOf("chrome://") == 0 || url.indexOf("about:") == 0) ? "chrome" : "content";
       let args = {};
       args[pageName + "Page"] = url;
       return this.tabMail.openTab(pageName + "Tab", args);
@@ -50,7 +62,13 @@ let WAT = (function(){
         menuitem.setAttribute("oncommand", "WAT.openTab('" + page.url + "')");
         popupElm.insertBefore(menuitem, menuSep);
       });
-    }
+    },
+    onOpenNewTab: function WAT_onOpenNewTab(){
+      let target = document.popupNode;
+      if (target instanceof HTMLAnchorElement && target.href){
+        this.openTab(target.href);
+      }
+    },
   };
   window.addEventListener("load", init, false);
   return self;

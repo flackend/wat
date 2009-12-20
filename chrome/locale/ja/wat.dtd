@@ -2,6 +2,7 @@
 <!ENTITY wat.addon.label "アドオン">
 <!ENTITY wat.jsConsole.label "エラーコンソール">
 <!ENTITY wat.aboutConfig.label "about:config">
+<!ENTITY wat.openNewTab.label "タブに開く">
 <!ENTITY wat.option.label "設定">
 <!ENTITY wat.option.window.title "WAT設定">
 <!ENTITY wat.option.pagename.label "ページ名">

@@ -15,8 +15,17 @@
              oncommand="WAT.openTab('chrome://global/content/config.xul')"/>
     <command id="wat_OptionCmd"
              oncommand="WAT.openTab('chrome://wat/content/option.xul')"/>
+    <command id="wat_openNewTabCmd"
+             oncommand="WAT.onOpenNewTab()"/>
   </commandset>
 </commandset>
+<popup id="mailContext">
+  <menuitem id="wat_openNewTabMenu"
+            label="Open in New Tab"
+            command="&wat.openNewTab.label;"
+            hidden="true"
+            insertafter="mailContext-openInBrowser"/>
+</popup>
 <menubar id="mail-menubar">
   <menu id="wat_menu_Tab"
         label="&wat.menu.label;"
