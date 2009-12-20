@@ -14,8 +14,9 @@ lisence MPL 1.1/GPL 2.0/LGPL 2.1
 <script type="application/x-javascript" src="chrome://wat/content/option.js"/>
 <vbox flex="1">
   <separator class="thin"/>
+  <label value="Version: ####VERSION####"/>
+  <separator class="thin"/>
   <hbox>
-    <label value="Version: ####VERSION####"/>
     <vbox flex="1">
       <grid flex="1">
         <columns>
