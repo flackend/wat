@@ -43,5 +43,6 @@ ScreenShots
 
  * ![WAT ContextMenu on Link](http://github.com/teramako/wat/raw/master/img/wat_contextmenu.png)
  * ![WAT ToolbarMenu](http://github.com/teramako/wat/raw/master/img/wat_menu.png)
+   ![WAT OpenURLDialog](http://github.com/teramako/wat/raw/master/img/wat_openurl.png)
  * ![WAT OptionWindow](http://github.com/teramako/wat/raw/master/img/wat_option.png)
   
