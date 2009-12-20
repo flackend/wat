@@ -3,7 +3,6 @@
 <!ENTITY wat.jsConsole.label "ErrorConsole">
 <!ENTITY wat.aboutConfig.label "about:config">
 <!ENTITY wat.openNewTab.label "Open in new tab">
-<!ENTITY wat.openURL.label "Open URL in tab">
 <!ENTITY wat.option.label "Option">
 <!ENTITY wat.option.window.title "WAT Option">
 <!ENTITY wat.option.pagename.label "PageName">

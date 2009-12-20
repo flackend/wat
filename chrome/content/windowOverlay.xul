@@ -23,8 +23,8 @@
 </commandset>
 <popup id="mailContext">
   <menuitem id="wat_openNewTabMenu"
-            label="Open in New Tab"
-            command="&wat.openNewTab.label;"
+            label="&wat.openNewTab.label;"
+            command="wat_openNewTabCmd"
             hidden="true"
             insertafter="mailContext-openInBrowser"/>
 </popup>
