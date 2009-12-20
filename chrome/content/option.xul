@@ -13,6 +13,7 @@ lisence MPL 1.1/GPL 2.0/LGPL 2.1
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 <script type="application/x-javascript" src="chrome://wat/content/option.js"/>
 <vbox flex="1">
+  <separator class="thin"/>
   <hbox>
     <vbox flex="1">
       <grid flex="1">
@@ -40,6 +41,7 @@ lisence MPL 1.1/GPL 2.0/LGPL 2.1
   <hbox>
     <label id="statusLabel" value="" flex="1" class="error"/>
   </hbox>
+  <separator class="thin"/>
   <hbox flex="1">
     <hbox flex="1">
       <listbox id="pageListBox"
