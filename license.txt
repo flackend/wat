@@ -14,7 +14,7 @@ The following license applies to all code files:
  * for the specific language governing rights and limitations under the
  * License.
  * 
- * The Original Code is Tag Dialog.
+ * The Original Code is WAT
  *
  * The Initial Developer of the Original Code is
  * teramako <teramako@gmail.com>.
