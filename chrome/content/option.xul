@@ -5,17 +5,66 @@ lisence MPL 1.1/GPL 2.0/LGPL 2.1
 <?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
 <?xml-stylesheet href="chrome://wat/skin/wat.css" type="text/css"?>
 
-<!DOCTYPE dialog SYSTEM "chrome://wat/locale/wat.dtd">
+<!DOCTYPE window SYSTEM "chrome://wat/locale/wat.dtd">
 
-<dialog id="watDialog"
-        title="&wat.dialog.title;"
-        buttons="accept,cancel"
-        ondialogaccept="return wat.commit();"
-        ondialogcancel="return wat.cancel();"
+<window id="watDialog"
+        title="&wat.option.window.title;"
         onload="wat.init();"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-  <script type="application/x-javascript" src="chrome://wat/content/watOption.js"/>
-</dialog>
+<script type="application/x-javascript" src="chrome://wat/content/option.js"/>
+<vbox flex="1">
+  <hbox>
+    <vbox flex="1">
+      <grid flex="1">
+        <columns>
+          <column/>
+          <column flex="1"/>
+        </columns>
+        <rows>
+          <row>
+            <label value="&wat.option.pagename.label;"/>
+            <textbox id="siteNameTextBox" multiline="false" oninput="wat.onInput()"/>
+          </row>
+          <row>
+            <label value="&wat.option.pageurl.label;"/>
+            <textbox id="urlTextBox" multiline="false" oninput="wat.onInput()"/>
+          </row>
+        </rows>
+      </grid>
+    </vbox>
+    <vbox>
+      <button id="addButton" label="&wat.option.button.add;" oncommand="wat.add()" disabled="true"/>
+      <spacer flex="1"/>
+    </vbox>
+  </hbox>
+  <hbox>
+    <label id="statusLabel" value="" flex="1" class="error"/>
+  </hbox>
+  <hbox flex="1">
+    <hbox flex="1">
+      <listbox id="pageListBox"
+               seltype="single"
+               onselect="wat.onSelect()"
+               flex="1">
+        <listhead>
+          <listheader label="&wat.option.pagename.label;"/>
+          <listheader label="&wat.option.pageurl.label;"/>
+        </listhead>
+        <listcols>
+          <listcol flex="1"/>
+          <listcol flex="2"/>
+        </listcols>
+      </listbox>
+    </hbox>
+    <vbox>
+      <button id="deleteButton" label="&wat.option.button.delete;" oncommand="wat.delete()"     disabled="true"/>
+      <button id="upButton"     label="&wat.option.button.up;"     oncommand="wat.move('up')"   disabled="true"/>
+      <button id="downButton"   label="&wat.option.button.down;"   oncommand="wat.move('down')" disabled="true"/>
+      <spacer flex="1"/>
+    </vbox>
+  </hbox>
+</vbox>
+</window>
 <!--
 vim: sw=2 ts=2 et:
 -->

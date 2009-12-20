@@ -3,5 +3,11 @@
 <!ENTITY wat.jsConsole.label "エラーコンソール">
 <!ENTITY wat.aboutConfig.label "about:config">
 <!ENTITY wat.option.label "設定">
-<!ENTITY wat.dialog.title "WAT設定">
+<!ENTITY wat.option.window.title "WAT設定">
+<!ENTITY wat.option.pagename.label "ページ名">
+<!ENTITY wat.option.pageurl.label "URL">
+<!ENTITY wat.option.button.add "追加">
+<!ENTITY wat.option.button.delete "削除">
+<!ENTITY wat.option.button.up "上へ">
+<!ENTITY wat.option.button.down "下へ">
 

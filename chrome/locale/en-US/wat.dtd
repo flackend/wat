@@ -3,5 +3,11 @@
 <!ENTITY wat.jsConsole.label "ErrorConsole">
 <!ENTITY wat.aboutConfig.label "about:config">
 <!ENTITY wat.option.label "Option">
-<!ENTITY wat.dialog.title "WAT Option">
+<!ENTITY wat.option.window.title "WAT Option">
+<!ENTITY wat.option.pagename.label "PageName">
+<!ENTITY wat.option.pageurl.label "URL">
+<!ENTITY wat.option.button.add "Add">
+<!ENTITY wat.option.button.delete "Delete">
+<!ENTITY wat.option.button.up "Up">
+<!ENTITY wat.option.button.down "Down">
 

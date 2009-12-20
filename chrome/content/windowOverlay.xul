@@ -8,13 +8,13 @@
 <commandset id="mailCommands">
   <commandset id="wat_Commands">
     <command id="wat_addonCmd"
-             oncommand="WAT.openTabChrome('chrome://mozapps/content/extensions/extensions.xul')"/>
+             oncommand="WAT.openTab('chrome://mozapps/content/extensions/extensions.xul')"/>
     <command id="wat_jsConsoleCmd"
-             oncommand="WAT.openTabChrome('chrome://global/content/console.xul')"/>
+             oncommand="WAT.openTab('chrome://global/content/console.xul')"/>
     <command id="wat_aboutConfigCmd"
-             oncommand="WAT.openTabChrome('chrome://global/content/config.xul')"/>
+             oncommand="WAT.openTab('chrome://global/content/config.xul')"/>
     <command id="wat_OptionCmd"
-             oncommand="WAT.openOption()"/>
+             oncommand="WAT.openTab('chrome://wat/content/option.xul')"/>
   </commandset>
 </commandset>
 <menubar id="mail-menubar">
@@ -22,7 +22,7 @@
         label="&wat.menu.label;"
         accesskey="W"
         insertbefore="helpMenu">
-    <menupopup id="wat_tabPopup">
+    <menupopup id="wat_menuPopup">
       <menuseparator id="wat_menu_sep"/>
       <menuitem id="wat_addonMenu"
                 label="&wat.addon.label;"
@@ -36,7 +36,7 @@
                 label="&wat.aboutConfig.label;"
                 accesskey="C"
                 command="wat_aboutConfigCmd"/>
-      <menuseparator id="wat_menu_opt"/>
+      <menuseparator id="wat_menu_opt_sep"/>
       <menuitem id="wat_OptionMenu"
                 label="&wat.option.label;"
                 accesskey="O"

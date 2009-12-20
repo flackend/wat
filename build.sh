@@ -2,7 +2,7 @@
 
 ZIP=zip
 JAR=wat.jar
-VERSION=0.1
+VERSION=0.1a
 
 XPI=wat-${VERSION}.xpi
 # make jar
