@@ -17,6 +17,8 @@
              oncommand="WAT.openTab('chrome://wat/content/option.xul')"/>
     <command id="wat_openNewTabCmd"
              oncommand="WAT.onOpenNewTab()"/>
+    <command id="wat_openURLCmd"
+             oncommand="WAT.openURLDialog()"/>
   </commandset>
 </commandset>
 <popup id="mailContext">
@@ -33,6 +35,11 @@
         insertbefore="helpMenu">
     <menupopup id="wat_menuPopup">
       <menuseparator id="wat_menu_sep"/>
+      <menuitem id="wat_quickopenMenu"
+                label="&wat.openURL.label;"
+                accesskey="T"
+                command="wat_openURLCmd"/>
+      <menuseparator/>
       <menuitem id="wat_addonMenu"
                 label="&wat.addon.label;"
                 accesskey="A"

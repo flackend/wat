@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+lisence MPL 1.1/GPL 2.0/LGPL 2.1
+-->
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://wat/skin/wat.css" type="text/css"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://wat/locale/wat.dtd">
+<dialog id="wat_openURL_dialog"
+        title="&wat.openURL.label;"
+        onload="onLoad()"
+        buttonlabelaccept="&wat.openURL.acceptButton.label;"
+        ondialogaccept="return open()"
+        persist="screenX screenY"
+        style="width: 30em;"
+        screenX="24" screenY="24"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<script type="application/x-javascript" src="chrome://wat/content/openURL.js"/>
+<hbox>
+  <separator orient="vertical" class="thin"/>
+  <vbox flex="1">
+    <hbox align="center">
+      <label value="URL:"/>
+      <textbox id="urlTextBox"
+               flex="1"
+               oninput="doEnabing()"/>
+    </hbox>
+    <label value="" id="statusLabel" class="error"/>
+  </vbox>
+</hbox>
+</dialog>
+<!--
+vim: sw=2 ts=2 et:
+-->

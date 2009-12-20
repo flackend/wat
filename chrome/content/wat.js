@@ -69,6 +69,9 @@ let WAT = (function(){
         this.openTab(target.href);
       }
     },
+    openURLDialog: function WAT_openURLDialog(){
+      openDialog("chrome://wat/content/openURL.xul","_blank", "chrome,modal,titlebar", window);
+    }
   };
   window.addEventListener("load", init, false);
   return self;
