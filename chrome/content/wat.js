@@ -45,6 +45,13 @@ let WAT = (function(){
       let pageName = (url.indexOf("chrome://") == 0 || url.indexOf("about:") == 0) ? "chrome" : "content";
       let args = {};
       args[pageName + "Page"] = url;
+      if (pageName == "content"){
+        let uri = makeURI(url, null, null);
+        let reg = new RegExp("^" + uri.prePath.replace(/\./g, "\\."));
+        args.clickHandler = function contentClickHandler(aEvent){
+          specialTabs.siteClickHandler(aEvent, reg);
+        }
+      }
       return this.tabMail.openTab(pageName + "Tab", args);
     },
     regenerateMenu: function WAT_regenerateMenu(){
