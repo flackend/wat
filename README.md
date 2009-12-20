@@ -9,6 +9,13 @@ Requirement
 
  * [Thunderbird > 3.0](http://mozilla.org/thunderbird/)
 
+Features
+--------
+
+ * register Name and URL like bookmark from WAT -> Option
+ * open in tab quickly from WAT -> Open URL in tab
+ * open in tab from link contex menu
+
 License
 -------
 
@@ -20,14 +27,14 @@ Get Start
 ---------
 
  1. Build xpi
- 
-   ``sh build.sh``
+     
+    ``sh build.sh``
 
  2. Install xpi from Addons dialog
-
-   then restart Thunderbird
-   'WAT' toolbar menu apears.
-
+    
+    then restart Thunderbird
+    'WAT' toolbar menu apears.
+    
  3. Resister PageName and URL from WAT -> Option
     which is opened in new tab.
 
