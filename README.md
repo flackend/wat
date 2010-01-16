@@ -23,8 +23,16 @@ License
  * [GPL 2.0](http://www.gnu.org/licenses/gpl-2.0.html)
  * [LGPL 2.1](http://www.gnu.org/licenses/lgpl-2.1.html)
  
-Get Start
----------
+Get Extension
+----------------------
+
+ * From [AMO](https://addons.mozilla.org/en-US/thunderbird)
+   [WAT (WebApplicationTab) :: Add-ons for Thunderbird](https://addons.mozilla.org/ja/thunderbird/addon/55713)
+ * From GitHub
+   [Downloads - GitHub](http://github.com/teramako/wat/downloads)
+
+How to build
+------------
 
  1. Build xpi
      
