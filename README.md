@@ -26,9 +26,9 @@ License
 Get Extension
 ----------------------
 
- * From [AMO](https://addons.mozilla.org/en-US/thunderbird)
-   [WAT (WebApplicationTab) :: Add-ons for Thunderbird](https://addons.mozilla.org/ja/thunderbird/addon/55713)
- * From GitHub
+ * From [AMO](https://addons.mozilla.org/en-US/thunderbird):
+   [WAT (WebApplicationTab) :: Add-ons for Thunderbird](https://addons.mozilla.org/en-US/thunderbird/addon/55713)
+ * From GitHub:
    [Downloads - GitHub](http://github.com/teramako/wat/downloads)
 
 How to build
