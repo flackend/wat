@@ -1,7 +1,7 @@
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
-const ioService = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
+const fixup = Cc["@mozilla.org/docshell/urifixup;1"].getService(Ci.nsIURIFixup);
 let textbox, openButton, statusLabel, win;
 function onLoad(){
   textbox = document.getElementById("urlTextBox");
@@ -11,6 +11,7 @@ function onLoad(){
   win = window.arguments[0];
 
   doEnabing();
+  textbox.focus();
 }
 
 function doEnabing(){
@@ -19,15 +20,17 @@ function doEnabing(){
 }
 
 function open(){
-  let url = textbox.value;
+  let url = textbox.value,
+      uri;
   try {
-    ioService.newURI(url, null, null)
+    uri = fixup.createFixupURI(url, fixup.FIXUP_FLAG_NONE);
   } catch(e){
     statusLabel.value = url + " is invalid";
     return false;
   }
-  win.WAT.openTab(url);
+  win.WAT.openTab(uri.spec);
   window.close();
   return false;
 }
 
+// vim: sw=2 ts=2 et:
