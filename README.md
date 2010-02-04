@@ -15,6 +15,7 @@ Features
  * register Name and URL like bookmark from WAT -> Option
  * open in tab quickly from WAT -> Open URL in tab
  * open in tab from link contex menu
+ * can copy to clipboard the title or the URL from tab context menu
 
 License
 -------
