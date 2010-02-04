@@ -23,6 +23,7 @@ lisence MPL 1.1/GPL 2.0/LGPL 2.1
       <label value="URL:"/>
       <textbox id="urlTextBox"
                flex="1"
+               value="http://"
                oninput="doEnabing()"/>
     </hbox>
     <label value="" id="statusLabel" class="error"/>
