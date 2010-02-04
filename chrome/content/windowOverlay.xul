@@ -5,6 +5,10 @@
          
 <script type="application/x-javascript" src="chrome://wat/content/wat.js"/> 
 
+<stringbundleset id="stringbundleset">
+  <stringbundle id="bundle_wat" src="chrome://wat/locale/wat.properties"/>
+</stringbundleset>
+
 <commandset id="mailCommands">
   <commandset id="wat_Commands">
     <command id="wat_addonCmd"

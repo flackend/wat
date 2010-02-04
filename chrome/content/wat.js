@@ -1,10 +1,12 @@
 
 let WAT = (function(){
+  const Cc = Components.classes;
+  const Ci = Components.interfaces;
   const WAT_PREFBRANCH_PAGES = "extensions.wat.pages";
-  let popupElm = null, menuSep = null;
-  let prefService = Components.classes["@mozilla.org/preferences-service;1"]
-                              .getService(Components.interfaces.nsIPrefService)
-                              .QueryInterface(Components.interfaces.nsIPrefBranch2);
+  let popupElm = null, menuSep = null, bundle = null;
+  let prefService = Cc["@mozilla.org/preferences-service;1"]
+                      .getService(Ci.nsIPrefService)
+                      .QueryInterface(Ci.nsIPrefBranch2);
   let pagesObserver = {
     observe: function pages_observe(aSubject, aTopic, aData){
       self.regenerateMenu();
@@ -16,6 +18,7 @@ let WAT = (function(){
     self.tabMail = document.getElementById("tabmail");
     popupElm = document.getElementById("wat_menuPopup");
     menuSep = document.getElementById("wat_menu_sep");
+    bundle = document.getElementById("bundle_wat");
     self.regenerateMenu();
 
     let openTabMenu = document.getElementById("wat_openNewTabMenu");
@@ -43,8 +46,9 @@ let WAT = (function(){
     tabMail: null,
     openTab: function WAT_openTab (url){
       let pageName = (url.indexOf("chrome://") == 0 || url.indexOf("about:") == 0) ? "chrome" : "content";
+      let type = pageName + "Tab", page = pageName + "Page";
       let args = {};
-      args[pageName + "Page"] = url;
+      args[page] = url;
       if (pageName == "content"){
         let uri = makeURI(url, null, null);
         let reg = new RegExp("^" + uri.prePath.replace(/\./g, "\\.") + "($|/)");
@@ -52,14 +56,28 @@ let WAT = (function(){
           specialTabs.siteClickHandler(aEvent, reg);
         }
       }
-      return this.tabMail.openTab(pageName + "Tab", args);
+      let tabMode = this.tabMail.tabModes[type];
+      if (tabMode.tabs.length >= tabMode.maxTabs){
+        let res = {};
+        let promptService = Cc["@mozilla.org/embedcomp/prompt-service;1"].getService(Ci.nsIPromptService2);
+        promptService.alertCheck(window,
+          bundle.getFormattedString("maxTabs.overwrite.title", [tabMode.maxTabs]),
+          bundle.getString("maxTabs.overwrite.msg"),
+          bundle.getString("mexTabs.overwrite.check"),
+          res);
+        if (!res.value){
+          return false;
+        }
+        this.tabMail.tabModes[type].maxTabs++;
+      }
+      return this.tabMail.openTab(type, args);
     },
     regenerateMenu: function WAT_regenerateMenu(){
       removeAllElementUntilSep(popupElm, menuSep.id);
       if (!prefService.prefHasUserValue(WAT_PREFBRANCH_PAGES)){
         return;
       }
-      let pageString = prefService.getComplexValue(WAT_PREFBRANCH_PAGES, Components.interfaces.nsIPrefLocalizedString).data;
+      let pageString = prefService.getComplexValue(WAT_PREFBRANCH_PAGES, Ci.nsIPrefLocalizedString).data;
       let pages = JSON.parse(pageString);
       if (!(pages instanceof Array)) return;
 
