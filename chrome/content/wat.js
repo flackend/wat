@@ -121,9 +121,10 @@ let WAT = (function(){
       if (!(pages instanceof Array)) return;
 
       pages.forEach(function(page){
-        let menuitem = document.createElement("menuitem");
-        menuitem.setAttribute("label", page.label);
-        menuitem.setAttribute("oncommand", "WAT.openTab('" + page.url + "')");
+        let menuitem = createElement("menuitem", {
+          label: page.label,
+          oncommand: "WAT.openTab('" + page.url + "')"
+        });
         popupElm.insertBefore(menuitem, menuSep);
       });
     },
