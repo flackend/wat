@@ -32,6 +32,45 @@ let WAT = (function(){
       }
       return true;
     },false);
+
+    appendTabContextMenu();
+  }
+  function createElement(tagName, attrs){
+    let elem = document.createElement(tagName);
+    for (let name in attrs){
+      elem.setAttribute(name, attrs[name]);
+    }
+    return elem;
+  }
+  function appendTabContextMenu(){
+    let popup = document.getAnonymousElementByAttribute(self.tabMail, "anonid", "tabContextMenu"),
+        items = [
+          createElement("menuitem", {
+            label: bundle.getString("tabContextMenu.copyTitle.label"),
+            oncommand: "WAT.copy('TITLE')"
+          }),
+          createElement("menuitem", {
+            label: bundle.getString("tabContextMenu.copyUrl.label"),
+            oncommand: "WAT.copy('URL')"
+          })
+        ];
+    items.forEach(function(item){
+      popup.appendChild(item);
+    });
+
+    popup.addEventListener("popupshowing", function(event){
+      let [iTab, tab, tabNode] = self.tabMail._getTabContextForTabbyThing(document.popupNode);
+      if ("mode" in tab && (tab.mode.type == "contentTab" || tab.mode.type == "chromeTab")){
+          items.forEach(function(item){
+            if (item.hasAttribute("hidden"))
+              item.removeAttribute("hidden");
+          });
+      } else {
+        items.forEach(function(item){
+          item.setAttribute("hidden", "true");
+        });
+      }
+    }, true);
   }
   function removeAllElementUntilSep(parentElm, sepId){
     for (let i=0, len=parentElm.childNodes.length; i<len; i++){
@@ -96,6 +135,24 @@ let WAT = (function(){
     },
     openURLDialog: function WAT_openURLDialog(){
       openDialog("chrome://wat/content/openURL.xul","_blank", "chrome,modal,titlebar", window);
+    },
+    copy: function WAT_copy(label){
+      const clipboardHelper = Cc["@mozilla.org/widget/clipboardhelper;1"].getService(Ci.nsIClipboardHelper);
+      let [iTab, tab, tabNode] = this.tabMail._getTabContextForTabbyThing(document.popupNode);
+      if (!("browser" in tab))
+        return;
+      switch(label){
+        case "TITLE":
+          str = tab.browser.contentTitle;
+          break;
+        case "URL":
+          str = tab.browser.currentURI.spec;
+          break;
+        default:
+          return;
+      }
+      if (str)
+        clipboardHelper.copyString(str);
     }
   };
   window.addEventListener("load", init, false);
