@@ -2,7 +2,8 @@
 let WAT = (function(){
   const Cc = Components.classes;
   const Ci = Components.interfaces;
-  const WAT_PREFBRANCH_PAGES = "extensions.wat.pages";
+  const WAT_PREFBRANCH_PAGES = "extensions.wat.pages",
+        WAT_PREFBRANCH_MIDDLECLICK_IN_NEWTAB = "extensions.wat.middleClickIsNewTab";
   let popupElm = null, menuSep = null, bundle = null;
   let prefService = Cc["@mozilla.org/preferences-service;1"]
                       .getService(Ci.nsIPrefService)
@@ -32,6 +33,9 @@ let WAT = (function(){
       }
       return true;
     },false);
+
+    document.getElementById("messagepane")
+      .setAttribute("onclick", "return WAT.contentAreaClickHandler(event) || contentAreaClick(event)"); 
 
     appendTabContextMenu();
   }
@@ -91,9 +95,7 @@ let WAT = (function(){
       if (pageName == "content"){
         let uri = makeURI(url, null, null);
         let reg = new RegExp("^" + uri.prePath.replace(/\./g, "\\.") + "($|/)");
-        args.clickHandler = function contentClickHandler(aEvent){
-          specialTabs.siteClickHandler(aEvent, reg);
-        }
+        args.clickHandler = "WAT.siteClickHandler(event, " + reg.toSource() + ")";
       }
       let tabMode = this.tabMail.tabModes[type];
       if (tabMode.tabs.length >= tabMode.maxTabs){
@@ -110,6 +112,53 @@ let WAT = (function(){
         this.tabMail.tabModes[type].maxTabs++;
       }
       return this.tabMail.openTab(type, args);
+    },
+    get middleClickIsNewTab(){
+      return prefService.getBoolPref(WAT_PREFBRANCH_MIDDLECLICK_IN_NEWTAB);
+    },
+    set middleClickIsNewTab(value){
+      let bool = !!value;
+      prefService.setBoolPref(WAT_PREFBRANCH_MIDDLECLICK_IN_NEWTAB, bool);
+      return bool;
+    },
+    contentAreaClickHandler: function WAT_contentAreaClickHandler(aEvent){
+      let href = hRefForClickEvent(aEvent);
+      if (href && aEvent.button == 1){
+        let uri = makeURI(href);
+        if (uri.schemeIs("http") || uri.schemeIs("https") || uri.schemeIs("about")){
+          aEvent.preventDefault();
+          WAT.openTab(href);
+          return true;
+        }
+      }
+      return false;
+    },
+    /*
+     * @see specialTabs.siteClickHandler
+     */
+    siteClickHandler: function WAT_siteClickHandler(aEvent, aSiteRegExp){
+      if (!aEvent.isTrusted || aEvent.getPreventDefault() || aEvent.button == 2)
+        return true;
+
+      let href = hRefForClickEvent(aEvent, true);
+      if (href){
+        let uri = makeURI(href);
+        if (!specialTabs._protocolSvc.isExposedProtocol(uri.scheme) ||
+            ((uri.schemeIs("http") || uri.schemeIs("https") ||
+              uri.schemeIs("about")) && !aSiteRegExp.test(uri.spec))) {
+          aEvent.preventDefault();
+          if (aEvent.button == 1 && WAT.middleClickIsNewTab)
+            WAT.openTab(href);
+          else
+            openLinkExternally(href);
+        } else if (aEvent.button == 1) {
+          aEvent.preventDefault();
+          if (WAT.middleClickIsNewTab)
+            WAT.openTab(href);
+          else
+            openLinkExternally(href);
+        }
+      }
     },
     regenerateMenu: function WAT_regenerateMenu(){
       removeAllElementUntilSep(popupElm, menuSep.id);
