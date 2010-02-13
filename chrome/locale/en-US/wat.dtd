@@ -11,6 +11,9 @@
 <!ENTITY wat.option.button.delete "Delete">
 <!ENTITY wat.option.button.up "Up">
 <!ENTITY wat.option.button.down "Down">
+<!ENTITY wat.option.group.urlregistration.label "URL registration">
+<!ENTITY wat.option.group.settings.label "Settings">
+<!ENTITY wat.option.middleclicktab "Open in a new tab on middle-click">
 <!ENTITY wat.openURL.label "Open URL in tab">
 <!ENTITY wat.openURL.acceptButton.label "Open">
 

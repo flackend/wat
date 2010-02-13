@@ -11,6 +11,9 @@
 <!ENTITY wat.option.button.delete "削除">
 <!ENTITY wat.option.button.up "上へ">
 <!ENTITY wat.option.button.down "下へ">
+<!ENTITY wat.option.group.urlregistration.label "URLの登録">
+<!ENTITY wat.option.group.settings.label "設定">
+<!ENTITY wat.option.middleclicktab "中ボタンクリックでタブに開く">
 <!ENTITY wat.openURL.label "URLをタブに開く">
 <!ENTITY wat.openURL.acceptButton.label "開く">
 
