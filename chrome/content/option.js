@@ -1,8 +1,38 @@
-
-/*
-const WAT_STORAGE_RESOURCE = "resource://wat/storage.jsm";
-Components.utils.import(WAT_STORAGE_RESOURCE);
-*/
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is WAT
+ *
+ * The Initial Developer of the Original Code is WAT
+ * Portions created by the Initial Developer are Copyright (C) 2009
+ * the Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s):
+ *   teramako <teramako@gmail.com>
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
@@ -13,12 +43,23 @@ const ioService = Cc["@mozilla.org/network/io-service;1"]
                     .getService(Ci.nsIIOService);
 
 let wat = (function(){
+  // --------------------------------------------------------------------------
+  // Private Section
+  // ----------------------------------------------------------------------{{{1
   let siteNameTextBox, urlTextBox, listBox, statusLabel,
       addButton, deleteButton, upButton, downButton;
   let isError = false;
+  /**
+   * like prototype.js
+   * @param {String} id
+   * @return {Element}
+   */
   function $(id){
     return document.getElementById(id);
   }
+  /**
+   * save URL data to pereferences
+   */
   function updateData(){
     let pages = [];
     for (let i=0, len=listBox.itemCount; i<len; i++){
@@ -32,6 +73,15 @@ let wat = (function(){
     supportString.data = JSON.stringify(pages);
     prefService.setComplexValue("pages", Ci.nsISupportsString, supportString);
   }
+  /**
+   * create listitem element
+   * and append to listbox#pageListBox
+   * @param {Object} page
+   *                 {
+   *                  label: "page-title",
+   *                  url: "page-url"
+   *                 }
+   */
   function addItem(page){
     let item = document.createElement("listitem");
     let nameCell = document.createElement("listcell");
@@ -42,6 +92,10 @@ let wat = (function(){
     item.appendChild(urlCell);
     listBox.appendChild(item);
   }
+  /**
+   * @param {String} url
+   * @return {nsIURI|null}
+   */
   function getURI(url){
     try {
       let uri = ioService.newURI(url, null, null);
@@ -50,6 +104,9 @@ let wat = (function(){
       return null;
     }
   }
+  /**
+   * @param {String} msg Error Message
+   */
   function showErrorStatus(msg){
     statusLabel.setAttribute("value", "ERROR: " + msg);
     statusLabel.setAttribute("class", "error");
@@ -67,7 +124,14 @@ let wat = (function(){
     urlTextBox.value = "";
     addButton.setAttribute("disabled","true");
   }
+  // 1}}}
+  // --------------------------------------------------------------------------
+  // Public Section
+  // ----------------------------------------------------------------------{{{1
   let self = {
+    /**
+     * called from options.xul when the window is loaded
+     */
     init: function wat_init(){
       siteNameTextBox = $("siteNameTextBox");
       urlTextBox      = $("urlTextBox");
@@ -78,6 +142,7 @@ let wat = (function(){
       upButton        = $("upButton");
       downButton      = $("downButton");
       
+      // get and show stored pages data in prefereces
       let pages = [];
       if (prefService.prefHasUserValue("pages")){
         let pageString = prefService.getComplexValue("pages", Ci.nsIPrefLocalizedString).data;
@@ -85,6 +150,9 @@ let wat = (function(){
       }
       pages.forEach(addItem);
     },
+    /**
+     * called from button#addButton in option.xul
+     */
     add: function wat_add(){
       let name = siteNameTextBox.value,
           url  = urlTextBox.value;
@@ -100,11 +168,19 @@ let wat = (function(){
       updateData();
       resetTextboxes();
     },
+    /**
+     * called from button#deleteButton in option.xul
+     */
     delete: function wat_onDelete(){
       let index = listBox.selectedIndex;
       listBox.removeItemAt(index);
       updateData();
     },
+    /**
+     * move up or down the selected row on listbox#pageListBox
+     * called from button#upButton or button#downButton in option.xul
+     * @param {String} command it's must be "up" or "down"
+     */
     move: function wat_move(command){
       let index = listBox.selectedIndex;
       if (index < 0) return;
@@ -131,6 +207,12 @@ let wat = (function(){
       }
       updateData();
     },
+    /**
+     * input event handler of textbox#siteNameTextBox and textbox#urlTextBox.
+     *
+     * button#addButton change to enabled, if both of
+     * textbox#siteNameTextBox and textbox#urlTextBox were filled.
+     */
     onInput: function wat_onInput(){
       if (siteNameTextBox.value && urlTextBox.value){
         if (addButton.hasAttribute("disabled")){
@@ -141,6 +223,12 @@ let wat = (function(){
       }
       resetStatus();
     },
+    /**
+     * select event handler of listbox#pageListBox
+     *
+     * if the row is selected, enable button
+     * #deleteButton, #upButton and #downButton.
+     */
     onSelect: function wat_onSelect(){
       if (listBox.selectedIndex < 0){
         deleteButton.setAttribute("disabled","true");
@@ -154,6 +242,7 @@ let wat = (function(){
     }
   };
   return self;
+  // 1}}}
 })();
 
-// vim: sw=2 ts=2 et:
+// vim: sw=2 ts=2 et fdm=marker:
