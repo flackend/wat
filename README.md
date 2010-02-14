@@ -53,8 +53,6 @@ How to build
 ScreenShots
 -----------
 
- * ![WAT ContextMenu on Link](http://github.com/teramako/wat/raw/master/img/wat_contextmenu.png)
- * ![WAT ToolbarMenu](http://github.com/teramako/wat/raw/master/img/wat_menu.png)
-   ![WAT OpenURLDialog](http://github.com/teramako/wat/raw/master/img/wat_openurl.png)
- * ![WAT OptionWindow](http://github.com/teramako/wat/raw/master/img/wat_option.png)
+<table style="width:194px;"><tr><td align="center" style="height:194px;background:url(http://picasaweb.google.co.jp/s/c/transparent_album_background.gif) no-repeat left"><a href="http://picasaweb.google.co.jp/teramako/WATWebApplicationTab?feat=embedwebsite"><img src="http://lh5.ggpht.com/_Rv7aS9PPjZQ/S3ffvfrlmVE/AAAAAAAACVU/RvUYhhZONfc/s160-c/WATWebApplicationTab.jpg" width="160" height="160" style="margin:1px 0 0 4px;"></a></td></tr><tr><td style="text-align:center;font-family:arial,sans-serif;font-size:11px"><a href="http://picasaweb.google.co.jp/teramako/WATWebApplicationTab?feat=embedwebsite" style="color:#4D4D4D;font-weight:bold;text-decoration:none;">WAT (WebApplicationTab)</a></td></tr></table>
+
   
