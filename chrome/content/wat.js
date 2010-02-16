@@ -153,6 +153,75 @@ let WAT = (function(){
       parentElm.removeChild(elm);
     }
   }
+  /**
+   * get favicon URL and set the URL to the tab and 
+   * preferece data.
+   * favicon URL:
+   *  1) href attribute of link[rel="shortcut icon"] in the content
+   *  2) /favicon.ico
+   * @param {Object} tabInfo
+   */
+  function setTabIconUpdater(tabInfo){
+    let browser = tabInfo.browser;
+    let currentPrePath;
+    /**
+     * set the favicon to the tab and update registered preference data if exists
+     * @param {String} iconURL
+     */
+    function setIcon(iconURL){
+      tabInfo.tabNode.image = iconURL;
+      let isUpdated = false;
+      if (prefService.prefHasUserValue(WAT_PREFBRANCH_PAGES)){
+        let pages = JSON.parse(prefService.getComplexValue(WAT_PREFBRANCH_PAGES, Ci.nsIPrefLocalizedString).data);
+        if (!(pages instanceof Array)) return;
+        for (let i=0, len=pages.length; i<len; i++){
+          let page = pages[i];
+          if (!("icon" in page) && page.url.indexOf(browser.currentURI.prePath) == 0){
+            page.icon = iconURL;
+            isUpdated = true;
+            break;
+          }
+        }
+        if (isUpdated){
+          let supportString = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
+          supportString.data = JSON.stringify(pages);
+          prefService.setComplexValue(WAT_PREFBRANCH_PAGES, Ci.nsISupportsString, supportString);
+        }
+      }
+    }
+    /**
+     * on DOMContentLoaded hander
+     * @param {Event} aEvent
+     */
+    function onDOMContentLoaded(aEvent){
+      let doc = aEvent.originalTarget;
+      // only HTMLDocument and non-frame
+      if (!(doc instanceof HTMLDocument) || doc.defaultView.frameElement)
+        return;
+      let link = browser.contentDocument.querySelector('link[rel="shortcut icon"]');
+      if (link){
+        setIcon(link.href);
+      } else {
+        let prePath = browser.currentURI.prePath;
+        if (prePath == currentPrePath)
+          return;
+        let faviconURL = prePath + "/favicon.ico";
+        let xhr = new XMLHttpRequest;
+        xhr.mozBackgroundRequest = true;
+        xhr.open("HEAD", faviconURL, true);
+        xhr.onreadystatechange = function XHR_onreadystatechange(){
+          if (xhr.readyState != 4)
+            return;
+          if (xhr.status == 200 && xhr.getResponseHeader("Content-Type") == "image/x-icon"){
+            setIcon(faviconURL);
+            cuurentPrePath = prePath;
+          }
+        };
+        xhr.send(null);
+      }
+    }
+    browser.addEventListener("DOMContentLoaded", onDOMContentLoaded, false);
+  }
   // 1}}}
   // --------------------------------------------------------------------------
   // Public Section
@@ -201,7 +270,9 @@ let WAT = (function(){
         }
         this.tabMail.tabModes[type].maxTabs++;
       }
-      return this.tabMail.openTab(type, args);
+      let tab = this.tabMail.openTab(type, args);
+      setTabIconUpdater(tab);
+      return tab;
     },
     /**
      * @type {Boolean}
@@ -287,6 +358,9 @@ let WAT = (function(){
       pages.forEach(function(page){
         let menuitem = createElement("menuitem", {
           label: page.label,
+          image: page.icon || "",
+          validate: "never",
+          class: "menuitem-iconic",
           oncommand: "WAT.openTab('" + page.url + "')"
         });
         popupElm.insertBefore(menuitem, menuSep);
