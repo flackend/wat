@@ -66,7 +66,8 @@ let wat = (function(){
       let item = listBox.getItemAtIndex(i);
       pages.push({
         label: item.childNodes[0].getAttribute("label"),
-        url  : item.childNodes[1].getAttribute("label")
+        url  : item.childNodes[1].getAttribute("label"),
+        icon : item.childNodes[0].getAttribute("image") || null
       });
     }
     let supportString = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
@@ -87,10 +88,8 @@ let wat = (function(){
     let item = document.createElement("listitem");
     let nameCell = document.createElement("listcell");
     nameCell.setAttribute("label", page.label);
-    if ("icon" in page){
-      nameCell.setAttribute("class", "listcell-iconic");
-      nameCell.setAttribute("image", page.icon);
-    }
+    nameCell.setAttribute("class", "listcell-iconic");
+    nameCell.setAttribute("image", page.icon || "");
     let urlCell = document.createElement("listcell");
     urlCell.setAttribute("label", page.url);
     item.appendChild(nameCell);

@@ -176,7 +176,7 @@ let WAT = (function(){
         if (!(pages instanceof Array)) return;
         for (let i=0, len=pages.length; i<len; i++){
           let page = pages[i];
-          if (!("icon" in page) && page.url.indexOf(browser.currentURI.prePath) == 0){
+          if (!("icon" in page && page.icon) && page.url.indexOf(browser.currentURI.prePath) == 0){
             page.icon = iconURL;
             isUpdated = true;
             break;
