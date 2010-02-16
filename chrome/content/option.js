@@ -80,12 +80,17 @@ let wat = (function(){
    *                 {
    *                  label: "page-title",
    *                  url: "page-url"
+   *                  icon: "favicon-url"(optional)
    *                 }
    */
   function addItem(page){
     let item = document.createElement("listitem");
     let nameCell = document.createElement("listcell");
     nameCell.setAttribute("label", page.label);
+    if ("icon" in page){
+      nameCell.setAttribute("class", "listcell-iconic");
+      nameCell.setAttribute("image", page.icon);
+    }
     let urlCell = document.createElement("listcell");
     urlCell.setAttribute("label", page.url);
     item.appendChild(nameCell);
