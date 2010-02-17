@@ -168,18 +168,18 @@ let WAT = (function(){
      * set the favicon to the tab and update registered preference data if exists
      * @param {String} iconURL
      */
-    function setIcon(iconURL){
+    function setIcon(iconURL){ // {{{2
       tabInfo.tabNode.image = iconURL;
       let isUpdated = false;
       if (prefService.prefHasUserValue(WAT_PREFBRANCH_PAGES)){
         let pages = JSON.parse(prefService.getComplexValue(WAT_PREFBRANCH_PAGES, Ci.nsIPrefLocalizedString).data);
         if (!(pages instanceof Array)) return;
+        let prePath = browser.currentURI.prePath;
         for (let i=0, len=pages.length; i<len; i++){
           let page = pages[i];
-          if (!("icon" in page && page.icon) && page.url.indexOf(browser.currentURI.prePath) == 0){
+          if (page.icon != iconURL && page.url.indexOf(prePath) == 0){
             page.icon = iconURL;
             isUpdated = true;
-            break;
           }
         }
         if (isUpdated){
@@ -188,12 +188,12 @@ let WAT = (function(){
           prefService.setComplexValue(WAT_PREFBRANCH_PAGES, Ci.nsISupportsString, supportString);
         }
       }
-    }
+    } // 2}}}
     /**
      * on DOMContentLoaded hander
      * @param {Event} aEvent
      */
-    function onDOMContentLoaded(aEvent){
+    function onDOMContentLoaded(aEvent){ // {{{2
       let doc = aEvent.originalTarget;
       // only HTMLDocument and non-frame
       if (!(doc instanceof HTMLDocument) || doc.defaultView.frameElement)
@@ -218,7 +218,7 @@ let WAT = (function(){
           }
         };
         xhr.send(null);
-      }
+      } // 2}}}
     }
     browser.addEventListener("DOMContentLoaded", onDOMContentLoaded, false);
   }
