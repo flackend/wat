@@ -82,6 +82,22 @@ let WAT = (function(){
     document.getElementById("messagepane")
       .setAttribute("onclick", "return WAT.contentAreaClickHandler(event) || contentAreaClick(event)"); 
 
+    // on Thunderbird started up and restored tabs,
+    // call setTabIconUpdator each tabInfo of "contentTab" type
+    // once.
+    let restoreTabsFunc = self.tabMail.restoreTabs;
+    self.tabMail.restoreTabs = function(){
+      restoreTabsFunc.apply(self.tabMail, arguments);
+      for each(let info in self.tabMail.tabInfo){
+        if ("browser" in info && info.mode.type == "contentTab"){
+          //Application.console.log("restoring : " + info.browser.id);
+          setTabIconUpdater(info);
+        }
+      }
+      self.tabMail.restoreTabs = restoreTabsFunc;
+    }
+    delete restoreTabsFunc;
+
     appendTabContextMenu();
   }
   /**
