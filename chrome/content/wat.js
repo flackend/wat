@@ -319,7 +319,7 @@ let WAT = (function(){
     /** tabmail element is set on thunderbird loaded. @see init() */
     tabMail: null,
     /**
-     * @param url {String}
+     * @param {nsIURI|String} uri
      * If the URL scheme given argument {url} is "chrome" or "about",
      *   use "chromeTab" type and
      *   set {url} to "chromePage" property
@@ -335,13 +335,20 @@ let WAT = (function(){
      * if the type of tab will over the limit,
      * show prompt about whether force open or not.
      */
-    openTab: function WAT_openTab (url){
-      let pageName = (url.indexOf("chrome://") == 0 || url.indexOf("about:") == 0) ? "chrome" : "content";
+    openTab: function WAT_openTab (uri){
+      if (!(uri instanceof Ci.nsIURI)){
+        try {
+          uri = makeURI(uri, null, null);
+        } catch(e){
+          Components.utils.reportError(e);
+          return;
+        }
+      }
+      let pageName = (uri.schemeIs("chrome") || uri.schemeIs("about")) ? "chrome" : "content";
       let type = pageName + "Tab", page = pageName + "Page";
       let args = {};
-      args[page] = url;
+      args[page] = uri.spec;
       if (pageName == "content"){
-        let uri = makeURI(url, null, null);
         let reg = new RegExp("^" + uri.prePath.replace(/\./g, "\\.") + "($|/)");
         args.clickHandler = "WAT.siteClickHandler(event, " + reg.toSource() + ")";
       }
@@ -360,7 +367,8 @@ let WAT = (function(){
         this.tabMail.tabModes[type].maxTabs++;
       }
       let tab = this.tabMail.openTab(type, args);
-      setTabIconUpdater(tab);
+      if (tab)
+        setTabIconUpdater(tab);
       return tab;
     },
     /**
