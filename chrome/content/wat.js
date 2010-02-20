@@ -128,7 +128,7 @@ let WAT = (function(){
       } else {
         openTabMenu.setAttribute("hidden", "true");
       }
-      let isContentTab = WAT.tabMail.selectedTab.mode.name == "contentTab";
+      let showForwardAndBack = WAT.tabMail.selectedTab.mode.name == "contentTab";
       let c = nsContextMenu.prototype;
       if (c.isContentSelection() ||
           (target instanceof HTMLCanvasElement) ||
@@ -137,12 +137,12 @@ let WAT = (function(){
           (target instanceof HTMLVideoElement) ||
           (target instanceof HTMLAudioElement) ||
           c.isTargetATextBox(target))
-        return true;
+        showForwardAndBack = false;
       ["wat_goForwardContextMenu", "wat_goBackContextMenu"]
         .forEach(function(id){
            let elm = document.getElementById(id);
-           elm.hidden = !isContentTab;
-           if (isContentTab){
+           elm.hidden = !showForwardAndBack;
+           if (showForwardAndBack){
              goUpdateCommand(elm.command);
            }
         });
