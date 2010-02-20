@@ -119,36 +119,8 @@ let WAT = (function(){
 
     // add openInNewTab ContextMenu on HTMLAnchorElement
     // and set forward and back menus
-    let openTabMenu = document.getElementById("wat_openNewTabMenu");
-    document.getElementById("mailContext").addEventListener("popupshowing", function(evt){
-      let xulMenu = evt.target;
-      let target = document.popupNode;
-      if (target instanceof HTMLAnchorElement){
-        openTabMenu.removeAttribute("hidden");
-      } else {
-        openTabMenu.setAttribute("hidden", "true");
-      }
-      let showForwardAndBack = WAT.tabMail.selectedTab.mode.name == "contentTab";
-      let c = nsContextMenu.prototype;
-      if (c.isContentSelection() ||
-          (target instanceof HTMLCanvasElement) ||
-          (target instanceof HTMLImageElement) ||
-          (target instanceof HTMLAnchorElement) ||
-          (target instanceof HTMLVideoElement) ||
-          (target instanceof HTMLAudioElement) ||
-          c.isTargetATextBox(target))
-        showForwardAndBack = false;
-      ["wat_goForwardContextMenu", "wat_goBackContextMenu"]
-        .forEach(function(id){
-           let elm = document.getElementById(id);
-           elm.hidden = !showForwardAndBack;
-           if (showForwardAndBack){
-             goUpdateCommand(elm.command);
-           }
-        });
-
-      return true;
-    },false);
+    document.getElementById("mailContext")
+      .addEventListener("popupshowing", onMailContextPopupShowing, false);
 
     // overwrite contentArea(message panel in mail3pane) click handler
     // @see WAT_contentAreaClickHandler
@@ -173,6 +145,30 @@ let WAT = (function(){
 
     appendTabContextMenu();
   }
+
+  /**
+   * popup#mailContext's popupshowing event handler
+   * @see nsContextMenu in chrome://messenger/content/nsContextMenu.js
+   */
+  function onMailContextPopupShowing(aEvent){
+    let c = gContextMenu;
+    let notOnSpecialItem = !(c.inMessageArea || c.isContentSelected ||
+                             c.onCanvas || c.onLink || c.onImage ||
+                             c.onPlayableMedia || c.onTextInput);
+    c.showItem("wat_openNewTabMenu", c.onLink && !c.onMailtoLink &&
+                c.linkProtocol != "about" && c.linkProtocol != "chrome");
+    ["wat_goForwardContextMenu", "wat_goBackContextMenu"]
+      .forEach(function(id){
+        let elm = document.getElementById(id);
+        c.showItem(elm, notOnSpecialItem);
+        if (notOnSpecialItem){
+          goUpdateCommand(elm.command);
+        }
+      });
+
+    return true;
+  }
+
   /**
    * createElement
    * @param tagName {String}
