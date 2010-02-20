@@ -59,6 +59,15 @@
              oncommand="WAT.onOpenNewTab()"/>
     <command id="wat_openURLCmd"
              oncommand="WAT.openURLDialog()"/>
+    <commandset id="wat_browserCommands"
+                commandupdater="true"
+                events="create-menu-go"
+                oncommandupdate="goUpdateMailMenuItems(this)">
+      <command id="wat_cmd_browserGoBack"
+               oncommand="goDoCommand('wat_cmd_browserGoBack')"/>
+      <command id="wat_cmd_browserGoForward"
+               oncommand="goDoCommand('wat_cmd_browserGoForward')"/>
+    </commandset>
   </commandset>
 </commandset>
 <popup id="mailContext">
@@ -68,6 +77,18 @@
             hidden="true"
             insertafter="mailContext-openInBrowser"/>
 </popup>
+
+<menupopup id="menu_GoPopup">
+  <menuitem id="wat_goForwardMenu"
+            label="&wat.browser.forward.label;"
+            command="wat_cmd_browserGoForward"
+            insertbefore="goNextSeparator"/>
+  <menuitem id="wat_goBackMenu"
+            label="&wat.browser.back.label;"
+            command="wat_cmd_browserGoBack"
+            insertbefore="goNextSeparator"/>
+</menupopup>
+
 <menubar id="mail-menubar">
   <menu id="wat_menu_Tab"
         label="&wat.menu.label;"

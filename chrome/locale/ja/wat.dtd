@@ -16,4 +16,6 @@
 <!ENTITY wat.option.middleclicktab "中ボタンクリックでタブに開く">
 <!ENTITY wat.openURL.label "URLをタブに開く">
 <!ENTITY wat.openURL.acceptButton.label "開く">
+<!ENTITY wat.browser.forward.label "進む(ブラウザ)">
+<!ENTITY wat.browser.back.label "戻る(ブラウザ)">
 

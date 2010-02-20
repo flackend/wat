@@ -53,6 +53,49 @@ let WAT = (function(){
     }
   };
   prefService.addObserver(WAT_PREFBRANCH_PAGES, pagesObserver, false);
+
+  /**
+   * Support browser forward and back.
+   * @type {Ci.nsIController}
+   */
+  let browserController = {
+    supportsCommand: function watBrowserSupportsCommand(aCommand){
+      switch(aCommand){
+        case "wat_cmd_browserGoForward":
+        case "wat_cmd_browserGoBack":
+          return true;
+        default:
+          return false;
+      }
+    },
+    isCommandEnabled: function watBrowserIsCommandEnabled(aCommand){
+      let forward = false;
+      switch(aCommand){
+        case "wat_cmd_browserGoForward":
+          forward = true;
+        case "wat_cmd_browserGoBack":
+          let browser = WAT.tabMail.getBrowserForSelectedTab();
+          if (browser.sessionHistory)
+            return forward ? browser.canGoForward : browser.canGoBack;
+          else
+            return false;
+        default:
+          return false;
+      }
+    },
+    doCommand: function watBrowserDoCommand(aCommand){
+      switch(aCommand){
+        case "wat_cmd_browserGoForward":
+          WAT.tabMail.getBrowserForSelectedTab().goForward();
+          break;
+        case "wat_cmd_browserGoBack":
+          WAT.tabMail.getBrowserForSelectedTab().goBack();
+          break;
+      }
+    },
+    onEvent: function watBrowserOnEvent(aEvent){ },
+    name: "WAT Browser Controller"
+  };
   /**
    * called when thunderbird is loaded
    */
@@ -63,6 +106,16 @@ let WAT = (function(){
     menuSep = document.getElementById("wat_menu_sep");
     bundle = document.getElementById("bundle_wat");
     self.regenerateMenu();
+
+    /**
+     * @see browserController
+     */
+    window.controllers.appendController(browserController);
+
+    // enable session-history of web contents
+    // FIXME: when enable nsIDocShellHistory.useGlobalHistory,
+    //        an Exception occurs.
+    document.getElementById("dummycontentbrowser").removeAttribute("disablehistory");
 
     // add openInNewTab ContextMenu on HTMLAnchorElement
     let openTabMenu = document.getElementById("wat_openNewTabMenu");

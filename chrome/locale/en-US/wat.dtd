@@ -16,4 +16,6 @@
 <!ENTITY wat.option.middleclicktab "Open in a new tab on middle-click">
 <!ENTITY wat.openURL.label "Open URL in tab">
 <!ENTITY wat.openURL.acceptButton.label "Open">
+<!ENTITY wat.browser.forward.label "Browser Forward">
+<!ENTITY wat.browser.back.label "Browser Back">
 
