@@ -118,6 +118,7 @@ let WAT = (function(){
     document.getElementById("dummycontentbrowser").removeAttribute("disablehistory");
 
     // add openInNewTab ContextMenu on HTMLAnchorElement
+    // and set forward and back menus
     let openTabMenu = document.getElementById("wat_openNewTabMenu");
     document.getElementById("mailContext").addEventListener("popupshowing", function(evt){
       let xulMenu = evt.target;
@@ -127,6 +128,25 @@ let WAT = (function(){
       } else {
         openTabMenu.setAttribute("hidden", "true");
       }
+      let isContentTab = WAT.tabMail.selectedTab.mode.name == "contentTab";
+      let c = nsContextMenu.prototype;
+      if (c.isContentSelection() ||
+          (target instanceof HTMLCanvasElement) ||
+          (target instanceof HTMLImageElement) ||
+          (target instanceof HTMLAnchorElement) ||
+          (target instanceof HTMLVideoElement) ||
+          (target instanceof HTMLAudioElement) ||
+          c.isTargetATextBox(target))
+        return true;
+      ["wat_goForwardContextMenu", "wat_goBackContextMenu"]
+        .forEach(function(id){
+           let elm = document.getElementById(id);
+           elm.hidden = !isContentTab;
+           if (isContentTab){
+             goUpdateCommand(elm.command);
+           }
+        });
+
       return true;
     },false);
 

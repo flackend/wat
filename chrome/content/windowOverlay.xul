@@ -35,7 +35,12 @@
 
  ***** END LICENSE BLOCK ***** -->
 
-<!DOCTYPE overlay SYSTEM "chrome://wat/locale/wat.dtd">
+<!DOCTYPE overlay [
+  <!ENTITY % watDTD SYSTEM "chrome://wat/locale/wat.dtd">
+  %watDTD;
+  <!ENTITY % messengerDTD SYSTEM "chrome://messenger/locale/messenger.dtd">
+  %messengerDTD;
+]>
 <overlay id="watOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
          
@@ -95,9 +100,23 @@
             command="wat_openNewTabCmd"
             hidden="true"
             insertafter="mailContext-openInBrowser"/>
+  <menuitem id="wat_goForwardContextMenu"
+            label="&goForwardCmd.label;"
+            command="wat_cmd_browserGoForward"
+            accesskey="&goForwardCmd.accesskey;"
+            hidden="true"
+            insertafter="mailContext-sep-open-browser"/>
+  <menuitem id="wat_goBackContextMenu"
+            label="&goBackCmd.label;"
+            command="wat_cmd_browserGoBack"
+            accesskey="&goBackCmd.accesskey;"
+            hidden="true"
+            insertafter="mailContext-sep-open-browser"/>
 </popup>
 
 <menupopup id="menu_GoPopup">
+  <menuseparator id="wat_browser_menu_sep"
+                 insertbefore="goNextSeparator"/>
   <menuitem id="wat_goForwardMenu"
             label="&wat.browser.forward.label;"
             command="wat_cmd_browserGoForward"
