@@ -52,7 +52,9 @@
   </preferences>
   <vbox flex="1">
     <separator class="thin"/>
-    <label value="Version: ####VERSION####"/>
+    <hbox>
+      <image src="chrome://wat/skin/watIcon16.png"/><label value="Version: ####VERSION####"/>
+    </hbox>
     <separator class="thin"/>
     <groupbox flex="2">
       <caption label="&wat.option.group.urlregistration.label;"/>
