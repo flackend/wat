@@ -112,11 +112,6 @@ let WAT = (function(){
      */
     window.controllers.appendController(browserController);
 
-    // enable session-history of web contents
-    // FIXME: when enable nsIDocShellHistory.useGlobalHistory,
-    //        an Exception occurs.
-    //document.getElementById("dummycontentbrowser").removeAttribute("disablehistory");
-
     // add openInNewTab ContextMenu on HTMLAnchorElement
     // and set forward and back menus
     document.getElementById("mailContext")
