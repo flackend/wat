@@ -113,11 +113,6 @@ let WAT = (function(){
      */
     window.controllers.appendController(browserController);
 
-    // enable session-history of web contents
-    // FIXME: when enable nsIDocShellHistory.useGlobalHistory,
-    //        an Exception occurs.
-    document.getElementById("dummycontentbrowser").removeAttribute("disablehistory");
-
     // add openInNewTab ContextMenu on HTMLAnchorElement
     // and set forward and back menus
     document.getElementById("mailContext")
@@ -137,6 +132,7 @@ let WAT = (function(){
       for each(let info in self.tabMail.tabInfo){
         if ("browser" in info && info.mode.type == "contentTab"){
           //Application.console.log("restoring : " + info.browser.id);
+          enableSessionHistory(info.browser);
           setTabIconUpdater(info);
         }
       }
@@ -145,6 +141,24 @@ let WAT = (function(){
     delete restoreTabsFunc;
 
     appendTabContextMenu();
+  }
+
+  const os = Cc["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
+  /**
+   * enable session history of the browser
+   * @param {Element} browser
+   */
+  function enableSessionHistory(browser){
+    if (!browser.hasAttribute("disablehistory"))
+      return;
+    browser.removeAttribute("disablehistory");
+    try {
+      os.addObserver(browser, "browser:purge-session-history", false);
+      browser.webNavigation.sessionHistory =
+        Cc["@mozilla.org/browser/shistory;1"].createInstance(Ci.nsISHistory);
+    } catch(e){
+      Components.utils.reportError(e);
+    }
   }
 
   /**
@@ -327,6 +341,7 @@ let WAT = (function(){
      *       which checks HTMLAnchorElement's href attribute
      *       whether the URL scheme is specific (e.g. "http" or "https") or not,
      *       then opens the URL in a new tab or external browser.
+     *   and enable session-history (@see enableSessionHistory)
      *
      * Now, Thunderbird limits amount of tabs to 10 each types.
      * if the type of tab will over the limit,
@@ -364,8 +379,10 @@ let WAT = (function(){
         this.tabMail.tabModes[type].maxTabs++;
       }
       let tab = this.tabMail.openTab(type, args);
-      if (tab)
+      if (tab && type == "contentTab"){
+        enableSessionHistory(tab.browser);
         setTabIconUpdater(tab);
+      }
       return tab;
     },
     /**
