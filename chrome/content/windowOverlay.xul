@@ -70,6 +70,25 @@
     </commandset>
   </commandset>
 </commandset>
+
+<keyset id="mailKeys">
+  <keyset id="wat_keyset">
+    <key id="wat_goBackKb"
+         keycode="VK_LEFT"
+         command="wat_cmd_browserGoBack"
+         modifiers="alt"/>
+    <key keycode="VK_BACK"
+         command="wat_cmd_browserGoBack"/>
+    <key id="wat_goForwardKb"
+         keycode="VK_RIGHT"
+         command="wat_cmd_browserGoForward"
+         modifiers="alt"/>
+    <key keycode="VK_BACK"
+         command="wat_cmd_browserGoForward"
+         modifiers="shift"/>
+  </keyset>
+</keyset>
+
 <popup id="mailContext">
   <menuitem id="wat_openNewTabMenu"
             label="&wat.openNewTab.label;"
@@ -82,10 +101,12 @@
   <menuitem id="wat_goForwardMenu"
             label="&wat.browser.forward.label;"
             command="wat_cmd_browserGoForward"
+            key="wat_goForwardKb"
             insertbefore="goNextSeparator"/>
   <menuitem id="wat_goBackMenu"
             label="&wat.browser.back.label;"
             command="wat_cmd_browserGoBack"
+            key="wat_goBackKb"
             insertbefore="goNextSeparator"/>
 </menupopup>
 
