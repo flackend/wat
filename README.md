@@ -17,6 +17,8 @@ Features
  * open in tab from link contex menu
  * can copy to clipboard the title or the URL from tab context menu (version 0.2.4)
  * can open in a new tab on middle-click (version 0.3.0)
+ * can forward and back from key-navigation (foward: Alt-Right or Shift-BS, back: Alt-Left or BS),
+   menus in "Go" on the menubar or the context menu (version 0.4.0)
 
 License
 -------
