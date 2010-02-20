@@ -41,7 +41,9 @@ let WAT = (function(){
   const Cc = Components.classes;
   const Ci = Components.interfaces;
   const WAT_PREFBRANCH_PAGES = "extensions.wat.pages",
-        WAT_PREFBRANCH_MIDDLECLICK_IN_NEWTAB = "extensions.wat.middleClickIsNewTab";
+        WAT_PREFBRANCH_MIDDLECLICK_IN_NEWTAB = "extensions.wat.middleClickIsNewTab",
+        WAT_FORWARD_CMD = "wat_cmd_browserGoForward",
+        WAT_BACK_CMD    = "wat_cmd_browserGoBack";
   let popupElm = null, menuSep = null, bundle = null;
   let prefService = Cc["@mozilla.org/preferences-service;1"]
                       .getService(Ci.nsIPrefService)
@@ -61,8 +63,8 @@ let WAT = (function(){
   let browserController = {
     supportsCommand: function watBrowserSupportsCommand(aCommand){
       switch(aCommand){
-        case "wat_cmd_browserGoForward":
-        case "wat_cmd_browserGoBack":
+        case WAT_FORWARD_CMD:
+        case WAT_BACK_CMD:
           return true;
         default:
           return false;
@@ -71,9 +73,9 @@ let WAT = (function(){
     isCommandEnabled: function watBrowserIsCommandEnabled(aCommand){
       let forward = false;
       switch(aCommand){
-        case "wat_cmd_browserGoForward":
+        case WAT_FORWARD_CMD:
           forward = true;
-        case "wat_cmd_browserGoBack":
+        case WAT_BACK_CMD:
           let browser = WAT.tabMail.getBrowserForSelectedTab();
           if (browser.sessionHistory)
             return forward ? browser.canGoForward : browser.canGoBack;
@@ -85,16 +87,15 @@ let WAT = (function(){
     },
     doCommand: function watBrowserDoCommand(aCommand){
       switch(aCommand){
-        case "wat_cmd_browserGoForward":
+        case WAT_FORWARD_CMD:
           WAT.tabMail.getBrowserForSelectedTab().goForward();
           break;
-        case "wat_cmd_browserGoBack":
+        case WAT_BACK_CMD:
           WAT.tabMail.getBrowserForSelectedTab().goBack();
           break;
       }
     },
-    onEvent: function watBrowserOnEvent(aEvent){ },
-    name: "WAT Browser Controller"
+    onEvent: function watBrowserOnEvent(aEvent){ }
   };
   /**
    * called when thunderbird is loaded
