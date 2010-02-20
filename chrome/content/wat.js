@@ -462,12 +462,11 @@ let WAT = (function(){
     /**
      * called from context menu on HTMLAnchorElement
      * @see command#wat_openNewTabCmd in windowOverlay.xul
+     * @see nsContextMenu in chrome://messenger/content/nsContextMenu.js
      */
     onOpenNewTab: function WAT_onOpenNewTab(){
-      let target = document.popupNode;
-      if (target instanceof HTMLAnchorElement && target.href){
-        this.openTab(target.href);
-      }
+      if (gContextMenu && gContextMenu.linkURI)
+        this.openTab(gContextMenu.linkURI);
     },
     /**
      * called from menu in Toolbar(WAT)
