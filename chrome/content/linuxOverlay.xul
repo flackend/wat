@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE overlay SYSTEM "chrome://wat/locale/wat.dtd">
+<overlay>
+<keyset id="wat_keyset">
+  <key id="wat_goBackKb2"
+       key="["
+       oncommand="goDoCommand('wat_cmd_browserGoBack')"
+       modifiers="accel"/>
+  <key id="wat_goForwardKb2"
+       key="]"
+       oncommand="goDoCommand('wat_cmd_browserGoForward')"
+       modifiers="accel"/>
+</keyset>
+</overlay>
+<!--
+vim: sw=2 ts=2 et:
+-->
+

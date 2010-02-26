@@ -4,3 +4,6 @@ overlay chrome://messenger/content/messenger.xul chrome://wat/content/windowOver
 locale	wat en-US       jar:chrome/wat.jar!/locale/en-US/
 locale	wat ja          jar:chrome/wat.jar!/locale/ja/
 skin    wat classic/1.0 jar:chrome/wat.jar!/skin/
+overlay chrome://wat/content/windowOverlay.xul chrome://wat/content/macOverlay.xul os=Darwin
+overlay chrome://wat/content/windowOverlay.xul chrome://wat/content/linuxOverlay.xul os=Linux
+
