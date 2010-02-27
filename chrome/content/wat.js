@@ -436,7 +436,9 @@ let WAT = (function(){
       let href = hRefForClickEvent(aEvent, true);
       if (href){
         let uri = makeURI(href);
-        if (!specialTabs._protocolSvc.isExposedProtocol(uri.scheme) ||
+        if (uri.schemeIs("javascript")){
+          WAT.tabMail.currentTabInfo.browser.loadURI(uri.spec);
+        } else if (!specialTabs._protocolSvc.isExposedProtocol(uri.scheme) ||
             ((uri.schemeIs("http") || uri.schemeIs("https") ||
               uri.schemeIs("about")) && !aSiteRegExp.test(uri.spec))) {
           aEvent.preventDefault();
