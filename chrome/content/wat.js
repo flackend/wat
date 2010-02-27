@@ -133,7 +133,7 @@ let WAT = (function(){
         if ("browser" in info && info.mode.type == "contentTab"){
           //Application.console.log("restoring : " + info.browser.id);
           enableSessionHistory(info.browser);
-          setTabIconUpdater(info);
+          handleDOMContentLoaded(info);
         }
       }
       self.tabMail.restoreTabs = restoreTabsFunc;
@@ -254,14 +254,9 @@ let WAT = (function(){
     }
   }
   /**
-   * get favicon URL and set the URL to the tab and 
-   * preferece data.
-   * favicon URL:
-   *  1) href attribute of link[rel="shortcut icon"] in the content
-   *  2) /favicon.ico
    * @param {Object} tabInfo
    */
-  function setTabIconUpdater(tabInfo){
+  function handleDOMContentLoaded(tabInfo){
     let browser = tabInfo.browser;
     let currentPrePath;
     /**
@@ -290,19 +285,19 @@ let WAT = (function(){
       }
     } // 2}}}
     /**
-     * on DOMContentLoaded hander
-     * @param {Event} aEvent
+     * get favicon URL and set the URL to the tab and 
+     * preferece data.
+     * favicon URL:
+     *  1) href attribute of link[rel="shortcut icon"] in the content
+     *  2) /favicon.ico
+     * @param {HTMLDocument} doc
      */
-    function onDOMContentLoaded(aEvent){ // {{{2
-      let doc = aEvent.originalTarget;
-      // only HTMLDocument and non-frame
-      if (!(doc instanceof HTMLDocument) || doc.defaultView.frameElement)
-        return;
-      let link = browser.contentDocument.querySelector('link[rel="shortcut icon"]');
+    function updateIcon(doc){ // {{{2
+      let link = doc.querySelector('link[rel="shortcut icon"]');
       if (link){
         setIcon(link.href);
       } else {
-        let prePath = browser.currentURI.prePath;
+        let prePath = makeURI(doc.location).prePath;
         if (prePath == currentPrePath)
           return;
         let faviconURL = prePath + "/favicon.ico";
@@ -318,8 +313,45 @@ let WAT = (function(){
           }
         };
         xhr.send(null);
-      } // 2}}}
-    }
+      }
+    } // 2}}}
+    /**
+     * @param {HTMLDocument} doc
+     * @return {Boolean} setted redirect or not
+     */
+    function checkHTMLRedirect(doc){ // {{{2
+      let meta = doc.querySelector('meta[http-equiv="refresh"]');
+      if (!meta)
+        return false;
+      let content = meta.getAttribute("content");
+      let reg = new RegExp("^(\\d+);url=(.+)$");
+      let matches = content.match(reg);
+      if (matches){
+        Application.console.log("in redirect: " + matches.join("\n"));
+        let currentURI = browser.currentURI,
+            sec = parseInt(matches[1], 10),
+            uri = makeURI(matches[2], null, currentURI);
+        if (uri.host == currentURI.host){
+          setTimeout(function(){
+            browser.loadURI(uri.spec, currentURI);
+          }, sec * 1000);
+          return true;
+        }
+      }
+      return false;
+    } // 2}}}
+    /**
+     * on DOMContentLoaded handler
+     * @param {Event} aEvent
+     */
+    function onDOMContentLoaded(aEvent){ // {{{2
+      let doc = aEvent.originalTarget;
+      // only HTMLDocument and non-frame
+      if (!(doc instanceof HTMLDocument) || doc.defaultView.frameElement)
+        return;
+      checkHTMLRedirect(doc)
+      updateIcon(doc);
+    } // 2}}}
     browser.addEventListener("DOMContentLoaded", onDOMContentLoaded, false);
   }
   // 1}}}
@@ -381,7 +413,7 @@ let WAT = (function(){
       let tab = this.tabMail.openTab(type, args);
       if (tab && type == "contentTab"){
         enableSessionHistory(tab.browser);
-        setTabIconUpdater(tab);
+        handleDOMContentLoaded(tab);
       }
       return tab;
     },
