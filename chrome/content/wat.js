@@ -293,7 +293,7 @@ let WAT = (function(){
      * @param {HTMLDocument} doc
      */
     function updateIcon(doc){ // {{{2
-      let link = doc.querySelector('link[rel="shortcut icon"]');
+      let link = doc.querySelector('link[rel~="icon"]');
       if (link){
         setIcon(link.href);
       } else {
