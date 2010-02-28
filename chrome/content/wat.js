@@ -259,6 +259,7 @@ let WAT = (function(){
   function handleDOMContentLoaded(tabInfo){
     let browser = tabInfo.browser;
     let currentPrePath;
+    const ssm = Cc["@mozilla.org/scriptsecuritymanager;1"].getService(Ci.nsIScriptSecurityManager);
     /**
      * set the favicon to the tab and update registered preference data if exists
      * @param {String} iconURL
@@ -295,6 +296,22 @@ let WAT = (function(){
     function updateIcon(doc){ // {{{2
       let link = doc.querySelector('link[rel~="icon"]');
       if (link){
+        try {
+          let uri = makeURI(link.href, doc.characterSet);
+          ssm.checkLoadURIWithPrincipal(doc.nodePrincipal,
+                                        uri,
+                                        Ci.nsIScriptSecurityManager.DISALLOW_SCRIPT);
+          const contentPolicy = Cc["@mozilla.org/layout/content-policy;1"]
+                                  .getService(Ci.nsIContentPolicy);
+          if (contentPolicy.shouldLoad(Ci.nsIContentPolicy.TYPE_IMAGE,
+                                       uri, doc.documentURIObject,
+                                       link, link.type, null)
+            != Ci.nsIContentPolicy.ACCEPT)
+            return;
+        } catch(e){
+          Components.utils.reportError(e);
+          return;
+        }
         setIcon(link.href);
       } else {
         let prePath = makeURI(doc.location).prePath;
