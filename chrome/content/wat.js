@@ -108,6 +108,7 @@ let WAT = (function(){
     bundle = document.getElementById("bundle_wat");
     self.regenerateMenu();
 
+    updateTabMail(self.tabMail);
     /**
      * @see browserController
      */
@@ -133,7 +134,7 @@ let WAT = (function(){
         if ("browser" in info && info.mode.type == "contentTab"){
           //Application.console.log("restoring : " + info.browser.id);
           enableSessionHistory(info.browser);
-          handleDOMContentLoaded(info);
+          info.tabNode.setAttribute("onerror", "this.removeAttribute('image')");
         }
       }
       self.tabMail.restoreTabs = restoreTabsFunc;
@@ -141,6 +142,129 @@ let WAT = (function(){
     delete restoreTabsFunc;
 
     appendTabContextMenu();
+  }
+
+  /**
+   * append functions to #tabmail
+   * @param {Element} tabMail
+   */
+  function updateTabMail(tabMail){
+    /**
+     * @param {Object} aTabInfo
+     */
+    tabMail.updateIcon = function watUpdateIcon(aTabInfo){
+      if (!("browser" in aTabInfo))
+        return;
+
+      let browser = aTabInfo.browser;
+      if (!aTabInfo.busy && browser.mIconURL){
+        Application.console.log("updateIcon: " + browser.mIconURL + "\n" + Error("DEBUG").stack);
+        aTabInfo.tabNode.setAttribute("image", browser.mIconURL);
+        prefUpdateIcon(aTabInfo, browser.mIconURL);
+      } else {
+        aTabInfo.tabNode.removeAttribute("image");
+      }
+    };
+    /**
+     * @param {Object} aTabInfo
+     */
+    tabMail.useDefaultIcon = function watUseDefaultIcon(aTabInfo){
+      if (!("browser" in aTabInfo))
+        return;
+      let browser = aTabInfo.browser;
+      let uri = browser.contentDocument.documentURIObject;
+      if (browser.contentDocument instanceof ImageDocument){
+        // XXX: now not implemented
+        return;
+      } else if (uri.schemeIs("http") || uri.schemeIs("https")){
+        browser.mIconURL = uri.prePath + "/favicon.ico";
+        this.updateIcon(aTabInfo);
+      }
+    };
+    /**
+     * @param {Object} aTabInfo
+     * @param {String} iconURL
+     */
+    function prefUpdateIcon(aTabInfo, iconURL){
+      let isUpdated = false;
+      if (prefService.prefHasUserValue(WAT_PREFBRANCH_PAGES)){
+        let pages = JSON.parse(prefService.getComplexValue(WAT_PREFBRANCH_PAGES, Ci.nsIPrefLocalizedString).data);
+        if (!(pages instanceof Array)) return;
+        let prePath = aTabInfo.browser.currentURI.prePath;
+        for (let i=0, len=pages.length; i<len; i++){
+          let page = pages[i];
+          if (page.icon != iconURL && page.url.indexOf(prePath) == 0){
+            page.icon = iconURL;
+            isUpdated = true;
+          }
+        }
+        if (isUpdated){
+          let supportString = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
+          supportString.data = JSON.stringify(pages);
+          prefService.setComplexValue(WAT_PREFBRANCH_PAGES, Ci.nsISupportsString, supportString);
+        }
+      }
+    }
+    /**
+     * @param {Document} aDocument
+     */
+    function getTabForDocument(aDocument){
+      let info = tabMail.tabInfo.filter(function(tabInfo){
+        return ("browser" in tabInfo && tabInfo.browser.contentDocument == aDocument)
+      });
+      if (info.length > 0)
+        return info[0];
+      return null;
+    }
+    /**
+     * @param {Event} aEvent DOMLinkAdded event
+     */
+    function onDOMLinkAdded(aEvent){
+      let link = aEvent.originalTarget;
+      let rel = link.rel && link.rel.toLowerCase();
+      let iconAdded = false;
+      if (!link || !link.ownerDocument || !rel || !link.href)
+        return;
+      let rels = rel.split(/\s+/);
+      for (let i=0, len=rels.length; i<len; i++){
+        switch(rels[i]){
+          case "feed":
+          case "alternate":
+            // XXX: not implemented
+            break;
+          case "icon":
+            if (iconAdded)
+              break;
+            let targetDoc = link.ownerDocument;
+            let uri = makeURI(link.href, targetDoc.characterSet);
+            if (uri.schemeIs("chrome"))
+              break;
+            try {
+              urlSecurityCheck(targetDoc.nodePrincipal, uri, Ci.nsIScriptSecurityManager.DISALLOW_SCRIPT);
+            } catch(e){
+              break;
+            }
+            try {
+              var contentPolicy = Cc["@mozilla.org/layout/content-policy;1"]
+                                  .getService(Ci.nsIContentPolicy);
+            } catch(e){
+              break;
+            }
+            if (contentPolicy.shouldLoad(Ci.nsIContentPolicy.TYPE_IMAGE,
+                                         uri, targetDoc.documentURIObject,
+                                         link, link.type, null)
+              != Ci.nsIContentPolicy.ACCEPT)
+              break;
+            let tabInfo = getTabForDocument(targetDoc);
+            if (!tabInfo)
+              break;
+            tabInfo.browser.mIconURL = uri.spec;
+            tabMail.updateIcon(tabInfo);
+            iconAdded = true;
+        }
+      }
+    }
+    tabMail.addEventListener("DOMLinkAdded", onDOMLinkAdded, false);
   }
 
   const os = Cc["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
@@ -253,124 +377,6 @@ let WAT = (function(){
       parentElm.removeChild(elm);
     }
   }
-  /**
-   * @param {Object} tabInfo
-   */
-  function handleDOMContentLoaded(tabInfo){
-    let browser = tabInfo.browser;
-    let currentPrePath;
-    const ssm = Cc["@mozilla.org/scriptsecuritymanager;1"].getService(Ci.nsIScriptSecurityManager);
-    /**
-     * set the favicon to the tab and update registered preference data if exists
-     * @param {String} iconURL
-     */
-    function setIcon(iconURL){ // {{{2
-      tabInfo.tabNode.image = iconURL;
-      let isUpdated = false;
-      if (prefService.prefHasUserValue(WAT_PREFBRANCH_PAGES)){
-        let pages = JSON.parse(prefService.getComplexValue(WAT_PREFBRANCH_PAGES, Ci.nsIPrefLocalizedString).data);
-        if (!(pages instanceof Array)) return;
-        let prePath = browser.currentURI.prePath;
-        for (let i=0, len=pages.length; i<len; i++){
-          let page = pages[i];
-          if (page.icon != iconURL && page.url.indexOf(prePath) == 0){
-            page.icon = iconURL;
-            isUpdated = true;
-          }
-        }
-        if (isUpdated){
-          let supportString = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
-          supportString.data = JSON.stringify(pages);
-          prefService.setComplexValue(WAT_PREFBRANCH_PAGES, Ci.nsISupportsString, supportString);
-        }
-      }
-    } // 2}}}
-    /**
-     * get favicon URL and set the URL to the tab and 
-     * preferece data.
-     * favicon URL:
-     *  1) href attribute of link[rel="shortcut icon"] in the content
-     *  2) /favicon.ico
-     * @param {HTMLDocument} doc
-     */
-    function updateIcon(doc){ // {{{2
-      let link = doc.querySelector('link[rel~="icon"]');
-      if (link){
-        try {
-          let uri = makeURI(link.href, doc.characterSet);
-          ssm.checkLoadURIWithPrincipal(doc.nodePrincipal,
-                                        uri,
-                                        Ci.nsIScriptSecurityManager.DISALLOW_SCRIPT);
-          const contentPolicy = Cc["@mozilla.org/layout/content-policy;1"]
-                                  .getService(Ci.nsIContentPolicy);
-          if (contentPolicy.shouldLoad(Ci.nsIContentPolicy.TYPE_IMAGE,
-                                       uri, doc.documentURIObject,
-                                       link, link.type, null)
-            != Ci.nsIContentPolicy.ACCEPT)
-            return;
-        } catch(e){
-          Components.utils.reportError(e);
-          return;
-        }
-        setIcon(link.href);
-      } else {
-        let prePath = makeURI(doc.location).prePath;
-        if (prePath == currentPrePath)
-          return;
-        let faviconURL = prePath + "/favicon.ico";
-        let xhr = new XMLHttpRequest;
-        xhr.mozBackgroundRequest = true;
-        xhr.open("HEAD", faviconURL, true);
-        xhr.onreadystatechange = function XHR_onreadystatechange(){
-          if (xhr.readyState != 4)
-            return;
-          if (xhr.status == 200 && xhr.getResponseHeader("Content-Type") == "image/x-icon"){
-            setIcon(faviconURL);
-            cuurentPrePath = prePath;
-          }
-        };
-        xhr.send(null);
-      }
-    } // 2}}}
-    /**
-     * @param {HTMLDocument} doc
-     * @return {Boolean} setted redirect or not
-     */
-    function checkHTMLRedirect(doc){ // {{{2
-      let meta = doc.querySelector('meta[http-equiv="refresh"]');
-      if (!meta)
-        return false;
-      let content = meta.getAttribute("content");
-      let reg = new RegExp("^(\\d+);url=(.+)$");
-      let matches = content.match(reg);
-      if (matches){
-        Application.console.log("in redirect: " + matches.join("\n"));
-        let currentURI = browser.currentURI,
-            sec = parseInt(matches[1], 10),
-            uri = makeURI(matches[2], null, currentURI);
-        if (uri.host == currentURI.host){
-          setTimeout(function(){
-            browser.loadURI(uri.spec, currentURI);
-          }, sec * 1000);
-          return true;
-        }
-      }
-      return false;
-    } // 2}}}
-    /**
-     * on DOMContentLoaded handler
-     * @param {Event} aEvent
-     */
-    function onDOMContentLoaded(aEvent){ // {{{2
-      let doc = aEvent.originalTarget;
-      // only HTMLDocument and non-frame
-      if (!(doc instanceof HTMLDocument) || doc.defaultView.frameElement)
-        return;
-      checkHTMLRedirect(doc)
-      updateIcon(doc);
-    } // 2}}}
-    browser.addEventListener("DOMContentLoaded", onDOMContentLoaded, false);
-  }
   // 1}}}
   // --------------------------------------------------------------------------
   // Public Section
@@ -430,7 +436,7 @@ let WAT = (function(){
       let tab = this.tabMail.openTab(type, args);
       if (tab && type == "contentTab"){
         enableSessionHistory(tab.browser);
-        handleDOMContentLoaded(tab);
+        tab.tabNode.setAttribute("onerror", "this.removeAttribute('image')");
       }
       return tab;
     },

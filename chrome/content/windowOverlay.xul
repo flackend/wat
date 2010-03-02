@@ -45,6 +45,7 @@
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
          
 <script type="application/x-javascript" src="chrome://wat/content/wat.js"/> 
+<script type="application/x-javascript" src="chrome://wat/content/watTabProgressListener.js"/> 
 
 <stringbundleset id="stringbundleset">
   <stringbundle id="bundle_wat" src="chrome://wat/locale/wat.properties"/>
