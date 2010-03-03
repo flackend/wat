@@ -17,8 +17,12 @@ Features
  * open in tab from link contex menu
  * can copy to clipboard the title or the URL from tab context menu (version 0.2.4)
  * can open in a new tab on middle-click (version 0.3.0)
- * can forward and back from key-navigation (foward: Alt-Right or Shift-BS, back: Alt-Left or BS),
+ * can forward and back from key-navigation (likes firefox)
    menus in "Go" on the menubar or the context menu (version 0.4.0)
+   * on Windows Back: Alt-Left or BS, Forward: Alt-Rieght or Shift-BS
+   * on MacOS Back: Cmd-Left or Cmd-[ or Delete, Forward: Cmd-Right or Cmd-] or Shfit-Delete
+   * on Linux Back: Alt-Left or Ctrl-[ or BS, Forward: Alt-Right or Ctrl-] or Shift-BS
+ * redirects by meta tab refresh is available (version 0.4.3)
 
 License
 -------
