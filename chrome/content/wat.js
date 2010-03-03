@@ -240,7 +240,7 @@ let WAT = (function(){
             if (uri.schemeIs("chrome"))
               break;
             try {
-              urlSecurityCheck(targetDoc.nodePrincipal, uri, Ci.nsIScriptSecurityManager.DISALLOW_SCRIPT);
+              urlSecurityCheck(uri, targetDoc.nodePrincipal, Ci.nsIScriptSecurityManager.DISALLOW_SCRIPT);
             } catch(e){
               break;
             }
