@@ -17,6 +17,7 @@
     </em:targetApplication>
     
     <em:homepageURL>http://github.com/teramako/wat/</em:homepageURL>
+    <em:optionsURL>chrome://wat/content/option.xul</em:optionsURL>
     <em:iconURL>chrome://wat/skin/watIcon32.png</em:iconURL>
   </Description>
 </RDF>
