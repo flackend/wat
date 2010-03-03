@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE overlay SYSTEM "chrome://wat/locale/wat.dtd">
-<overlay>
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 <keyset id="wat_keyset">
   <key id="wat_goBackKb"
        modifiers="accel"/>
