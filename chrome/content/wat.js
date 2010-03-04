@@ -141,6 +141,19 @@ let WAT = (function(){
     }
     delete restoreTabsFunc;
 
+    // overwrite openUILink
+    // add a feature case of middle-click
+    window.openUILink = function watOpenUILink(url, event){
+      if (!event.button){
+          messenger.launchExternalURL(url);
+      } else if (event.button == 1){
+        let uri = makeURI(url);
+        if (uri.schemeIs("http") || uri.schemeIs("https")){
+          WAT.openTab(uri);
+        }
+      }
+    };
+
     appendTabContextMenu();
   }
 
@@ -540,8 +553,21 @@ let WAT = (function(){
      * @see nsContextMenu in chrome://messenger/content/nsContextMenu.js
      */
     onOpenNewTab: function WAT_onOpenNewTab(){
-      if (gContextMenu && gContextMenu.linkURI)
+      if (gContextMenu && gContextMenu.linkURI){
         this.openTab(gContextMenu.linkURI);
+      } else if (document.popupNode){
+        let node = document.popupNode;
+        Application.console.log("tab: " + node.localName + ", id: " + node.parentNode.id);
+        let uri;
+        try {
+          uri = makeURI(node.textContent);
+        } catch(e){
+          Components.reportError(e);
+        }
+        if (uri){
+          this.openTab(uri);
+        }
+      }
     },
     /**
      * called from menu in Toolbar(WAT)
