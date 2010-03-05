@@ -23,6 +23,9 @@ Features
    * on MacOS Back: Cmd-Left or Cmd-[ or Delete, Forward: Cmd-Right or Cmd-] or Shfit-Delete
    * on Linux Back: Alt-Left or Ctrl-[ or BS, Forward: Alt-Right or Ctrl-] or Shift-BS
  * redirects by meta tab refresh is available (version 0.4.3)
+ * open a new tab the link in RSS feed message header on middle-click or context-menu
+   (version 0.4.5)
+   * and compatible for [CompactHeader](https://addons.mozilla.org/en-US/thunderbird/addon/13564)
 
 License
 -------
