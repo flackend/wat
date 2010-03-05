@@ -62,7 +62,7 @@
     <command id="wat_OptionCmd"
              oncommand="WAT.openTab('chrome://wat/content/option.xul')"/>
     <command id="wat_openNewTabCmd"
-             oncommand="WAT.onOpenNewTab()"/>
+             oncommand="WAT.handlers.onOpenNewTab()"/>
     <command id="wat_openURLCmd"
              oncommand="WAT.openURLDialog()"/>
     <commandset id="wat_browserCommands"

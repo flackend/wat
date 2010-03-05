@@ -38,23 +38,12 @@ let WAT = (function(){
   // --------------------------------------------------------------------------
   // Private Section
   // ----------------------------------------------------------------------{{{1
-  const Cc = Components.classes;
-  const Ci = Components.interfaces;
-  const WAT_PREFBRANCH_PAGES = "extensions.wat.pages",
-        WAT_PREFBRANCH_MIDDLECLICK_IN_NEWTAB = "extensions.wat.middleClickIsNewTab",
-        WAT_FORWARD_CMD = "wat_cmd_browserGoForward",
+  const Cc = Components.classes,
+        Ci = Components.interfaces,
+        Cu = Components.utils;
+  const WAT_FORWARD_CMD = "wat_cmd_browserGoForward",
         WAT_BACK_CMD    = "wat_cmd_browserGoBack";
   let popupElm = null, menuSep = null, bundle = null;
-  let prefService = Cc["@mozilla.org/preferences-service;1"]
-                      .getService(Ci.nsIPrefService)
-                      .QueryInterface(Ci.nsIPrefBranch2);
-  let pagesObserver = {
-    observe: function pages_observe(aSubject, aTopic, aData){
-      /** @see WAT_regenerateMenu */
-      self.regenerateMenu();
-    }
-  };
-  prefService.addObserver(WAT_PREFBRANCH_PAGES, pagesObserver, false);
 
   /**
    * Support browser forward and back.
@@ -122,7 +111,7 @@ let WAT = (function(){
     // overwrite contentArea(message panel in mail3pane) click handler
     // @see WAT_contentAreaClickHandler
     document.getElementById("messagepane")
-      .setAttribute("onclick", "return WAT.contentAreaClickHandler(event) || contentAreaClick(event)"); 
+      .setAttribute("onclick", "return WAT.handlers.contentAreaClickHandler(event) || contentAreaClick(event)"); 
 
     // on Thunderbird started up and restored tabs,
     // call setTabIconUpdator each tabInfo of "contentTab" type
@@ -132,7 +121,6 @@ let WAT = (function(){
       restoreTabsFunc.apply(self.tabMail, arguments);
       for each(let info in self.tabMail.tabInfo){
         if ("browser" in info && info.mode.type == "contentTab"){
-          //Application.console.log("restoring : " + info.browser.id);
           enableSessionHistory(info.browser);
           info.tabNode.setAttribute("onerror", "this.removeAttribute('image')");
         }
@@ -173,7 +161,6 @@ let WAT = (function(){
 
       let browser = aTabInfo.browser;
       if (!aTabInfo.busy && browser.mIconURL){
-        Application.console.log("updateIcon: " + browser.mIconURL + "\n" + Error("DEBUG").stack);
         aTabInfo.tabNode.setAttribute("image", browser.mIconURL);
         prefUpdateIcon(aTabInfo, browser.mIconURL);
       } else {
@@ -202,23 +189,17 @@ let WAT = (function(){
      */
     function prefUpdateIcon(aTabInfo, iconURL){
       let isUpdated = false;
-      if (prefService.prefHasUserValue(WAT_PREFBRANCH_PAGES)){
-        let pages = JSON.parse(prefService.getComplexValue(WAT_PREFBRANCH_PAGES, Ci.nsIPrefLocalizedString).data);
-        if (!(pages instanceof Array)) return;
-        let prePath = aTabInfo.browser.currentURI.prePath;
-        for (let i=0, len=pages.length; i<len; i++){
-          let page = pages[i];
-          if (page.icon != iconURL && page.url.indexOf(prePath) == 0){
-            page.icon = iconURL;
-            isUpdated = true;
-          }
-        }
-        if (isUpdated){
-          let supportString = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
-          supportString.data = JSON.stringify(pages);
-          prefService.setComplexValue(WAT_PREFBRANCH_PAGES, Ci.nsISupportsString, supportString);
+      let pages = WAT.prefs.pages;
+      let prePath = aTabInfo.browser.currentURI.prePath;
+      for (let i=0, len=pages.length; i<len; i++){
+        let page = pages[i];
+        if (page.icon != iconURL && page.url.indexOf(prePath) == 0){
+          page.icon = iconURL;
+          isUpdated = true;
         }
       }
+      if (isUpdated)
+        WAT.prefs.pages = pages;
     }
     /**
      * @param {Document} aDocument
@@ -351,11 +332,11 @@ let WAT = (function(){
         items = [
           createElement("menuitem", {
             label: bundle.getString("tabContextMenu.copyTitle.label"),
-            oncommand: "WAT.copy('TITLE')"
+            oncommand: "WAT.handlers.copy('TITLE')"
           }),
           createElement("menuitem", {
             label: bundle.getString("tabContextMenu.copyUrl.label"),
-            oncommand: "WAT.copy('URL')"
+            oncommand: "WAT.handlers.copy('URL')"
           })
         ];
     items.forEach(function(item){
@@ -432,7 +413,7 @@ let WAT = (function(){
       args[page] = uri.spec;
       if (pageName == "content"){
         let reg = new RegExp("^" + uri.prePath.replace(/\./g, "\\.") + "($|/)");
-        args.clickHandler = "WAT.siteClickHandler(event, " + reg.toSource() + ")";
+        args.clickHandler = "WAT.handlers.siteClickHandler(event, " + reg.toSource() + ")";
       }
       let tabMode = this.tabMail.tabModes[type];
       if (tabMode.tabs.length >= tabMode.maxTabs){
@@ -456,87 +437,189 @@ let WAT = (function(){
       return tab;
     },
     /**
-     * @type {Boolean}
-     * @see WAT_siteClickHandler
-     * if true, opens in a new tab on middle-click
+     * preferences
+     * {{{2
      */
-    get middleClickIsNewTab(){
-      return prefService.getBoolPref(WAT_PREFBRANCH_MIDDLECLICK_IN_NEWTAB);
-    },
-    set middleClickIsNewTab(value){
-      let bool = !!value;
-      prefService.setBoolPref(WAT_PREFBRANCH_MIDDLECLICK_IN_NEWTAB, bool);
-      return bool;
-    },
+    prefs: (function(){
+      const WAT_PREFBRANCH_PAGES = "extensions.wat.pages",
+            WAT_PREFBRANCH_MIDDLECLICK_IN_NEWTAB = "extensions.wat.middleClickIsNewTab";
+      const prefService = Cc["@mozilla.org/preferences-service;1"]
+                          .getService(Ci.nsIPrefService)
+                          .QueryInterface(Ci.nsIPrefBranch2);
+      let pagesObserver = {
+        observe: function pages_observe(aSubject, aTopic, aData){
+          /** @see WAT_regenerateMenu */
+          WAT.regenerateMenu();
+        }
+      };
+      prefService.addObserver(WAT_PREFBRANCH_PAGES, pagesObserver, false);
+      // ----------------------------------------------------------------------
+      // Preference Public Section
+      // ------------------------------------------------------------------{{{3
+      let publicPrefs = {
+        /**
+         * @type {Boolean}
+         * @see WAT_siteClickHandler
+         * if true, opens in a new tab on middle-click
+         */
+        get middleClickIsNewTab(){
+          return prefService.getBoolPref(WAT_PREFBRANCH_MIDDLECLICK_IN_NEWTAB);
+        },
+        set middleClickIsNewTab(value){
+          let bool = !!value;
+          prefService.setBoolPref(WAT_PREFBRANCH_MIDDLECLICK_IN_NEWTAB, bool);
+          return bool;
+        },
+        /**
+         * @return {Array}
+         * [{
+         *    label: "page-title",
+         *    url: "page-url"
+         *    icon: "favicon-url"(optional)
+         * }, {
+         *    // ...
+         * }]
+         */
+        get pages(){
+          if (!prefService.prefHasUserValue(WAT_PREFBRANCH_PAGES))
+            return [];
+          let pageString = prefService.getComplexValue(WAT_PREFBRANCH_PAGES, Ci.nsIPrefLocalizedString).data;
+          let pages = JSON.parse(pageString);
+          if (pages instanceof Array)
+            return pages;
+          return [];
+        },
+        set pages(value){
+          try {
+            var pages = JSON.stringify(value);
+          } catch(e){
+            Cu.reportError(e);
+            return null;
+          }
+          let supportString = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
+          supportString.data = pages
+          prefService.setComplexValue(WAT_PREFBRANCH_PAGES, Ci.nsISupportsString, supportString);
+          return pages;
+        }
+      };
+      return publicPrefs;
+      // 3}}}
+    })(),
+    // 2}}}
     /**
-     * @param aEvent {Event} MouseEvent
-     * @return {Boolean} if true, the other operation should not be done
-     * add middle-click handler on HTMLAnchorElement
-     * to "messagepane" (message panel in mail3pane)
-     * if {Event} is middle-click and the URL scheme is specific,
-     *   opens the URL in a new tab and
-     *   return true
-     * else
-     *   return false
+     * hadlers
+     * {{{2
      */
-    contentAreaClickHandler: function WAT_contentAreaClickHandler(aEvent){
-      let href = hRefForClickEvent(aEvent);
-      if (href && aEvent.button == 1){
-        let uri = makeURI(href);
-        if (uri.schemeIs("http") || uri.schemeIs("https") || uri.schemeIs("about")){
-          aEvent.preventDefault();
-          WAT.openTab(href);
+    handlers: { 
+      /**
+       * @param aEvent {Event} MouseEvent
+       * @return {Boolean} if true, the other operation should not be done
+       * add middle-click handler on HTMLAnchorElement
+       * to "messagepane" (message panel in mail3pane)
+       * if {Event} is middle-click and the URL scheme is specific,
+       *   opens the URL in a new tab and
+       *   return true
+       * else
+       *   return false
+       */
+      contentAreaClickHandler: function WAT_contentAreaClickHandler(aEvent){
+        let href = hRefForClickEvent(aEvent);
+        if (href && aEvent.button == 1){
+          let uri = makeURI(href);
+          if (uri.schemeIs("http") || uri.schemeIs("https") || uri.schemeIs("about")){
+            aEvent.preventDefault();
+            WAT.openTab(href);
+            return true;
+          }
+        }
+        return false;
+      },
+      /**
+       * @param aEvent {Event} MouseEvent expect left or middle button
+       * @param aSiteRegExp {RegExp} used whether
+       *                    matches {aSiteRegExp} and the anchor URL or not.
+       * @see WAT_openTab
+       * @see middleClickIsNewTab
+       *
+       */
+      siteClickHandler: function WAT_siteClickHandler(aEvent, aSiteRegExp){
+        if (!aEvent.isTrusted || aEvent.getPreventDefault() || aEvent.button == 2)
           return true;
-        }
-      }
-      return false;
-    },
-    /**
-     * @param aEvent {Event} MouseEvent expect left or middle button
-     * @param aSiteRegExp {RegExp} used whether
-     *                    matches {aSiteRegExp} and the anchor URL or not.
-     * @see WAT_openTab
-     * @see middleClickIsNewTab
-     *
-     */
-    siteClickHandler: function WAT_siteClickHandler(aEvent, aSiteRegExp){
-      if (!aEvent.isTrusted || aEvent.getPreventDefault() || aEvent.button == 2)
-        return true;
 
-      let href = hRefForClickEvent(aEvent, true);
-      if (href){
-        let uri = makeURI(href);
-        if (uri.schemeIs("javascript")){
-          WAT.tabMail.currentTabInfo.browser.loadURI(uri.spec);
-        } else if (!specialTabs._protocolSvc.isExposedProtocol(uri.scheme) ||
-            ((uri.schemeIs("http") || uri.schemeIs("https") ||
-              uri.schemeIs("about")) && !aSiteRegExp.test(uri.spec))) {
-          aEvent.preventDefault();
-          if (aEvent.button == 1 && WAT.middleClickIsNewTab)
-            WAT.openTab(href);
-          else
-            openLinkExternally(href);
-        } else if (aEvent.button == 1) {
-          aEvent.preventDefault();
-          if (WAT.middleClickIsNewTab)
-            WAT.openTab(href);
-          else
-            openLinkExternally(href);
+        let href = hRefForClickEvent(aEvent, true);
+        if (href){
+          let uri = makeURI(href);
+          if (uri.schemeIs("javascript")){
+            WAT.tabMail.currentTabInfo.browser.loadURI(uri.spec);
+          } else if (!specialTabs._protocolSvc.isExposedProtocol(uri.scheme) ||
+              ((uri.schemeIs("http") || uri.schemeIs("https") ||
+                uri.schemeIs("about")) && !aSiteRegExp.test(uri.spec))) {
+            aEvent.preventDefault();
+            if (aEvent.button == 1 && WAT.prefs.middleClickIsNewTab)
+              WAT.openTab(href);
+            else
+              openLinkExternally(href);
+          } else if (aEvent.button == 1) {
+            aEvent.preventDefault();
+            if (WAT.prefs.middleClickIsNewTab)
+              WAT.openTab(href);
+            else
+              openLinkExternally(href);
+          }
         }
-      }
+      },
+      /**
+       * called from context menu on HTMLAnchorElement
+       * or RSS feed message header
+       * @see command#wat_openNewTabCmd in windowOverlay.xul
+       * @see popup#copyUrlPopup in chrome://messenger/content/msgHdrViewOverlay.xul
+       * @see nsContextMenu in chrome://messenger/content/nsContextMenu.js
+       */
+      onOpenNewTab: function WAT_onOpenNewTab(){
+        if (gContextMenu && gContextMenu.linkURI){
+          WAT.openTab(gContextMenu.linkURI);
+        } else if (document.popupNode){
+          let node = document.popupNode;
+          try {
+            var uri = makeURI(node.textContent);
+          } catch(e){
+            Components.reportError(e);
+          }
+          if (uri)
+            WAT.openTab(uri);
+        }
+      },
+      /**
+       * called from tab's context menu
+       * @param {String} label should be "TITLE" or "URL"
+       */
+      copy: function WAT_copy(label){
+        const clipboardHelper = Cc["@mozilla.org/widget/clipboardhelper;1"].getService(Ci.nsIClipboardHelper);
+        let [iTab, tab, tabNode] = this.tabMail._getTabContextForTabbyThing(document.popupNode);
+        if (!("browser" in tab))
+          return;
+        switch(label){
+          case "TITLE":
+            str = tab.browser.contentTitle;
+            break;
+          case "URL":
+            str = tab.browser.currentURI.spec;
+            break;
+          default:
+            return;
+        }
+        if (str)
+          clipboardHelper.copyString(str);
+      },
     },
+    // 2}}}
     /**
      * called when thunderbird is loaded and
      * "extensions.wat.pages" is modified
      */
     regenerateMenu: function WAT_regenerateMenu(){
       removeAllElementUntilSep(popupElm, menuSep.id);
-      if (!prefService.prefHasUserValue(WAT_PREFBRANCH_PAGES)){
-        return;
-      }
-      let pageString = prefService.getComplexValue(WAT_PREFBRANCH_PAGES, Ci.nsIPrefLocalizedString).data;
-      let pages = JSON.parse(pageString);
-      if (!(pages instanceof Array)) return;
+      let pages = this.prefs.pages;
 
       pages.forEach(function(page){
         let menuitem = createElement("menuitem", {
@@ -544,32 +627,11 @@ let WAT = (function(){
           image: page.icon || "",
           validate: "never",
           class: "menuitem-iconic",
-          oncommand: "WAT.openTab('" + page.url + "')"
+          url: page.url,
+          oncommand: "WAT.openTab(this.getAttribute('url'))"
         });
         popupElm.insertBefore(menuitem, menuSep);
       });
-    },
-    /**
-     * called from context menu on HTMLAnchorElement
-     * @see command#wat_openNewTabCmd in windowOverlay.xul
-     * @see nsContextMenu in chrome://messenger/content/nsContextMenu.js
-     */
-    onOpenNewTab: function WAT_onOpenNewTab(){
-      if (gContextMenu && gContextMenu.linkURI){
-        this.openTab(gContextMenu.linkURI);
-      } else if (document.popupNode){
-        let node = document.popupNode;
-        Application.console.log("tab: " + node.localName + ", id: " + node.parentNode.id);
-        let uri;
-        try {
-          uri = makeURI(node.textContent);
-        } catch(e){
-          Components.reportError(e);
-        }
-        if (uri){
-          this.openTab(uri);
-        }
-      }
     },
     /**
      * called from menu in Toolbar(WAT)
@@ -577,28 +639,6 @@ let WAT = (function(){
      */
     openURLDialog: function WAT_openURLDialog(){
       openDialog("chrome://wat/content/openURL.xul","_blank", "chrome,modal,titlebar", window);
-    },
-    /**
-     * called from tab's context menu
-     * @param {String} label should be "TITLE" or "URL"
-     */
-    copy: function WAT_copy(label){
-      const clipboardHelper = Cc["@mozilla.org/widget/clipboardhelper;1"].getService(Ci.nsIClipboardHelper);
-      let [iTab, tab, tabNode] = this.tabMail._getTabContextForTabbyThing(document.popupNode);
-      if (!("browser" in tab))
-        return;
-      switch(label){
-        case "TITLE":
-          str = tab.browser.contentTitle;
-          break;
-        case "URL":
-          str = tab.browser.currentURI.spec;
-          break;
-        default:
-          return;
-      }
-      if (str)
-        clipboardHelper.copyString(str);
     },
     /**
      * @param {String} url
