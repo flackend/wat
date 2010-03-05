@@ -412,7 +412,11 @@ let WAT = (function(){
       let args = {};
       args[page] = uri.spec;
       if (pageName == "content"){
-        let reg = new RegExp("^" + uri.prePath.replace(/\./g, "\\.") + "($|/)");
+        let reg;
+        if (uri.schemeIs("http") || uri.schemeIs("https"))
+          reg = new RegExp("^https?://" + uri.host.replace(/\./g,"\\.") + "($|/)");
+        else
+          reg = new RegExp("^" + uri.prePath.replace(/\./g, "\\.") + "($|/)");
         args.clickHandler = "WAT.handlers.siteClickHandler(event, " + reg.toSource() + ")";
       }
       let tabMode = this.tabMail.tabModes[type];
