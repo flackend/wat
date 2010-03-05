@@ -155,6 +155,8 @@ let WAT = (function(){
     };
 
     appendTabContextMenu();
+
+    self.loadScript("chrome://wat/content/plugins/init.js", self.plugins);
   }
 
   /**
@@ -597,7 +599,16 @@ let WAT = (function(){
       }
       if (str)
         clipboardHelper.copyString(str);
-    }
+    },
+    /**
+     * @param {String} url
+     * @param {Object} context
+     */
+    loadScript: function WAT_loadScript(url, context){
+      const ssl = Cc["@mozilla.org/moz/jssubscript-loader;1"].getService(Ci.mozIJSSubScriptLoader);
+      ssl.loadSubScript(url, context);
+    },
+    plugins: { },
   };
   window.addEventListener("load", init, false);
   return self;
