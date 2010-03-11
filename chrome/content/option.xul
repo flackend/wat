@@ -72,7 +72,7 @@
               </row>
               <row>
                 <label value="&wat.option.pageurl.label;"/>
-                <textbox id="urlTextBox" multiline="false" oninput="wat.onInput()"/>
+                <textbox id="urlTextBox" multiline="false" oninput="wat.onInput()" value="http://"/>
               </row>
             </rows>
           </grid>
