@@ -599,7 +599,7 @@ let WAT = (function(){
        */
       copy: function WAT_copy(label){
         const clipboardHelper = Cc["@mozilla.org/widget/clipboardhelper;1"].getService(Ci.nsIClipboardHelper);
-        let [iTab, tab, tabNode] = this.tabMail._getTabContextForTabbyThing(document.popupNode);
+        let [iTab, tab, tabNode] = WAT.tabMail._getTabContextForTabbyThing(document.popupNode);
         if (!("browser" in tab))
           return;
         switch(label){
