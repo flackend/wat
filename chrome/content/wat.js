@@ -144,6 +144,15 @@ let WAT = (function(){
 
     appendTabContextMenu();
 
+    let accounts = getAccountsByType("rss");
+    let accountKey = WAT.prefs.feedAccountKey;
+    if (accounts.length > 0) {
+      if (!accountKey || !accounts.some(function(a) a.key == accountKey)){
+        WAT.prefs.feedAccountKey = accounts[0].key;
+      }
+    } else if (accountKey){
+      WAT.prefs.feedAccountKey = "";
+    }
     self.loadScript("chrome://wat/content/plugins/init.js", self.plugins);
   }
 
@@ -218,15 +227,33 @@ let WAT = (function(){
     function onDOMLinkAdded(aEvent){
       let link = aEvent.originalTarget;
       let rel = link.rel && link.rel.toLowerCase();
-      let iconAdded = false;
+      let iconAdded = false,
+          feedAdded = false;
       if (!link || !link.ownerDocument || !rel || !link.href)
         return;
       let rels = rel.split(/\s+/);
       for (let i=0, len=rels.length; i<len; i++){
         switch(rels[i]){
-          case "feed":
           case "alternate":
-            // XXX: not implemented
+            if (rels.some(function(r) r == "stylesheet"))
+              break;
+          case "feed":
+            if (feedAdded)
+              break;
+            let type = link.type.replace(/^\s*|\s*(?:;.*)?$/g, "");
+            if (type == "application/rss+xml" || type == "application/atom+xml"){
+              try {
+                urlSecurityCheck(link.href, link.ownerDocument.nodePrincipal,
+                  Ci.nsIScriptSecurityManager.DISALLOW_INHERIT_PRINCIPAL);
+              } catch(e){
+                break;
+              }
+              let tabInfo = getTabForDocument(link.ownerDocument);
+              if (tabInfo){
+                WAT.handlers.feeds.add(link, tabInfo);
+                feedAdded = true;
+              }
+            }
             break;
           case "icon":
             if (iconAdded)
@@ -261,6 +288,7 @@ let WAT = (function(){
       }
     }
     tabMail.addEventListener("DOMLinkAdded", onDOMLinkAdded, false);
+    tabMail.registerTabMonitor(WAT.handlers.feeds.tabMonitor);
   }
 
   const os = Cc["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
@@ -373,6 +401,18 @@ let WAT = (function(){
       parentElm.removeChild(elm);
     }
   }
+  /**
+   * @param {String} aType
+   */
+  function getAccountsByType(aType){
+    const accountMgr = Cc["@mozilla.org/messenger/account-manager;1"].getService(Ci.nsIMsgAccountManager);
+    let accounts = [];
+    for (let a in fixIterator(accountMgr.accounts, Ci.nsIMsgAccount)){
+      if (!aType || a.incomingServer.type == aType)
+        accounts.push(a);
+    }
+    return accounts;
+  }
   // 1}}}
   // --------------------------------------------------------------------------
   // Public Section
@@ -446,7 +486,8 @@ let WAT = (function(){
      */
     prefs: (function(){
       const WAT_PREFBRANCH_PAGES = "extensions.wat.pages",
-            WAT_PREFBRANCH_MIDDLECLICK_IN_NEWTAB = "extensions.wat.middleClickIsNewTab";
+            WAT_PREFBRANCH_MIDDLECLICK_IN_NEWTAB = "extensions.wat.middleClickIsNewTab",
+            WAT_PREFBRANCH_FEEDACCOUNT = "extensions.wat.feedaccount";
       const prefService = Cc["@mozilla.org/preferences-service;1"]
                           .getService(Ci.nsIPrefService)
                           .QueryInterface(Ci.nsIPrefBranch2);
@@ -461,6 +502,17 @@ let WAT = (function(){
       // Preference Public Section
       // ------------------------------------------------------------------{{{3
       let publicPrefs = {
+        /**
+         * @type {String}
+         */
+        get feedAccountKey(){
+          return prefService.getCharPref(WAT_PREFBRANCH_FEEDACCOUNT);
+        },
+        set feedAccountKey(value){
+          value = value.toString();
+          prefService.setCharPref(WAT_PREFBRANCH_FEEDACCOUNT, value);
+          return value;
+        },
         /**
          * @type {Boolean}
          * @see WAT_siteClickHandler
@@ -615,6 +667,84 @@ let WAT = (function(){
         if (str)
           clipboardHelper.copyString(str);
       },
+      feeds: {
+        add: function wat_addFeed(link, tabInfo){
+          if (!tabInfo.browser || !tabInfo.feeds)
+            tabInfo.feeds = [];
+          tabInfo.feeds.push({href: link.href, title: link.title});
+          let currentTabInfo = WAT.tabMail.currentTabInfo;
+          if (currentTabInfo.browser && currentTabInfo.browser == tabInfo.browser){
+            let button = document.getElementById("wat_feedButton");
+            if (button)
+              button.collapsed = false;
+          }
+        },
+        onSubscribe: function wat_feedSubscribe(aURL){
+          let accounts = getAccountsByType("rss");
+          if (accounts.length){
+            //FIXME: should supports multi feed acounts
+            //openSubscriptionsDialog(accounts[0].incomingServer.rootFolder);
+            let w = Cc["@mozilla.org/appshell/window-mediator;1"]
+                      .getService(Ci.nsIWindowMediator)
+                      .getMostRecentWindow("Mail:News-BlogSubscriptions");
+            let rootFolder = accounts[0].incomingServer.rootFolder;
+            if (w){
+              w.focus();
+              w.gFeedSubscriptionsWindow.addFeed(aURL, rootFolder.URI);
+            } else {
+              w = window.openDialog("chrome://messenger-newsblog/content/feed-subscriptions.xul","",
+                                "centerscreen,chrome,dialog=no,resizable",
+                                { server: rootFolder.server, folder: rootFolder });
+              w.addEventListener("load", function(){
+                w.removeEventListener("load", arguments.collee, false);
+                setTimeout(function(){
+                  w.gFeedSubscriptionsWindow.addFeed(aURL, rootFolder.URI);
+                }, 500);
+              }, false);
+            }
+          }
+        },
+        popupShowing: function wat_feedMenuPopupShowing(){
+          let feedMenus = document.getElementById("wat_feedMenuPopup");
+          while (feedMenus.firstChild)
+            feedMenus.removeChild(feedMenus.firstChild);
+          let tabInfo = WAT.tabMail.currentTabInfo;
+          let feeds = tabInfo.feeds;
+          if (!feeds || feeds.length == 0)
+            return false;
+          feeds.forEach(function(feed){
+            let label = bundle.getFormattedString('feed.show.label', [feed.title || feed.href]);
+            let menu = createElement("menuitem", {
+              label: label,
+              feed: feed.href,
+              tooltiptext: feed.href,
+              oncommand: "WAT.handlers.feeds.onSubscribe(this.getAttribute('feed'))",
+              crop: "center"
+            });
+            feedMenus.appendChild(menu);
+          });
+          return true;
+        },
+        update: function(aTab){
+          let feedButton = document.getElementById("wat_feedButton");
+          if (!WAT.prefs.feedAccountKey){
+            feedButton.collapsed = true;
+            return;
+          }
+          if (!aTab)
+            aTab = WAT.tabMail.currentTabInfo;
+          if (aTab.feeds && aTab.feeds.length > 0)
+            feedButton.collapsed = false;
+          else
+            feedButton.collapsed = true;
+        },
+        tabMonitor: {
+          onTabSwitched: function wat_feedOnTabSwitched(aTab, aOldTab){
+            WAT.handlers.feeds.update(aTab);
+          },
+          onTabTitleChanged: function(){ }
+        },
+      }
     },
     // 2}}}
     /**

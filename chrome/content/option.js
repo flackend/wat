@@ -47,7 +47,7 @@ let wat = (function(){
   // Private Section
   // ----------------------------------------------------------------------{{{1
   let siteNameTextBox, urlTextBox, listBox, statusLabel,
-      addButton, deleteButton, upButton, downButton;
+      addButton, deleteButton, upButton, downButton, feedaccountPopup;
   let isError = false;
   /**
    * like prototype.js
@@ -128,6 +128,43 @@ let wat = (function(){
     urlTextBox.value = "";
     addButton.setAttribute("disabled","true");
   }
+  function supportsArrayIterator(array, iface){
+    let iter = function(){
+      var count = array.Count();
+      for (let i = 0; i < count; i++){
+        yield array.QueryElementAt(i, iface);
+      }
+    };
+    return {__iterator__: iter};
+  }
+  function initializeFeedAccount(){
+    const am = Cc["@mozilla.org/messenger/account-manager;1"].getService(Ci.nsIMsgAccountManager);
+    let feedAccountExists = false;
+    for (let account in supportsArrayIterator(am.accounts, Ci.nsIMsgAccount)){
+      if (account.incomingServer.type == "rss"){
+        feedAccountExists = true;
+        let elm = document.createElement("menuitem");
+        elm.setAttribute("label", account.incomingServer.prettyName);
+        elm.setAttribute("value", account.key);
+        feedaccountPopup.appendChild(elm);
+        if (feedaccountPopup.parentNode.value == account.key){
+          feedaccountPopup.parentNode.selectedItem = elm;
+        }
+      }
+    }
+    if (!feedaccountPopup.parentNode.selectedItem){
+      if (feedAccountExists){
+        feedaccountPopup.parentNode.selectedIndex = 0;
+        prefService.setCharPref("feedaccount", feedaccountPopup.parentNode.selectedItem.value)
+      } else {
+        let elm = document.createElement("menuitem");
+        elm.setAttribute("label", "-");
+        elm.setAttribute("value", "");
+        feedaccountPopup.appendChild(elm);
+        feedaccountPopup.parentNode.selectedItem = elm;
+      }
+    }
+  }
   // 1}}}
   // --------------------------------------------------------------------------
   // Public Section
@@ -145,6 +182,7 @@ let wat = (function(){
       deleteButton    = $("deleteButton");
       upButton        = $("upButton");
       downButton      = $("downButton");
+      feedaccountPopup= $("feedaccountPopup");
       
       // get and show stored pages data in prefereces
       let pages = [];
@@ -153,6 +191,8 @@ let wat = (function(){
         pages = JSON.parse(pageString);
       }
       pages.forEach(addItem);
+
+      initializeFeedAccount();
     },
     /**
      * called from button#addButton in option.xul

@@ -35,6 +35,7 @@
 
  ***** END LICENSE BLOCK ***** -->
 
+<?xml-stylesheet href="chrome://wat/skin/wat.css" type="text/css"?>
 <!DOCTYPE overlay [
   <!ENTITY % watDTD SYSTEM "chrome://wat/locale/wat.dtd">
   %watDTD;
@@ -168,6 +169,20 @@
     </menupopup>
   </menu>
 </menubar>
+
+<statusbar id="status-bar">
+  <statusbarpanel id="wat_feedpanel"
+                  insertafter="statusbar-progresspanel">
+    <button id="wat_feedButton"
+            type="menu"
+            collapsed="true"
+            class="plain">
+      <menupopup id="wat_feedMenuPopup"
+                 position="before_end"
+                 onpopupshowing="WAT.handlers.feeds.popupShowing()"/>
+    </button>
+  </statusbarpanel>
+</statusbar>
 
 </overlay>
 <!--

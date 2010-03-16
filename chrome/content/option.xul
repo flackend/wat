@@ -49,6 +49,7 @@
 <prefpane label="pref" flex="1">
   <preferences>
     <preference id="middle-click" name="extensions.wat.middleClickIsNewTab" type="bool"/>
+    <preference id="feedaccount" name="extensions.wat.feedaccount" type="string"/>
   </preferences>
   <vbox flex="1">
     <separator class="thin"/>
@@ -113,7 +114,13 @@
     <hbox flex="1">
       <groupbox flex="1">
         <caption label="&wat.option.group.settings.label;"/>
-          <checkbox label="&wat.option.middleclicktab;" preference="middle-click"/>
+        <checkbox label="&wat.option.middleclicktab;" preference="middle-click"/>
+        <hbox>
+          <label value="RSS Feed Subscribe to"/>
+          <menulist preference="feedaccount">
+            <menupopup id="feedaccountPopup"/>
+          </menulist>
+        </hbox>
       </groupbox>
     </hbox>
   </vbox>

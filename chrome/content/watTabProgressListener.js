@@ -47,6 +47,7 @@ tabProgressListener.prototype =
     }
 
     this.mBrowser.missingPlugins = null;
+    WAT.handlers.feeds.update(this.mTab);
   },
   onStateChange: function wat_onStateChange(aWebProgress, aRequest, aStateFlags,
                                             aStatus) {
@@ -57,6 +58,9 @@ tabProgressListener.prototype =
     let tabmail = document.getElementById("tabmail");
 
     if (aStateFlags & nsIWebProgressListener.STATE_START) {
+      if (nsIWebProgressListener.STATE_IS_NETWORK && aRequest &&
+          aWebProgress.DOMWindow == content)
+        this.mTab.feeds == null;
       this.mRequestCount++;
     }
     else if (aStateFlags & nsIWebProgressListener.STATE_STOP) {
