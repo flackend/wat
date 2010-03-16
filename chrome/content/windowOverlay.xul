@@ -84,13 +84,15 @@
          keycode="VK_LEFT"
          oncommand="goDoCommand('wat_cmd_browserGoBack')"
          modifiers="alt"/>
-    <key keycode="VK_BACK"
+    <key id="wat_goBackKb2"
+         keycode="VK_BACK"
          oncommand="goDoCommand('wat_cmd_browserGoBack')"/>
     <key id="wat_goForwardKb"
          keycode="VK_RIGHT"
          oncommand="goDoCommand('wat_cmd_browserGoForward')"
          modifiers="alt"/>
-    <key keycode="VK_BACK"
+    <key id="wat_goForwardKb2"
+         keycode="VK_BACK"
          oncommand="goDoCommand('wat_cmd_browserGoForward')"
          modifiers="shift"/>
   </keyset>

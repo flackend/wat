@@ -2,11 +2,11 @@
 <!DOCTYPE overlay SYSTEM "chrome://wat/locale/wat.dtd">
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 <keyset id="wat_keyset">
-  <key id="wat_goBackKb2"
+  <key id="wat_goBackKb3"
        key="["
        oncommand="goDoCommand('wat_cmd_browserGoBack')"
        modifiers="accel"/>
-  <key id="wat_goForwardKb2"
+  <key id="wat_goForwardKb3"
        key="]"
        oncommand="goDoCommand('wat_cmd_browserGoForward')"
        modifiers="accel"/>
