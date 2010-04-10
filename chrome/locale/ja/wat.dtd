@@ -14,6 +14,7 @@
 <!ENTITY wat.option.group.urlregistration.label "URLの登録">
 <!ENTITY wat.option.group.settings.label "設定">
 <!ENTITY wat.option.middleclicktab "中ボタンクリックでタブに開く">
+<!ENTITY wat.option.loadInBackground "タブをバックグラウンドに開く(+Shift-keyで動作が入れ替わります)">
 <!ENTITY wat.openURL.label "URLをタブに開く">
 <!ENTITY wat.openURL.acceptButton.label "開く">
 <!ENTITY wat.browser.forward.label "進む(ブラウザ)">

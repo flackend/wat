@@ -14,6 +14,7 @@
 <!ENTITY wat.option.group.urlregistration.label "URL registration">
 <!ENTITY wat.option.group.settings.label "Settings">
 <!ENTITY wat.option.middleclicktab "Open in a new tab on middle-click">
+<!ENTITY wat.option.loadInBackground "Open tab in background (+Shift-key reverse the behavior)">
 <!ENTITY wat.openURL.label "Open URL in tab">
 <!ENTITY wat.openURL.acceptButton.label "Open">
 <!ENTITY wat.browser.forward.label "Browser Forward">

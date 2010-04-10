@@ -48,6 +48,7 @@
 <script type="application/x-javascript" src="chrome://wat/content/option.js"/>
 <prefpane label="pref" flex="1">
   <preferences>
+    <preference id="loadInBackground" name="mail.tabs.loadInBackground" type="bool"/>
     <preference id="middle-click" name="extensions.wat.middleClickIsNewTab" type="bool"/>
     <preference id="feedaccount" name="extensions.wat.feedaccount" type="string"/>
   </preferences>
@@ -114,6 +115,7 @@
     <hbox flex="1">
       <groupbox flex="1">
         <caption label="&wat.option.group.settings.label;"/>
+        <checkbox label="&wat.option.loadInBackground;" preference="loadInBackground"/>
         <checkbox label="&wat.option.middleclicktab;" preference="middle-click"/>
         <hbox>
           <label value="RSS Feed Subscribe to"/>
