@@ -137,7 +137,7 @@ let WAT = (function(){
       } else if (event.button == 1){
         let uri = makeURI(url);
         if (uri.schemeIs("http") || uri.schemeIs("https")){
-          WAT.openTab(uri);
+          WAT.openTab(uri, isLoadInBackground(event));
         }
       }
     };
@@ -413,6 +413,15 @@ let WAT = (function(){
     }
     return accounts;
   }
+  /**
+   * @param {Event} aEvent
+   */
+  function isLoadInBackground(aEvent){
+    let bg = WAT.prefs.loadInBackground;
+    if (aEvent.shiftKey)
+      bg = !bg;
+    return bg;
+  }
   // 1}}}
   // --------------------------------------------------------------------------
   // Public Section
@@ -434,11 +443,14 @@ let WAT = (function(){
      *       then opens the URL in a new tab or external browser.
      *   and enable session-history (@see enableSessionHistory)
      *
+     * @param {Boolean} background
+     * open tab in background
+     *
      * Now, Thunderbird limits amount of tabs to 10 each types.
      * if the type of tab will over the limit,
      * show prompt about whether force open or not.
      */
-    openTab: function WAT_openTab (uri){
+    openTab: function WAT_openTab (uri, background){
       if (!(uri instanceof Ci.nsIURI)){
         try {
           uri = makeURI(uri, null, null);
@@ -449,7 +461,7 @@ let WAT = (function(){
       }
       let pageName = (uri.schemeIs("chrome") || uri.schemeIs("about")) ? "chrome" : "content";
       let type = pageName + "Tab", page = pageName + "Page";
-      let args = {};
+      let args = { background: !!background };
       args[page] = uri.spec;
       if (pageName == "content"){
         let reg;
@@ -487,7 +499,8 @@ let WAT = (function(){
     prefs: (function(){
       const WAT_PREFBRANCH_PAGES = "extensions.wat.pages",
             WAT_PREFBRANCH_MIDDLECLICK_IN_NEWTAB = "extensions.wat.middleClickIsNewTab",
-            WAT_PREFBRANCH_FEEDACCOUNT = "extensions.wat.feedaccount";
+            WAT_PREFBRANCH_FEEDACCOUNT = "extensions.wat.feedaccount",
+            TAB_LOADINBACKGROUND = "mail.tabs.loadInBackground";
       const prefService = Cc["@mozilla.org/preferences-service;1"]
                           .getService(Ci.nsIPrefService)
                           .QueryInterface(Ci.nsIPrefBranch2);
@@ -556,6 +569,18 @@ let WAT = (function(){
           supportString.data = pages
           prefService.setComplexValue(WAT_PREFBRANCH_PAGES, Ci.nsISupportsString, supportString);
           return pages;
+        },
+        /**
+         * @return {Boolean}
+         * @see prefs "mail.tabs.loadInBackground"
+         */
+        get loadInBackground(){
+          return prefService.getBoolPref(TAB_LOADINBACKGROUND);
+        },
+        set loadInBackground(value){
+          value = !!value;
+          prefService.setBoolPref(TAB_LOADINBACKGROUND, value);
+          return value;
         }
       };
       return publicPrefs;
@@ -584,7 +609,7 @@ let WAT = (function(){
           let uri = makeURI(href);
           if (uri.schemeIs("http") || uri.schemeIs("https") || uri.schemeIs("about")){
             aEvent.preventDefault();
-            WAT.openTab(href);
+            WAT.openTab(href, isLoadInBackground(aEvent));
             return true;
           }
         }
@@ -603,6 +628,7 @@ let WAT = (function(){
           return true;
 
         let href = hRefForClickEvent(aEvent, true);
+        let background = isLoadInBackground(aEvent);
         if (href){
           let uri = makeURI(href);
           if (uri.schemeIs("javascript")){
@@ -612,13 +638,13 @@ let WAT = (function(){
                 uri.schemeIs("about")) && !aSiteRegExp.test(uri.spec))) {
             aEvent.preventDefault();
             if (aEvent.button == 1 && WAT.prefs.middleClickIsNewTab)
-              WAT.openTab(href);
+              WAT.openTab(href, background);
             else
               openLinkExternally(href);
           } else if (aEvent.button == 1) {
             aEvent.preventDefault();
             if (WAT.prefs.middleClickIsNewTab)
-              WAT.openTab(href);
+              WAT.openTab(href, background);
             else
               openLinkExternally(href);
           }
@@ -632,8 +658,9 @@ let WAT = (function(){
        * @see nsContextMenu in chrome://messenger/content/nsContextMenu.js
        */
       onOpenNewTab: function WAT_onOpenNewTab(){
+        let background = WAT.prefs.loadInBackground;
         if (gContextMenu && gContextMenu.linkURI){
-          WAT.openTab(gContextMenu.linkURI);
+          WAT.openTab(gContextMenu.linkURI, background);
         } else if (document.popupNode){
           let node = document.popupNode;
           try {
@@ -642,7 +669,7 @@ let WAT = (function(){
             Components.reportError(e);
           }
           if (uri)
-            WAT.openTab(uri);
+            WAT.openTab(uri, background);
         }
       },
       /**
