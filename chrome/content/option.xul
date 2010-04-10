@@ -38,7 +38,7 @@
 <?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
 <?xml-stylesheet href="chrome://wat/skin/wat.css" type="text/css"?>
 
-<!DOCTYPE window SYSTEM "chrome://wat/locale/wat.dtd">
+<!DOCTYPE prefwindow SYSTEM "chrome://wat/locale/wat.dtd">
 
 <prefwindow id="watDialog"
         title="&wat.option.window.title;"
@@ -46,11 +46,11 @@
         buttons=","
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 <script type="application/x-javascript" src="chrome://wat/content/option.js"/>
-<prefpane label="pref" flex="1">
+<prefpane label="&wat.option.window.title;" flex="1">
   <preferences>
-    <preference id="loadInBackground" name="mail.tabs.loadInBackground" type="bool"/>
-    <preference id="middle-click" name="extensions.wat.middleClickIsNewTab" type="bool"/>
-    <preference id="feedaccount" name="extensions.wat.feedaccount" type="string"/>
+    <preference id="loadInBackground" name="mail.tabs.loadInBackground" type="bool" instantApply="true"/>
+    <preference id="middle-click" name="extensions.wat.middleClickIsNewTab" type="bool" instantApply="true"/>
+    <preference id="feedaccount" name="extensions.wat.feedaccount" type="string" instantApply="true"/>
   </preferences>
   <vbox flex="1">
     <separator class="thin"/>
