@@ -3,7 +3,7 @@ let scripts = [
   {
     NAME: "CompactHeader",
     EXTENSION_ID: "{58D4392A-842E-11DE-B51A-C7B855D89593}",
-    VERSION: "1.1.*",
+    VERSION: "1.2.*",
     FILENAME: "compactHeader.js"
   }
 ];
