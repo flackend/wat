@@ -605,12 +605,14 @@ let WAT = (function(){
        */
       contentAreaClickHandler: function WAT_contentAreaClickHandler(aEvent){
         let href = hRefForClickEvent(aEvent);
-        if (href && aEvent.button == 1){
+        if (href) {
           let uri = makeURI(href);
-          if (uri.schemeIs("http") || uri.schemeIs("https") || uri.schemeIs("about")){
-            aEvent.preventDefault();
-            WAT.openTab(href, isLoadInBackground(aEvent));
-            return true;
+          if (aEvent.button == 1 || (aEvent.button == 0 && aEvent.ctrlKey)) {
+            if (uri.schemeIs("http") || uri.schemeIs("https") || uri.schemeIs("about")){
+              aEvent.preventDefault();
+              WAT.openTab(href, isLoadInBackground(aEvent));
+              return true;
+            }
           }
         }
         return false;
@@ -637,13 +639,14 @@ let WAT = (function(){
               ((uri.schemeIs("http") || uri.schemeIs("https") ||
                 uri.schemeIs("about")) && !aSiteRegExp.test(uri.spec))) {
             aEvent.preventDefault();
-            if (aEvent.button == 1 && WAT.prefs.middleClickIsNewTab)
+            if ((aEvent.button == 1 && WAT.prefs.middleClickIsNewTab) ||
+                (aEvent.button == 0 && aEvent.ctrlKey))
               WAT.openTab(href, background);
             else
               openLinkExternally(href);
           } else if (aEvent.button == 1) {
             aEvent.preventDefault();
-            if (WAT.prefs.middleClickIsNewTab)
+            if (WAT.prefs.middleClickIsNewTab || aEvent.ctrlKey)
               WAT.openTab(href, background);
             else
               openLinkExternally(href);

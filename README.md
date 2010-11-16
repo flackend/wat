@@ -20,6 +20,7 @@ Features
    * if _Open tab in background_ option (see Option dialog) is on,
      open in background and Shfit+Middle-Click opens in foreground (version 0.6)
    * if the option is off, the behavior is reverse.
+ * can open in a new tab on ctrl + click (version 0.6.2)
  * can forward and back from key-navigation (likes firefox)
    menus in "Go" on the menubar or the context menu (version 0.4.0)
    * on Windows Back: Alt-Left or BS, Forward: Alt-Rieght or Shift-BS
