@@ -784,6 +784,7 @@ let WAT = (function(){
     regenerateMenu: function WAT_regenerateMenu(){
       removeAllElementUntilSep(popupElm, menuSep.id);
       let pages = this.prefs.pages;
+      let nPages = 0;
 
       pages.forEach(function(page){
         let menuitem = createElement("menuitem", {
@@ -795,7 +796,10 @@ let WAT = (function(){
           oncommand: "WAT.openTab(this.getAttribute('url'))"
         });
         popupElm.insertBefore(menuitem, menuSep);
+        nPages++;
       });
+
+      menuSep.setAttribute("style", nPages ? null : "display: none;");
     },
     /**
      * called from menu in Toolbar(WAT)
