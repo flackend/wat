@@ -1,21 +1,21 @@
 <!ENTITY wat.menu.label "WAT">
-<!ENTITY wat.addon.label "Addon">
-<!ENTITY wat.jsConsole.label "ErrorConsole">
-<!ENTITY wat.aboutConfig.label "about:config">
-<!ENTITY wat.openNewTab.label "Open in new tab">
-<!ENTITY wat.option.label "Option">
-<!ENTITY wat.option.window.title "WAT Option">
-<!ENTITY wat.option.pagename.label "PageName">
-<!ENTITY wat.option.pageurl.label "URL">
+<!ENTITY wat.addon.label "Add-ons">
+<!ENTITY wat.jsConsole.label "Error Console">
+<!ENTITY wat.aboutConfig.label "Config Editor">
+<!ENTITY wat.openNewTab.label "Open in New Tab">
+<!ENTITY wat.option.label "Options">
+<!ENTITY wat.option.window.title "WAT Options">
+<!ENTITY wat.option.pagename.label "Application Name">
+<!ENTITY wat.option.pageurl.label "Application URL">
 <!ENTITY wat.option.button.add "Add">
 <!ENTITY wat.option.button.delete "Delete">
 <!ENTITY wat.option.button.up "Up">
 <!ENTITY wat.option.button.down "Down">
-<!ENTITY wat.option.group.urlregistration.label "URL registration">
+<!ENTITY wat.option.group.urlregistration.label "Web Applications Menu">
 <!ENTITY wat.option.group.settings.label "Settings">
-<!ENTITY wat.option.middleclicktab "Open in a new tab on middle-click">
-<!ENTITY wat.option.loadInBackground "Open tab in background (+Shift-key reverse the behavior)">
-<!ENTITY wat.openURL.label "Open URL in tab">
+<!ENTITY wat.option.middleclicktab "Open in New Tab on middle-click">
+<!ENTITY wat.option.loadInBackground "Open Tab in Background (+Shift to reverse this)">
+<!ENTITY wat.openURL.label "Open URL in Tab">
 <!ENTITY wat.openURL.acceptButton.label "Open">
 <!ENTITY wat.browser.forward.label "Browser Forward">
 <!ENTITY wat.browser.back.label "Browser Back">
