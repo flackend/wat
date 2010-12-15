@@ -5,6 +5,7 @@
     <em:version>####VERSION####</em:version>
     <em:description>Web Application Tab for Thunderbird</em:description>
     <em:creator>teramako</em:creator>
+    <em:contributor>Sebastian Lisken</em:contributor>
     <em:id>wat@teramako</em:id>
     
     <em:targetApplication>
