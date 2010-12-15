@@ -1,0 +1,22 @@
+<!ENTITY wat.menu.label "WAT">
+<!ENTITY wat.addon.label "Tillägg">
+<!ENTITY wat.jsConsole.label "Felkonsolen">
+<!ENTITY wat.aboutConfig.label "about:config">
+<!ENTITY wat.openNewTab.label "Öppna i ny flik">
+<!ENTITY wat.option.label "Inställningar">
+<!ENTITY wat.option.window.title "Inställningar för WAT">
+<!ENTITY wat.option.pagename.label "Sidans namn">
+<!ENTITY wat.option.pageurl.label "URL">
+<!ENTITY wat.option.button.add "Lägg till">
+<!ENTITY wat.option.button.delete "Ta bort">
+<!ENTITY wat.option.button.up "Uppåt">
+<!ENTITY wat.option.button.down "Nedåt">
+<!ENTITY wat.option.group.urlregistration.label "URL-registrering">
+<!ENTITY wat.option.group.settings.label "Inställningar">
+<!ENTITY wat.option.middleclicktab "Öppna i en ny flik vid mittenklick">
+<!ENTITY wat.option.loadInBackground "Öppna flikar i bakgrunden (+Skift gör beteendet omvänt)">
+<!ENTITY wat.openURL.label "Öppna URL i flik">
+<!ENTITY wat.openURL.acceptButton.label "Öppna">
+<!ENTITY wat.browser.forward.label "[Webbläsare] Framåt">
+<!ENTITY wat.browser.back.label "[Webbläsare] Bakåt">
+
