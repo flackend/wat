@@ -5,13 +5,13 @@
 <!ENTITY wat.openNewTab.label "Öppna i ny flik">
 <!ENTITY wat.option.label "Inställningar">
 <!ENTITY wat.option.window.title "Inställningar för WAT">
-<!ENTITY wat.option.pagename.label "Sidans namn">
-<!ENTITY wat.option.pageurl.label "URL">
+<!ENTITY wat.option.pagename.label "Programmets namn">
+<!ENTITY wat.option.pageurl.label "Programmets URL">
 <!ENTITY wat.option.button.add "Lägg till">
 <!ENTITY wat.option.button.delete "Ta bort">
 <!ENTITY wat.option.button.up "Uppåt">
 <!ENTITY wat.option.button.down "Nedåt">
-<!ENTITY wat.option.group.urlregistration.label "URL-registrering">
+<!ENTITY wat.option.group.urlregistration.label "Webbprogrammeny">
 <!ENTITY wat.option.group.settings.label "Inställningar">
 <!ENTITY wat.option.middleclicktab "Öppna i en ny flik vid mittenklick">
 <!ENTITY wat.option.loadInBackground "Öppna flikar i bakgrunden (+Skift gör beteendet omvänt)">
