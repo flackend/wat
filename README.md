@@ -69,4 +69,12 @@ ScreenShots
 
 <table style="width:194px;"><tr><td align="center" style="height:194px;background:url(http://picasaweb.google.co.jp/s/c/transparent_album_background.gif) no-repeat left"><a href="http://picasaweb.google.co.jp/teramako/WATWebApplicationTab?feat=embedwebsite"><img src="http://lh5.ggpht.com/_Rv7aS9PPjZQ/S3ffvfrlmVE/AAAAAAAACVU/RvUYhhZONfc/s160-c/WATWebApplicationTab.jpg" width="160" height="160" style="margin:1px 0 0 4px;"></a></td></tr><tr><td style="text-align:center;font-family:arial,sans-serif;font-size:11px"><a href="http://picasaweb.google.co.jp/teramako/WATWebApplicationTab?feat=embedwebsite" style="color:#4D4D4D;font-weight:bold;text-decoration:none;">WAT (WebApplicationTab)</a></td></tr></table>
 
-  
+Issues
+------
+
+ * don't work ToDo list on Google Calendar 
+   
+   it's seems that following code doesn't work :(
+
+       &lt;iframe src="javascript:'&lt;html&gt;....&lt;/html&gt;'"&gt;
+
