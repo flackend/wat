@@ -2,7 +2,7 @@
 
 ZIP=zip
 JAR=wat.jar
-VERSION=0.7.1
+VERSION=0.8
 TMPDIR=tmp
 XPI=wat-${VERSION}.xpi
 
@@ -16,21 +16,15 @@ echo "replacing ####VERSION#### to $VERSION"
 find ${TMPDIR} -type f | xargs perl -i.bk -pe 's/####VERSION####/'${VERSION}'/g'
 find ${TMPDIR} -type f -name "*.bk" | xargs rm
 
-echo "creating ${JAR}"
-(cd tmp/chrome; zip ${JAR} -r content locale skin;)
-
 if [ -f ${XPI} ];then
 	rm ${XPI}
 fi
 
-PREF=`(cd tmp; find defaults -type d -o -name "*.js";)`
-
 echo "creating ${XPI}"
-(cd ${TMPDIR}; zip -2 ../${XPI} \
+(cd ${TMPDIR}; zip -9 ../${XPI} -r \
 	chrome \
-	chrome/${JAR} \
 	chrome.manifest \
-	${PREF} \
+  defaults \
 	install.rdf \
 	license.txt \
 	README.md;)
