@@ -1,5 +1,4 @@
 <!ENTITY wat.menu.label "WAT">
-<!ENTITY wat.addon.label "Add-ons">
 <!ENTITY wat.jsConsole.label "Error Console">
 <!ENTITY wat.aboutConfig.label "Config Editor">
 <!ENTITY wat.openNewTab.label "Open in New Tab">

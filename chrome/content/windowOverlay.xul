@@ -54,8 +54,6 @@
 
 <commandset id="mailCommands">
   <commandset id="wat_Commands">
-    <command id="wat_addonCmd"
-             oncommand="WAT.openTab('chrome://mozapps/content/extensions/extensions.xul')"/>
     <command id="wat_jsConsoleCmd"
              oncommand="WAT.openTab('chrome://global/content/console.xul')"/>
     <command id="wat_aboutConfigCmd"
@@ -151,10 +149,6 @@
                 accesskey="T"
                 command="wat_openURLCmd"/>
       <menuseparator/>
-      <menuitem id="wat_addonMenu"
-                label="&wat.addon.label;"
-                accesskey="A"
-                command="wat_addonCmd"/>
       <menuitem id="wat_jsConsoleMenu"
                 label="&wat.jsConsole.label;"
                 accesskey="E"
