@@ -9,7 +9,6 @@ let scripts = [
 ];
 const Cc = Components.classes,
       Ci = Components.interfaces;
-const extManager= Cc["@mozilla.org/extensions/manager;1"].getService(Ci.nsIExtensionManager);
 const comparator = Cc["@mozilla.org/xpcom/version-comparator;1"].getService(Ci.nsIVersionComparator);
 const contexts = {};
 function load(url, scriptObj){
@@ -42,13 +41,11 @@ function isExtensionEnabled(extItem){
   for (let i=0, len=scripts.length; i<len; i++){
     let s = scripts[i];
     let url = PRE_PATH + s.FILENAME;
-    let ext = extManager.getItemForID(s.EXTENSION_ID);
-    if (ext && isExtensionEnabled(ext)){
-      if (s.VERSION && comparator.compare(s.VERSION, ext.version) < 0){
-        continue;
+    AddonManager.getAddonByID(s.EXTENSION_ID, function (ext) {
+      if (ext && ext.isActive && comparator.compare(s.VERSION, ext.version) < 0) {
+        load(url, s);
       }
-      load(url, s);
-    }
+    });
   }
 })();
 
