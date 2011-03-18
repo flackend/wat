@@ -168,7 +168,7 @@
 
 <statusbar id="status-bar">
   <statusbarpanel id="wat_feedpanel"
-                  insertafter="statusbar-progresspanel">
+                  insertafter="totalMessageCount">
     <button id="wat_feedButton"
             type="menu"
             collapsed="true"
