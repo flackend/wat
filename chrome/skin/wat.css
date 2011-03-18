@@ -1,6 +1,6 @@
 
 .error {
-	color: red;
+  color: red;
 }
 
 #wat_feedButton > .button-box > .box-inherit > .button-text,
@@ -11,16 +11,16 @@
 #wat_feedButton,
 #wat_feedButton > .button-box,
 #wat_feedButton:hover:active > .button-box {
-	padding: 0;
-	margin: 0;
-	border: 0;
-	background-color: transparent;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background-color: transparent;
 }
 #wat_feedButton {
-	-moz-appearance: none;
-	min-width: 0;
-	margin-right: 1px !important;
-	list-style-image: url(chrome://messenger/skin/icons/folder-pane.png);
-	-moz-image-region: rect(112px, 16px, 128px, 0px);
+  -moz-appearance: none;
+  min-width: 0;
+  margin-right: 1px !important;
+  list-style-image: url(chrome://messenger-newsblog/skin/icons/rss-feed.png);
+  -moz-image-region: rect(0, 16px, 16px, 0);
 }
 
