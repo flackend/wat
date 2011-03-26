@@ -18,4 +18,5 @@
 <!ENTITY wat.openURL.acceptButton.label "Open">
 <!ENTITY wat.browser.forward.label "Browser Forward">
 <!ENTITY wat.browser.back.label "Browser Back">
+<!ENTITY wat.urlbar.placeholder "URL or search words">
 

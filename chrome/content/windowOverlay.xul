@@ -137,11 +137,9 @@
             insertbefore="goNextSeparator"/>
 </menupopup>
 
-<menubar id="mail-menubar">
-  <menu id="wat_menu_Tab"
-        label="&wat.menu.label;"
-        accesskey="W"
-        insertbefore="helpMenu">
+<hbox id="tabmail-buttons">
+  <toolbarbutton id="wat_button" type="menu"
+                 tooltiptext="&wat.menu.label;">
     <menupopup id="wat_menuPopup">
       <menuseparator id="wat_menu_sep"/>
       <menuitem id="wat_quickopenMenu"
@@ -163,8 +161,23 @@
                 accesskey="O"
                 command="wat_OptionCmd"/>
     </menupopup>
-  </menu>
-</menubar>
+  </toolbarbutton>
+  <toolbaritem id="wat_urlbar_container">
+    <textbox id="wat_urlbar"
+             type="autocomplete"
+             searchSessions="history"
+             accesskey="U"
+             placeholder="&wat.urlbar.placeholder;"
+             onblur="if(this.localName=='textbox'){ this.reset(); }"
+             ontextentered="WAT.openURLorSearch(this.value); this.blur();">
+      <box>
+        <toolbarbutton type="menu" image="" id="wat_searchEngineButton">
+          <menupopup id="wat_searchEngineMenuPopup" />
+        </toolbarbutton>
+      </box>
+    </textbox>
+  </toolbaritem>
+</hbox>
 
 <statusbar id="status-bar">
   <statusbarpanel id="wat_feedpanel"

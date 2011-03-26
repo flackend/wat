@@ -18,4 +18,5 @@
 <!ENTITY wat.openURL.acceptButton.label "Öppna">
 <!ENTITY wat.browser.forward.label "[Webbläsare] Framåt">
 <!ENTITY wat.browser.back.label "[Webbläsare] Bakåt">
+<!ENTITY wat.urlbar.placeholder "URL eller sökord">
 

@@ -1,5 +1,19 @@
 #wat_feedButton {
-	list-style-image: url(chrome://messenger/skin/icons/server-newsblog.png);
-	-moz-image-region: auto;
+  list-style-image: url(chrome://messenger/skin/icons/server-newsblog.png);
+  -moz-image-region: auto;
+}
+
+#wat_button {
+  background: none;
+  border-top: none;
+  -moz-border-start: 2px solid;
+  -moz-border-end: none;
+  -moz-border-left-colors: rgba(0,0,0,0.25) rgba(255,255,255,0.15);
+  -moz-border-right-colors: rgba(0,0,0,0.25) rgba(255,255,255,0.15);
+  margin: 0;
+}
+#wat_button:hover {
+  background: none;
+  background-color: rgba(0,0,0,0.10);
 }
 

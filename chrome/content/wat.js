@@ -41,6 +41,7 @@ let WAT = (function(){
   const Cc = Components.classes,
         Ci = Components.interfaces,
         Cu = Components.utils;
+  const searchService = Cc["@mozilla.org/browser/search-service;1"].getService(Ci.nsIBrowserSearchService);
   const WAT_FORWARD_CMD = "wat_cmd_browserGoForward",
         WAT_BACK_CMD    = "wat_cmd_browserGoBack";
   let popupElm = null, menuSep = null, bundle = null;
@@ -163,6 +164,8 @@ let WAT = (function(){
       WAT.prefs.feedAccountKey = "";
     }
     self.loadScript("chrome://wat/content/plugins/init.js", self.plugins);
+
+    self.searchEngines.init();
   }
 
   /**
@@ -502,6 +505,51 @@ let WAT = (function(){
       return tab;
     },
     /**
+     * @param {String} text URL or search word
+     */
+    openURLorSearch: function WAT_openURLorSearch (text) {
+      var keyword = "",
+          param = "",
+          offset = text.indexOf(" "),
+          url;
+      if (offset > 0) {
+        keyword = text.substr(0, offset);
+        param = text.substr(offset).trim();
+      } else {
+        keyword = text;
+      }
+      var engine = searchService.getEngineByAlias(keyword);
+      if (engine) {
+        var submission = engine.getSubmission(param, null);
+        url = submission.uri.spec;
+      } else if (keyword) {
+        var uri = Cc["@mozilla.org/browser/nav-bookmarks-service;1"]
+                            .getService(Ci.nsINavBookmarksService)
+                            .getURIForKeyword(keyword);
+        if (uri) {
+          var encodedParam = encodeURIComponent(param);
+          url = uri.spec.replace(/%s/g, encodedParam).replace(/%S/g, param);
+        }
+      }
+      if (url) {
+        this.openTab(url);
+      } else {
+        try {
+          uri = Cc["@mozilla.org/docshell/urifixup;1"].getService(Ci.nsIURIFixup)
+                  .createFixupURI(text, Ci.nsIURIFixup.FIXUP_FLAG_ALLOW_KEYWORD_LOOKUP);
+          window.Services.eTLD.getBaseDomain(uri);
+          this.openTab(uri);
+        } catch(e) {
+          if (e.result === Components.results.NS_ERROR_INSUFFICIENT_DOMAIN_LEVELS && searchService.defaultEngine) {
+            uri = searchService.currentEngine.getSubmission(text, null).uri;
+            this.openTab(uri);
+          } else {
+            Components.utils.reportError(e);
+          }
+        }
+      }
+    },
+    /**
      * preferences
      * {{{2
      */
@@ -594,6 +642,73 @@ let WAT = (function(){
       };
       return publicPrefs;
       // 3}}}
+    })(),
+    // 2}}}
+    /**
+     * search engines
+     * {{{2
+     */
+    searchEngines: (function(){
+      const SEARCH_ENGINE_TOPIC   = "browser-search-engine-modified",
+            SEARCH_ENGINE_ADDED   = "engine-added",
+            SEARCH_ENGINE_CHANGED = "engine-changed",
+            SEARCH_ENGINE_REMOVED = "engine-removed";
+      var popupMenu = null, menuButton = null;
+      function createMenus () {
+        while (popupMenu.hasChildNodes())
+          popupMenu.removeChild(popupMenu.firstChild);
+
+        var currentEngine = searchService.currentEngine;
+        for (let [, engine] in Iterator(searchService.getVisibleEngines())) {
+          var elm = createElement("menuitem", {
+            label: engine.name,
+            src: engine.iconURI.spec,
+            class: "menuitem-iconic",
+            tooltiptext: engine.description,
+            oncommand: "WAT.searchEngines.setCurrent(this.label)"
+          });
+          if (currentEngine === engine)
+            elm.setAttribute("selected", "true");
+
+          popupMenu.appendChild(elm);
+        }
+      }
+      function setCurrentEngine (engine) {
+        var currentEngine = searchService.currentEngine;
+        menuButton.setAttribute("image", engine.iconURI.spec);
+        menuButton.setAttribute("tooltiptext", engine.description);
+        if (currentEngine === engine)
+          return engine;
+
+        popupMenu.querySelector("menuitem[selected=true]").removeAttribute("selected");
+        popupMenu.querySelector("menuitem[label=" + engine.name + "]").setAttribute("selected", "true");
+        return searchService.currentEngine = engine;
+      }
+      var self = {
+        init: function () {
+          menuButton = $("wat_searchEngineButton");
+          popupMenu = $("wat_searchEngineMenuPopup");
+          createMenus();
+          setCurrentEngine(searchService.currentEngine);
+          os.addObserver(this, SEARCH_ENGINE_TOPIC, false);
+        },
+        setCurrent: function setCurrentSearchEngine (engineName) {
+          return setCurrentEngine(searchService.getEngineByName(engineName));
+        },
+        observe: function (aEngine, aTopic, aVerb) {
+          if (aTopic !== SEARCH_ENGINE_TOPIC)
+            return;
+
+          switch (aVerb) {
+          case SEARCH_ENGINE_ADDED:
+          case SEARCH_ENGINE_CHANGED:
+          case SEARCH_ENGINE_REMOVED:
+            createMenus();
+            break;
+          }
+        }
+      };
+      return self;
     })(),
     // 2}}}
     /**
