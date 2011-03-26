@@ -86,15 +86,25 @@ let WAT = (function(){
     },
     onEvent: function watBrowserOnEvent(aEvent){ }
   };
+
+  /**
+   * An alias to document.getElementById
+   * @param {String} id
+   * @param {Element}
+   */
+  function $(id) {
+    return document.getElementById(id);
+  }
+
   /**
    * called when thunderbird is loaded
    */
   function init(){
     window.removeEventListener("load", init, false);
-    self.tabMail = document.getElementById("tabmail");
-    popupElm = document.getElementById("wat_menuPopup");
-    menuSep = document.getElementById("wat_menu_sep");
-    bundle = document.getElementById("bundle_wat");
+    self.tabMail = $("tabmail");
+    popupElm = $("wat_menuPopup");
+    menuSep = $("wat_menu_sep");
+    bundle = $("bundle_wat");
     self.regenerateMenu();
 
     updateTabMail(self.tabMail);
@@ -105,12 +115,11 @@ let WAT = (function(){
 
     // add openInNewTab ContextMenu on HTMLAnchorElement
     // and set forward and back menus
-    document.getElementById("mailContext")
-      .addEventListener("popupshowing", onMailContextPopupShowing, false);
+    $("mailContext").addEventListener("popupshowing", onMailContextPopupShowing, false);
 
     // overwrite contentArea(message panel in mail3pane) click handler
     // @see WAT_contentAreaClickHandler
-    document.getElementById("messagepane")
+    $("messagepane")
       .setAttribute("onclick", "return WAT.handlers.contentAreaClickHandler(event) || contentAreaClick(event)"); 
 
     // on Thunderbird started up and restored tabs,
@@ -322,7 +331,7 @@ let WAT = (function(){
                 c.linkProtocol != "about" && c.linkProtocol != "chrome");
     ["wat_goForwardContextMenu", "wat_goBackContextMenu"]
       .forEach(function(id){
-        let elm = document.getElementById(id);
+        let elm = $(id);
         c.showItem(elm, notOnSpecialItem);
         if (notOnSpecialItem){
           goUpdateCommand(elm.command);
@@ -704,7 +713,7 @@ let WAT = (function(){
           tabInfo.feeds.push({href: link.href, title: link.title});
           let currentTabInfo = WAT.tabMail.currentTabInfo;
           if (currentTabInfo.browser && currentTabInfo.browser == tabInfo.browser){
-            let button = document.getElementById("wat_feedButton");
+            let button = $("wat_feedButton");
             if (button)
               button.collapsed = false;
           }
@@ -735,7 +744,7 @@ let WAT = (function(){
           }
         },
         popupShowing: function wat_feedMenuPopupShowing(){
-          let feedMenus = document.getElementById("wat_feedMenuPopup");
+          let feedMenus = $("wat_feedMenuPopup");
           while (feedMenus.firstChild)
             feedMenus.removeChild(feedMenus.firstChild);
           let tabInfo = WAT.tabMail.currentTabInfo;
@@ -756,7 +765,7 @@ let WAT = (function(){
           return true;
         },
         update: function(aTab){
-          let feedButton = document.getElementById("wat_feedButton");
+          let feedButton = $("wat_feedButton");
           if (!WAT.prefs.feedAccountKey){
             feedButton.collapsed = true;
             return;
