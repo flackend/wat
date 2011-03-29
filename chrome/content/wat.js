@@ -828,9 +828,9 @@ let WAT = (function(){
           tabInfo.feeds.push({href: link.href, title: link.title});
           let currentTabInfo = WAT.tabMail.currentTabInfo;
           if (currentTabInfo.browser && currentTabInfo.browser == tabInfo.browser){
-            let button = $("wat_feedButton");
-            if (button)
-              button.collapsed = false;
+            let feedPanel = $("wat_feedpanel");
+            if (feedPanel)
+              feedPanel.collapsed = false;
           }
         },
         onSubscribe: function wat_feedSubscribe(aURL){
@@ -880,17 +880,17 @@ let WAT = (function(){
           return true;
         },
         update: function(aTab){
-          let feedButton = $("wat_feedButton");
+          let feedPanel = $("wat_feedpanel");
           if (!WAT.prefs.feedAccountKey){
-            feedButton.collapsed = true;
+            feedPanel.collapsed = true;
             return;
           }
           if (!aTab)
             aTab = WAT.tabMail.currentTabInfo;
           if (aTab.feeds && aTab.feeds.length > 0)
-            feedButton.collapsed = false;
+            feedPanel.collapsed = false;
           else
-            feedButton.collapsed = true;
+            feedPanel.collapsed = true;
         },
         tabMonitor: {
           onTabSwitched: function wat_feedOnTabSwitched(aTab, aOldTab){
