@@ -537,7 +537,10 @@ let WAT = (function(){
         try {
           uri = Cc["@mozilla.org/docshell/urifixup;1"].getService(Ci.nsIURIFixup)
                   .createFixupURI(text, Ci.nsIURIFixup.FIXUP_FLAG_ALLOW_KEYWORD_LOOKUP);
-          window.Services.eTLD.getBaseDomain(uri);
+          // FIXME: TLDかIPアドレスにマッチする場合のみに修正すべき
+          if (uri.schemeIs("http") || uri.schemeIs("https"))
+            window.Services.eTLD.getBaseDomain(uri);
+
           this.openTab(uri);
         } catch(e) {
           if (e.result === Components.results.NS_ERROR_INSUFFICIENT_DOMAIN_LEVELS && searchService.defaultEngine) {
