@@ -106,7 +106,7 @@ let WAT = (function(){
     popupElm = $("wat_menuPopup");
     menuSep = $("wat_menu_sep");
     bundle = $("bundle_wat");
-    self.regenerateMenu();
+    migrateBookmarks();
 
     updateTabMail(self.tabMail);
     /**
@@ -166,6 +166,27 @@ let WAT = (function(){
     self.loadScript("chrome://wat/content/plugins/init.js", self.plugins);
 
     self.searchEngines.init();
+  }
+
+  /**
+   * import old bookmarks data to Places
+   */
+  function migrateBookmarks () {
+    const WAT_PREFBRANCH_PAGES = "extensions.wat.pages";
+    const prefs = window.Services.prefs;
+    const BS = PlacesUtils.bookmarks;
+    if (!prefs.prefHasUserValue(WAT_PREFBRANCH_PAGES))
+      return;
+    let pageString = prefs.getComplexValue(WAT_PREFBRANCH_PAGES, Ci.nsIPrefLocalizedString).data;
+    let pages = JSON.parse(pageString);
+    if (!(pages instanceof Array))
+      return;
+
+    for (let i = 0, len = pages.length; i < len; i++) {
+      let page = pages[i];
+      BS.insertBookmark(BS.bookmarksMenuFolder, makeURI(page.url), BS.DEFAULT_INDEX, page.label);
+    }
+    prefs.clearUserPref(WAT_PREFBRANCH_PAGES);
   }
 
   /**
@@ -569,20 +590,12 @@ let WAT = (function(){
      * {{{2
      */
     prefs: (function(){
-      const WAT_PREFBRANCH_PAGES = "extensions.wat.pages",
-            WAT_PREFBRANCH_MIDDLECLICK_IN_NEWTAB = "extensions.wat.middleClickIsNewTab",
+      const WAT_PREFBRANCH_MIDDLECLICK_IN_NEWTAB = "extensions.wat.middleClickIsNewTab",
             WAT_PREFBRANCH_FEEDACCOUNT = "extensions.wat.feedaccount",
             TAB_LOADINBACKGROUND = "mail.tabs.loadInBackground";
       const prefService = Cc["@mozilla.org/preferences-service;1"]
                           .getService(Ci.nsIPrefService)
                           .QueryInterface(Ci.nsIPrefBranch2);
-      let pagesObserver = {
-        observe: function pages_observe(aSubject, aTopic, aData){
-          /** @see WAT_regenerateMenu */
-          WAT.regenerateMenu();
-        }
-      };
-      prefService.addObserver(WAT_PREFBRANCH_PAGES, pagesObserver, false);
       // ----------------------------------------------------------------------
       // Preference Public Section
       // ------------------------------------------------------------------{{{3
@@ -610,37 +623,6 @@ let WAT = (function(){
           let bool = !!value;
           prefService.setBoolPref(WAT_PREFBRANCH_MIDDLECLICK_IN_NEWTAB, bool);
           return bool;
-        },
-        /**
-         * @return {Array}
-         * [{
-         *    label: "page-title",
-         *    url: "page-url"
-         *    icon: "favicon-url"(optional)
-         * }, {
-         *    // ...
-         * }]
-         */
-        get pages(){
-          if (!prefService.prefHasUserValue(WAT_PREFBRANCH_PAGES))
-            return [];
-          let pageString = prefService.getComplexValue(WAT_PREFBRANCH_PAGES, Ci.nsIPrefLocalizedString).data;
-          let pages = JSON.parse(pageString);
-          if (pages instanceof Array)
-            return pages;
-          return [];
-        },
-        set pages(value){
-          try {
-            var pages = JSON.stringify(value);
-          } catch(e){
-            Cu.reportError(e);
-            return null;
-          }
-          let supportString = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
-          supportString.data = pages
-          prefService.setComplexValue(WAT_PREFBRANCH_PAGES, Ci.nsISupportsString, supportString);
-          return pages;
         },
         /**
          * @return {Boolean}
@@ -916,30 +898,6 @@ let WAT = (function(){
       }
     },
     // 2}}}
-    /**
-     * called when thunderbird is loaded and
-     * "extensions.wat.pages" is modified
-     */
-    regenerateMenu: function WAT_regenerateMenu(){
-      removeAllElementUntilSep(popupElm, menuSep.id);
-      let pages = this.prefs.pages;
-      let nPages = 0;
-
-      pages.forEach(function(page){
-        let menuitem = createElement("menuitem", {
-          label: page.label,
-          image: page.icon || "",
-          validate: "never",
-          class: "menuitem-iconic",
-          url: page.url,
-          oncommand: "WAT.openTab(this.getAttribute('url'))"
-        });
-        popupElm.insertBefore(menuitem, menuSep);
-        nPages++;
-      });
-
-      menuSep.setAttribute("style", nPages ? null : "display: none;");
-    },
     /**
      * called from menu in Toolbar(WAT)
      * @see command#wat_openURLCmd in windowOverlay.xul
