@@ -36,17 +36,22 @@
  ***** END LICENSE BLOCK ***** -->
 
 <?xml-stylesheet href="chrome://wat/skin/wat.css" type="text/css"?>
+<?xml-stylesheet href="chrome://wat/content/places/places.css" type="text/css"?>
+<?xul-overlay href="chrome://wat/content/places/placesOverlay.xul"?>
 <!DOCTYPE overlay [
   <!ENTITY % watDTD SYSTEM "chrome://wat/locale/wat.dtd">
   %watDTD;
   <!ENTITY % messengerDTD SYSTEM "chrome://messenger/locale/messenger.dtd">
   %messengerDTD;
+  <!ENTITY % placesDTD SYSTEM "chrome://wat/locale/places/places.dtd">
+  %placesDTD;
 ]>
 <overlay id="watOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
          
 <script type="application/x-javascript" src="chrome://wat/content/wat.js"/> 
 <script type="application/x-javascript" src="chrome://wat/content/watTabProgressListener.js"/> 
+<script type="application/x-javascript" src="chrome://wat/content/places/browserPlacesViews.js"/>
 
 <stringbundleset id="stringbundleset">
   <stringbundle id="bundle_wat" src="chrome://wat/locale/wat.properties"/>
@@ -74,6 +79,10 @@
                oncommand="goDoCommand('wat_cmd_browserGoForward')"/>
     </commandset>
   </commandset>
+  <commandset id="placesCommands">
+    <command id="Browser:ShowAllBookmarks" oncommand="WAT.showPlacesOrganizer('AllBookmarks');"/>
+    <command id="Browser:ShowAllHistory" oncommand="WAT.showPlacesOrganizer('History');"/>
+  </commandset>
 </commandset>
 
 <keyset id="mailKeys">
@@ -95,6 +104,11 @@
          modifiers="shift"/>
   </keyset>
 </keyset>
+
+<popupset id="mainPopupSet">
+  <menupopup id="placesContext"/>
+  <tooltip id="bhTooltip"/>
+</popupset>
 
 <popup id="mailContext">
   <menuitem id="wat_openNewTabMenu"
@@ -140,13 +154,20 @@
 <hbox id="tabmail-buttons">
   <toolbarbutton id="wat_button" type="menu"
                  tooltiptext="&wat.menu.label;">
-    <menupopup id="wat_menuPopup">
+    <menupopup id="wat_menuPopup" placespopup="true" context="placesContext"
+               oncommand="BookmarksEventHandler.onCommand(event);"
+               onclick="BookmarksEventHandler.onClick(event);"
+               onpopupshowing="if (!this.parentNode._placesView) new PlacesMenu(event, 'place:folder=BOOKMARKS_MENU');"
+               tooltip="bhTooltip"
+               popupsinherittooltip="true">
       <menuseparator id="wat_menu_sep"/>
       <menuitem id="wat_quickopenMenu"
                 label="&wat.openURL.label;"
                 accesskey="T"
                 command="wat_openURLCmd"/>
       <menuseparator/>
+      <!-- Bookmarks menu items -->
+      <menuseparator builder="end"/>
       <menuitem id="wat_jsConsoleMenu"
                 label="&wat.jsConsole.label;"
                 accesskey="E"

@@ -10,7 +10,7 @@ if [ -d ${TMPDIR} ];then
 	rm -rf ${TMPDIR}
 fi
 mkdir ${TMPDIR}
-cp -pr chrome defaults chrome.manifest install.rdf license.txt README.md ${TMPDIR}
+cp -pr chrome modules defaults chrome.manifest install.rdf license.txt README.md ${TMPDIR}
 
 echo "replacing ####VERSION#### to $VERSION"
 find ${TMPDIR} -type f | xargs perl -i.bk -pe 's/####VERSION####/'${VERSION}'/g'
@@ -23,6 +23,7 @@ fi
 echo "creating ${XPI}"
 (cd ${TMPDIR}; zip -9 ../${XPI} -r \
 	chrome \
+  modules \
 	chrome.manifest \
   defaults \
 	install.rdf \

@@ -553,6 +553,18 @@ let WAT = (function(){
       }
     },
     /**
+     * @param {String} aLeftPaneRoot
+     */
+    showPlacesOrganizer: function WAT_showPlacesOrganizer (aLeftPaneRoot) {
+      var organizer = Services.wm.getMostRecentWindow("Places:Organizer");
+      if (!organizer) {
+        openDialog("chrome://wat/content/places/places.xul", "", "chrome,toolbar=yes,dialog=no,resizable", aLeftPaneRoot);
+      } else {
+        organizer.PlacesOrganizer.selectLeftPaneQuery(aLeftPaneRoot);
+        organizer.focus();
+      }
+    },
+    /**
      * preferences
      * {{{2
      */
