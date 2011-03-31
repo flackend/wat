@@ -160,7 +160,6 @@
                onpopupshowing="if (!this.parentNode._placesView) new PlacesMenu(event, 'place:folder=BOOKMARKS_MENU');"
                tooltip="bhTooltip"
                popupsinherittooltip="true">
-      <menuseparator id="wat_menu_sep"/>
       <menuitem id="wat_quickopenMenu"
                 label="&wat.openURL.label;"
                 accesskey="T"

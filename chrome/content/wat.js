@@ -44,7 +44,7 @@ let WAT = (function(){
   const searchService = Cc["@mozilla.org/browser/search-service;1"].getService(Ci.nsIBrowserSearchService);
   const WAT_FORWARD_CMD = "wat_cmd_browserGoForward",
         WAT_BACK_CMD    = "wat_cmd_browserGoBack";
-  let popupElm = null, menuSep = null, bundle = null;
+  let popupElm = null, bundle = null;
 
   /**
    * Support browser forward and back.
@@ -104,7 +104,6 @@ let WAT = (function(){
     window.removeEventListener("load", init, false);
     self.tabMail = $("tabmail");
     popupElm = $("wat_menuPopup");
-    menuSep = $("wat_menu_sep");
     bundle = $("bundle_wat");
     migrateBookmarks();
 
