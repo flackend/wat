@@ -203,7 +203,6 @@ let WAT = (function(){
       let browser = aTabInfo.browser;
       if (!aTabInfo.busy && browser.mIconURL){
         aTabInfo.tabNode.setAttribute("image", browser.mIconURL);
-        prefUpdateIcon(aTabInfo, browser.mIconURL);
       } else {
         aTabInfo.tabNode.removeAttribute("image");
       }
@@ -224,24 +223,6 @@ let WAT = (function(){
         this.updateIcon(aTabInfo);
       }
     };
-    /**
-     * @param {Object} aTabInfo
-     * @param {String} iconURL
-     */
-    function prefUpdateIcon(aTabInfo, iconURL){
-      let isUpdated = false;
-      let pages = WAT.prefs.pages;
-      let prePath = aTabInfo.browser.currentURI.prePath;
-      for (let i=0, len=pages.length; i<len; i++){
-        let page = pages[i];
-        if (page.icon != iconURL && page.url.indexOf(prePath) == 0){
-          page.icon = iconURL;
-          isUpdated = true;
-        }
-      }
-      if (isUpdated)
-        WAT.prefs.pages = pages;
-    }
     /**
      * @param {Document} aDocument
      */
