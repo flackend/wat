@@ -120,7 +120,7 @@ let WAT = (function(){
     // overwrite contentArea(message panel in mail3pane) click handler
     // @see WAT_contentAreaClickHandler
     $("messagepane")
-      .setAttribute("onclick", "return WAT.handlers.contentAreaClickHandler(event) || contentAreaClick(event)"); 
+      .setAttribute("onclick", "return WAT.handlers.contentAreaClickHandler(event) || contentAreaClick(event)");
 
     // on Thunderbird started up and restored tabs,
     // call setTabIconUpdator each tabInfo of "contentTab" type
@@ -711,7 +711,7 @@ let WAT = (function(){
      * hadlers
      * {{{2
      */
-    handlers: { 
+    handlers: {
       /**
        * @param aEvent {Event} MouseEvent
        * @return {Boolean} if true, the other operation should not be done

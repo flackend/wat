@@ -8,7 +8,7 @@
     <em:contributor>Sebastian Lisken</em:contributor>
     <em:contributor>Mikael Hiort af Ornäs</em:contributor>
     <em:id>wat@teramako</em:id>
-    
+
     <em:targetApplication>
       <!-- Thunderbird -->
       <Description>
@@ -17,7 +17,7 @@
         <em:maxVersion>3.3a4pre</em:maxVersion>
       </Description>
     </em:targetApplication>
-    
+
     <em:homepageURL>http://github.com/teramako/wat/</em:homepageURL>
     <em:optionsURL>chrome://wat/content/option.xul</em:optionsURL>
     <em:iconURL>chrome://wat/skin/watIcon32.png</em:iconURL>
