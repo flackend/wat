@@ -879,13 +879,6 @@ let WAT = (function(){
     },
     // 2}}}
     /**
-     * called from menu in Toolbar(WAT)
-     * @see command#wat_openURLCmd in windowOverlay.xul
-     */
-    openURLDialog: function WAT_openURLDialog(){
-      openDialog("chrome://wat/content/openURL.xul","_blank", "chrome,modal,titlebar", window);
-    },
-    /**
      * @param {String} url
      * @param {Object} context
      */

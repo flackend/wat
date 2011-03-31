@@ -14,8 +14,6 @@
 <!ENTITY wat.option.group.settings.label "Inställningar">
 <!ENTITY wat.option.middleclicktab "Öppna i en ny flik vid mittenklick">
 <!ENTITY wat.option.loadInBackground "Öppna flikar i bakgrunden (+Skift gör beteendet omvänt)">
-<!ENTITY wat.openURL.label "Öppna URL i flik">
-<!ENTITY wat.openURL.acceptButton.label "Öppna">
 <!ENTITY wat.browser.forward.label "[Webbläsare] Framåt">
 <!ENTITY wat.browser.back.label "[Webbläsare] Bakåt">
 <!ENTITY wat.urlbar.placeholder "URL eller sökord">

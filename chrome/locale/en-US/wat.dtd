@@ -14,8 +14,6 @@
 <!ENTITY wat.option.group.settings.label "Settings">
 <!ENTITY wat.option.middleclicktab "Open in New Tab on middle-click">
 <!ENTITY wat.option.loadInBackground "Open Tab in Background (+Shift to reverse this)">
-<!ENTITY wat.openURL.label "Open URL in Tab">
-<!ENTITY wat.openURL.acceptButton.label "Open">
 <!ENTITY wat.browser.forward.label "Browser Forward">
 <!ENTITY wat.browser.back.label "Browser Back">
 <!ENTITY wat.urlbar.placeholder "URL or search words">
