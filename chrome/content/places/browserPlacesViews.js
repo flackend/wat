@@ -750,7 +750,7 @@ PlacesViewBase.prototype = {
       aPopup._endOptOpenAllInTabs.setAttribute("onclick",
         "checkForMiddleClick(this, event); event.stopPropagation();");
       aPopup._endOptOpenAllInTabs.setAttribute("label",
-        gNavigatorBundle.getString("menuOpenAllInTabs.label"));
+        WAT.bundle.getString("menuOpenAllInTabs.label"));
       aPopup.appendChild(aPopup._endOptOpenAllInTabs);
     }
   },
