@@ -44,7 +44,6 @@ let WAT = (function(){
   const searchService = Cc["@mozilla.org/browser/search-service;1"].getService(Ci.nsIBrowserSearchService);
   const WAT_FORWARD_CMD = "wat_cmd_browserGoForward",
         WAT_BACK_CMD    = "wat_cmd_browserGoBack";
-  let bundle = null;
 
   /**
    * Support browser forward and back.
@@ -103,7 +102,9 @@ let WAT = (function(){
   function init(){
     window.removeEventListener("load", init, false);
     self.tabMail = $("tabmail");
-    bundle = $("bundle_wat");
+    XPCOMUtils.defineLazyGetter(self, "bundle", function() {
+      return $("bundle_wat");
+    });
     migrateBookmarks();
 
     updateTabMail(self.tabMail);
@@ -371,11 +372,11 @@ let WAT = (function(){
     let popup = document.getAnonymousElementByAttribute(self.tabMail, "anonid", "tabContextMenu"),
         items = [
           createElement("menuitem", {
-            label: bundle.getString("tabContextMenu.copyTitle.label"),
+            label: self.bundle.getString("tabContextMenu.copyTitle.label"),
             oncommand: "WAT.handlers.copy('TITLE')"
           }),
           createElement("menuitem", {
-            label: bundle.getString("tabContextMenu.copyUrl.label"),
+            label: self.bundle.getString("tabContextMenu.copyUrl.label"),
             oncommand: "WAT.handlers.copy('URL')"
           })
         ];
@@ -488,9 +489,9 @@ let WAT = (function(){
         let res = {};
         let promptService = Cc["@mozilla.org/embedcomp/prompt-service;1"].getService(Ci.nsIPromptService2);
         promptService.alertCheck(window,
-          bundle.getFormattedString("maxTabs.overwrite.title", [tabMode.maxTabs]),
-          bundle.getString("maxTabs.overwrite.msg"),
-          bundle.getString("mexTabs.overwrite.check"),
+          this.bundle.getFormattedString("maxTabs.overwrite.title", [tabMode.maxTabs]),
+          this.bundle.getString("maxTabs.overwrite.msg"),
+          this.bundle.getString("mexTabs.overwrite.check"),
           res);
         if (!res.value){
           return false;
@@ -843,7 +844,7 @@ let WAT = (function(){
           if (!feeds || feeds.length == 0)
             return false;
           feeds.forEach(function(feed){
-            let label = bundle.getFormattedString('feed.show.label', [feed.title || feed.href]);
+            let label = WAT.bundle.getFormattedString('feed.show.label', [feed.title || feed.href]);
             let menu = createElement("menuitem", {
               label: label,
               feed: feed.href,
