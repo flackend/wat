@@ -2,4 +2,7 @@
 <overlay id="watUtilityOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script type="application/javascript" src="chrome://wat/content/utilityOverlay.js"/>
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="bundle_wat" src="chrome://wat/locale/wat.properties"/>
+  </stringbundleset>
 </overlay>
