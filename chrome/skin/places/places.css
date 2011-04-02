@@ -125,6 +125,11 @@ treechildren::-moz-tree-cell-text(date, session-continue) {
   color: -moz-Field;
 }
 
+treechildren::-moz-tree-image(title, mailto) {
+  list-style-image: url("chrome://messenger/skin/icons/mail-toolbar-small.png");
+  -moz-image-region: rect(0, 32px, 16px, 16px);
+}
+
 /* Browser Sidebars */
 
 /* Default button vert. margins are 1px/2px, and this can cause misalignment */
