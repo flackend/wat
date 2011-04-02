@@ -473,6 +473,10 @@ let WAT = (function(){
           return;
         }
       }
+      if (uri.schemeIs("mailto")) {
+        msgComposeService.OpenComposeWindowWithURI(null, uri);
+        return;
+      }
       let pageName = (uri.schemeIs("chrome") || uri.schemeIs("about")) ? "chrome" : "content";
       let type = pageName + "Tab", page = pageName + "Page";
       let args = { background: !!background };
