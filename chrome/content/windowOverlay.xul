@@ -154,6 +154,10 @@
                onpopupshowing="if (!this.parentNode._placesView) new PlacesMenu(event, 'place:folder=BOOKMARKS_MENU');"
                tooltip="bhTooltip"
                popupsinherittooltip="true">
+      <menuitem id="wat_showAllBookmarks"
+                label="&wat.showAllBookmarks.label;"
+                accesskey="B"
+                command="Browser:ShowAllBookmarks"/>
       <menuseparator/>
       <!-- Bookmarks menu items -->
       <menuseparator builder="end"/>

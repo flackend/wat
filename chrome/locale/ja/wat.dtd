@@ -17,4 +17,5 @@
 <!ENTITY wat.browser.forward.label "進む(ブラウザ)">
 <!ENTITY wat.browser.back.label "戻る(ブラウザ)">
 <!ENTITY wat.urlbar.placeholder "URL または 検索キーワード">
+<!ENTITY wat.showAllBookmarks.label "すべてのブックマークを表示">
 
