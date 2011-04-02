@@ -203,6 +203,7 @@ let WAT = (function(){
       let browser = aTabInfo.browser;
       if (!aTabInfo.busy && browser.mIconURL){
         aTabInfo.tabNode.setAttribute("image", browser.mIconURL);
+        PlacesUtils.favicons.setAndLoadFaviconForPage(browser.currentURI, makeURI(browser.mIconURL), false);
       } else {
         aTabInfo.tabNode.removeAttribute("image");
       }
