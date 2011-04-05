@@ -102,6 +102,7 @@
 <popupset id="mainPopupSet">
   <menupopup id="placesContext"/>
   <tooltip id="bhTooltip"/>
+  <panel type="autocomplete-richlistbox" id="PopupAutoCompleteRichResult" ignorekeys="true" level="top" noautofocus="true"/>
 </popupset>
 
 <popup id="mailContext">
@@ -179,8 +180,17 @@
   <toolbaritem id="wat_urlbar_container">
     <textbox id="wat_urlbar"
              type="autocomplete"
-             searchSessions="history"
+             autocompletesearch="history search-autocomplete"
+             autocompletesearchparam="searchbar-history"
+             autocompletepopup="PopupAutoCompleteRichResult"
              accesskey="U"
+             timeout="250"
+             maxrows="10"
+             completeselectedindex="true"
+             showcommentcolumn="true"
+             showimagecolumn="true"
+             tabscrolling="true"
+             newlines="replacewithspaces"
              placeholder="&wat.urlbar.placeholder;"
              onblur="if(this.localName=='textbox'){ this.reset(); }"
              ontextentered="WAT.openURLorSearch(this.value); this.blur();">

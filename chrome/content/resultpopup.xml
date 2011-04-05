@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<bindings id="resultpopup"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+  <binding id="rich-result-popup"
+           extends="chrome://global/content/bindings/autocomplete.xml#autocomplete-rich-result-popup">
+    <implementation>
+      <field name="_maxResults">0</field>
+      <field name="_bundle" readonly="true">
+        Components.classes["@mozilla.org/intl/stringbundle;1"]
+          .getService(Components.interfaces.nsIStringBundle)
+          .createBundle("chrome://wat/locale/places/places.properties");
+      </field>
+      <field name="searchService" readonly="true">
+        Components.classes["@mozilla.org/browser/search-service;1"].getService(Ci.nsIBrowserSearchService);
+      </field>
+      <method name="openAutocompletePopup">
+        <parameter name="aInput"/>
+        <parameter name="aElement"/>
+        <body><![CDATA[
+          aInput.popup.hidden = false;
+          this._openAutocompletePopup(aInput, aElement);
+        ]]></body>
+      </method>
+      <method name="onPopupClick">
+        <parameter name="aEvent"/>
+        <body><![CDATA[
+          if (aEvent.button == 2)
+            return;
+          var controller = this.view.QueryInterface(Components.interfaces.nsIAutoCompleteController);
+          controller.handleEnter(true);
+        ]]></body>
+      </method>
+      <method name="createResultLabel">
+        <parameter name="aTitle"/>
+        <parameter name="aUrl"/>
+        <parameter name="aType"/>
+        <body><![CDATA[
+          var label = aTitle + " " + aUrl;
+          if (aType != "favicon" && aType != "suggest")
+            label += " " + this._bundle.GetStringFromName(aType + "ResultLabel");
+          return label;
+        ]]></body>
+      </method>
+      <method name="_appendCurrentResult">
+        <body><![CDATA[
+          var controller = this.mInput.controller,
+              matchCount = this._matchCount,
+              existingItemsCount = this.richlistbox.childNodes.length;
+          for (let i = 0; i < this.maxRows; i++) {
+            if (this._currentIndex >= matchCount)
+              return;
+
+            var item;
+            var trimedSearchString = controller.searchString.trim();
+            let url = Components.classes["@mozilla.org/intl/texttosuburi;1"]
+              .getService(Components.interfaces.nsITextToSubURI)
+              .unEscapeURIForUI("UTF-8", controller.getValueAt(this._currentIndex));
+            if (this._currentIndex < existingItemsCount) {
+              item = this.richlistbox.childNodes[this._currentIndex];
+              if (item.getAttribute("text") == trimedSearchString && item.getAttribute("url") == url) {
+                item.collapsed = false;
+                this._currentIndex++;
+                continue;
+              }
+            } else {
+              item = document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "richlistitem");
+            }
+            let image = controller.getImageAt(this._currentIndex),
+                title = controller.getCommentAt(this._currentIndex),
+                type  = controller.getStyleAt(this._currentIndex);
+            // Suggest word
+            if ((title == "Suggestions" && type == "suggestfirst") || (!title && !type && !image)) {
+              image = this.searchService.currentEngine.iconURI.spec;
+              type = "suggest";
+              title = url;
+            }
+            item.setAttribute("image", image);
+            item.setAttribute("url", url);
+            item.setAttribute("title", title);
+            item.setAttribute("type", type);
+            item.setAttribute("text", trimedSearchString);
+            if (this._currentIndex < existingItemsCount) {
+              item._adjustAcItem();
+              item.collapsed = false;
+            } else {
+              item.className = "autocomplete-richlistitem";
+              this.richlistbox.appendChild(item);
+            }
+            this._currentIndex++;
+          }
+          setTimeout(function (self) { self._appendCurrentResult(); }, 0, this);
+        ]]></body>
+      </method>
+    </implementation>
+  </binding>
+</bindings>

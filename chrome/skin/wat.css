@@ -49,6 +49,7 @@
 }
 
 #wat_urlbar {
+  -moz-binding: url("chrome://global/content/bindings/autocomplete.xml#autocomplete");
   -moz-appearance: none;
   border: 1px solid threedshadow;
   border-radius: 4px;
@@ -106,5 +107,49 @@
 .bookmark-item[query][hostContainer][open] {
   list-style-image: url("chrome://global/skin/icons/folder-item.png");
   -moz-image-region: rect(16px, 32px, 32px, 16px);
+}
+
+/*
+ * AutoCompletePopup
+ */
+#PopupAutoCompleteRichResult {
+  -moz-binding: url("chrome://wat/content/resultpopup.xml#rich-result-popup");
+}
+.autocomplete-richlistitem {
+  -moz-binding: url("chrome://global/content/bindings/autocomplete.xml#autocomplete-richlistitem");
+  -moz-box-orient: vertical;
+  overflow: -moz-hidden-unscrollable;
+}
+.ac-comment {
+  font-size: 1.15em;
+}
+.ac-extra > .ac-comment {
+  font-size: inherit;
+}
+.ac-url-text, .ac-action-text {
+  color: -moz-nativehyperlinktext;
+}
+.ac-result-type-bookmark {
+  list-style-image: url("chrome://wat/skin/places/editBookmark.png");
+  -moz-image-region: rect(0, 16px, 16px, 0);
+}
+.autocomplete-richlistitem[type=suggest] .ac-url-box { display: none; }
+.ac-result-type-suggest,
+.ac-result-type-keyword {
+  list-style-image: url("chrome://global/skin/icons/Search-glass.png");
+  -moz-image-region: rect(0, 32px, 16px, 16px);
+}
+.ac-result-type-tag {
+  list-style-image: url("chrome://wat/skin/places/tag.png");
+}
+.ac-result-type-bookmark,
+.ac-result-type-suggest,
+.ac-result-type-keyword,
+.ac-result-type-tag {
+  width: 16px;
+  height: 16px;
+}
+#PopupAutoCompleteRichResult .ac-url-text {
+  font-size: 1em;
 }
 
