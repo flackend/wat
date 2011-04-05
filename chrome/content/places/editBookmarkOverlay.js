@@ -106,8 +106,6 @@ var gEditItemOverlay = {
       this._hiddenRows.indexOf("keyword") != -1 || isQuery;
     this._element("locationRow").collapsed = !(this._uri && !isQuery) ||
       this._hiddenRows.indexOf("location") != -1;
-    this._element("loadInSidebarCheckbox").collapsed = !isBookmark || isQuery ||
-      this._readOnly || this._hiddenRows.indexOf("loadInSidebar") != -1;
     this._element("feedLocationRow").collapsed = !this._isLivemark ||
       this._hiddenRows.indexOf("feedLocation") != -1;
     this._element("siteLocationRow").collapsed = !this._isLivemark ||
@@ -171,10 +169,6 @@ var gEditItemOverlay = {
         this._initTextField("keywordField",
                             PlacesUtils.bookmarks
                                        .getKeywordForBookmark(this._itemId));
-        // Load In Sidebar checkbox
-        this._element("loadInSidebarCheckbox").checked =
-          PlacesUtils.annotations.itemHasAnnotation(this._itemId,
-                                                    PlacesUIUtils.LOAD_IN_SIDEBAR_ANNO);
       }
       else {
         if (!this._readOnly) // If readOnly wasn't forced through aInfo
@@ -786,14 +780,6 @@ var gEditItemOverlay = {
     }
   },
 
-  onLoadInSidebarCheckboxCommand:
-  function EIO_onLoadInSidebarCheckboxCommand() {
-    var loadInSidebarChecked = this._element("loadInSidebarCheckbox").checked;
-    var txn = PlacesUIUtils.ptm.setLoadInSidebar(this._itemId,
-                                                 loadInSidebarChecked);
-    PlacesUIUtils.ptm.doTransaction(txn);
-  },
-
   toggleFolderTreeVisibility: function EIO_toggleFolderTreeVisibility() {
     var expander = this._element("foldersExpander");
     var folderTreeRow = this._element("folderTreeRow");
@@ -1160,11 +1146,6 @@ var gEditItemOverlay = {
     case PlacesUIUtils.DESCRIPTION_ANNO:
       this._initTextField("descriptionField",
                           PlacesUIUtils.getItemDescription(this._itemId));
-      break;
-    case PlacesUIUtils.LOAD_IN_SIDEBAR_ANNO:
-      this._element("loadInSidebarCheckbox").checked =
-        PlacesUtils.annotations.itemHasAnnotation(this._itemId,
-                                                  PlacesUIUtils.LOAD_IN_SIDEBAR_ANNO);
       break;
     case PlacesUtils.LMANNO_FEEDURI:
       var feedURISpec = PlacesUtils.livemarks.getFeedURI(this._itemId).spec;

@@ -48,7 +48,6 @@ var PlacesOrganizer = {
   // observing additionalInfoBroadcaster.
   _additionalInfoFields: [
     "editBMPanel_descriptionRow",
-    "editBMPanel_loadInSidebarCheckbox",
     "editBMPanel_keywordRow",
   ],
 

@@ -45,8 +45,6 @@
  *     - "add" - for adding a new item.
  *       @ type (String). Possible values:
  *         - "bookmark"
- *           @ loadBookmarkInSidebar - optional, the default state for the
- *             "Load this bookmark in the sidebar" field.
  *         - "folder"
  *           @ URIList (Array of nsIURI objects) - optional, list of uris to
  *             be bookmarked under the new folder.
@@ -115,7 +113,6 @@ var BookmarkPropertiesPanel = {
   _itemType: null,
   _itemId: -1,
   _uri: null,
-  _loadInSidebar: false,
   _title: "",
   _description: "",
   _URIs: [],
@@ -142,7 +139,7 @@ var BookmarkPropertiesPanel = {
       if (this._itemType == LIVEMARK_CONTAINER)
         return this._strings.getString("dialogAcceptLabelAddLivemark");
 
-      if (this._dummyItem || this._loadInSidebar)
+      if (this._dummyItem)
         return this._strings.getString("dialogAcceptLabelAddItem");
 
       return this._strings.getString("dialogAcceptLabelSaveItem");
@@ -214,9 +211,6 @@ var BookmarkPropertiesPanel = {
             this._dummyItem = true;
           }
 
-          if ("loadBookmarkInSidebar" in dialogInfo)
-            this._loadInSidebar = dialogInfo.loadBookmarkInSidebar;
-
           if ("keyword" in dialogInfo) {
             this._keyword = dialogInfo.keyword;
             this._isAddKeywordDialog = true;
@@ -276,10 +270,6 @@ var BookmarkPropertiesPanel = {
           // keyword
           this._keyword = PlacesUtils.bookmarks
                                      .getKeywordForBookmark(this._itemId);
-          // Load In Sidebar
-          this._loadInSidebar = PlacesUtils.annotations
-                                           .itemHasAnnotation(this._itemId,
-                                                              PlacesUIUtils.LOAD_IN_SIDEBAR_ANNO);
           break;
 
         case "folder":
@@ -579,11 +569,6 @@ var BookmarkPropertiesPanel = {
     if (this._description) {
       childTransactions.push(
         PlacesUIUtils.ptm.editItemDescription(-1, this._description));
-    }
-
-    if (this._loadInSidebar) {
-      childTransactions.push(
-        PlacesUIUtils.ptm.setLoadInSidebar(-1, this._loadInSidebar));
     }
 
     if (this._postData) {
