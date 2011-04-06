@@ -60,7 +60,9 @@
     <command id="wat_aboutConfigCmd"
              oncommand="WAT.openTab('chrome://global/content/config.xul')"/>
     <command id="wat_OptionCmd"
-             oncommand="WAT.openTab('chrome://wat/content/option.xul')"/>
+             oncommand="WAT.openPreferences('optionPane')"/>
+    <command id="wat_SearchEngineCmd"
+             oncommand="WAT.openPreferences('searchEnginePane')"/>
     <command id="wat_openNewTabCmd"
              oncommand="WAT.handlers.onOpenNewTab()"/>
     <commandset id="wat_browserCommands"

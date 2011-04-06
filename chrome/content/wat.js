@@ -571,6 +571,22 @@ let WAT = (function(){
       }
     },
     /**
+     * @param {String} [aPanelID]
+     */
+    openPreferences: function WAT_openPreferences (aPanelID) {
+      var prefWin = Services.wm.getMostRecentWindow("WAT:Preferences");
+      if (prefWin) {
+        prefWin.focus();
+        if (aPanelID) {
+          var pane = prefWin.document.getElementById(aPanelID);
+          prefWin.document.documentElement.showPane(pane);
+        }
+        return prefWin;
+      }
+      return openDialog("chrome://wat/content/option.xul", "Preferences",
+                        "chrome,titlebar,toolbar,centerscreen,resizable,dialog=no", aPanelID);
+    },
+    /**
      * preferences
      * {{{2
      */
