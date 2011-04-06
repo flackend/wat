@@ -44,11 +44,10 @@
         type="prefwindow"
         windowtype="WAT:Preferences"
         title="&wat.option.window.title;"
-        style="min-height: 30em;"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <prefpane id="optionPane" label="&wat.option.general.title;"
             image="chrome://wat/skin/watIcon32.png"
-            onpaneload="wat.init();">
+            onpaneload="gGeneral.init();">
     <script type="application/javascript" src="chrome://wat/content/option.js"/>
     <preferences>
       <preference id="loadInBackground" name="mail.tabs.loadInBackground" type="bool" instantApply="true"/>

@@ -34,39 +34,25 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-const Cc = Components.classes;
-const Ci = Components.interfaces;
-const prefService = Cc["@mozilla.org/preferences-service;1"]
-                    .getService(Ci.nsIPrefService)
-                    .getBranch("extensions.wat.");
-const ioService = Cc["@mozilla.org/network/io-service;1"]
-                    .getService(Ci.nsIIOService);
+var gGeneral = {
+  init: function gGeneral_init () {
+    const Cc = Components.classes;
+    const Ci = Components.interfaces;
+    const prefService = Cc["@mozilla.org/preferences-service;1"]
+                        .getService(Ci.nsIPrefService)
+                        .getBranch("extensions.wat.");
+    var feedaccountPopup = document.getElementById("feedaccountPopup");
 
-let wat = (function(){
-  // --------------------------------------------------------------------------
-  // Private Section
-  // ----------------------------------------------------------------------{{{1
-  let siteNameTextBox, urlTextBox, listBox, statusLabel,
-      addButton, deleteButton, upButton, downButton, feedaccountPopup;
-  let isError = false;
-  /**
-   * like prototype.js
-   * @param {String} id
-   * @return {Element}
-   */
-  function $(id){
-    return document.getElementById(id);
-  }
-  function supportsArrayIterator(array, iface){
-    let iter = function(){
-      var count = array.Count();
-      for (let i = 0; i < count; i++){
-        yield array.QueryElementAt(i, iface);
-      }
-    };
-    return {__iterator__: iter};
-  }
-  function initializeFeedAccount(){
+    function supportsArrayIterator(array, iface){
+      let iter = function(){
+        var count = array.Count();
+        for (let i = 0; i < count; i++){
+          yield array.QueryElementAt(i, iface);
+        }
+      };
+      return {__iterator__: iter};
+    }
+
     const am = Cc["@mozilla.org/messenger/account-manager;1"].getService(Ci.nsIMsgAccountManager);
     let feedAccountExists = false;
     for (let account in supportsArrayIterator(am.accounts, Ci.nsIMsgAccount)){
@@ -94,21 +80,6 @@ let wat = (function(){
       }
     }
   }
-  // 1}}}
-  // --------------------------------------------------------------------------
-  // Public Section
-  // ----------------------------------------------------------------------{{{1
-  let self = {
-    /**
-     * called from options.xul when the window is loaded
-     */
-    init: function wat_init(){
-      feedaccountPopup = $("feedaccountPopup");
-      initializeFeedAccount();
-    },
-  };
-  return self;
-  // 1}}}
-})();
+};
 
 // vim: sw=2 ts=2 et fdm=marker:
