@@ -4,16 +4,17 @@
 <!ENTITY wat.openNewTab.label "Öppna i ny flik">
 <!ENTITY wat.option.label "Inställningar">
 <!ENTITY wat.option.window.title "Inställningar för WAT">
-<!ENTITY wat.option.pagename.label "Programmets namn">
-<!ENTITY wat.option.pageurl.label "Programmets URL">
-<!ENTITY wat.option.button.add "Lägg till">
-<!ENTITY wat.option.button.delete "Ta bort">
-<!ENTITY wat.option.button.up "Uppåt">
-<!ENTITY wat.option.button.down "Nedåt">
-<!ENTITY wat.option.group.urlregistration.label "Webbprogrammeny">
-<!ENTITY wat.option.group.settings.label "Inställningar">
-<!ENTITY wat.option.middleclicktab "Öppna i en ny flik vid mittenklick">
-<!ENTITY wat.option.loadInBackground "Öppna flikar i bakgrunden (+Skift gör beteendet omvänt)">
+<!ENTITY wat.option.general.title "Allmänt">
+<!ENTITY wat.option.general.middleclicktab "Öppna i en ny flik vid mittenklick">
+<!ENTITY wat.option.general.loadInBackground "Öppna flikar i bakgrunden (+Skift gör beteendet omvänt)">
+<!ENTITY wat.option.searchengine.title "Sökmotorer">
+<!ENTITY wat.option.searchengine.description "Sökmotorer lista">
+<!ENTITY wat.option.searchengine.col.name "Namn">
+<!ENTITY wat.option.searchengine.col.description "Beskrivning">
+<!ENTITY wat.option.searchengine.col.keyword "Nyckelord">
+<!ENTITY wat.option.searchengine.col.keyword.tooltip "Redigerbara genom att dubbelklicka">
+<!ENTITY wat.option.searchengine.col.hassuggest "Har föreslå">
+<!ENTITY wat.option.searchengine.enablesuggest "Aktivera föreslå">
 <!ENTITY wat.browser.forward.label "[Webbläsare] Framåt">
 <!ENTITY wat.browser.back.label "[Webbläsare] Bakåt">
 <!ENTITY wat.urlbar.placeholder "URL eller sökord">

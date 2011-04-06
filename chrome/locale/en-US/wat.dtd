@@ -4,16 +4,18 @@
 <!ENTITY wat.openNewTab.label "Open in New Tab">
 <!ENTITY wat.option.label "Options">
 <!ENTITY wat.option.window.title "WAT Options">
-<!ENTITY wat.option.pagename.label "Application Name">
-<!ENTITY wat.option.pageurl.label "Application URL">
-<!ENTITY wat.option.button.add "Add">
-<!ENTITY wat.option.button.delete "Delete">
-<!ENTITY wat.option.button.up "Up">
-<!ENTITY wat.option.button.down "Down">
-<!ENTITY wat.option.group.urlregistration.label "Web Applications Menu">
-<!ENTITY wat.option.group.settings.label "Settings">
-<!ENTITY wat.option.middleclicktab "Open in New Tab on middle-click">
-<!ENTITY wat.option.loadInBackground "Open Tab in Background (+Shift to reverse this)">
+<!ENTITY wat.option.general.title "General">
+<!ENTITY wat.option.general.middleclicktab "Open in New Tab on middle-click">
+<!ENTITY wat.option.general.loadInBackground "Open Tab in Background (+Shift to reverse this)">
+<!ENTITY wat.option.general.feedsubscribe "RSS Feed Subscribe to">
+<!ENTITY wat.option.searchengine.title "Search engines">
+<!ENTITY wat.option.searchengine.description "Search engines list">
+<!ENTITY wat.option.searchengine.col.name "Name">
+<!ENTITY wat.option.searchengine.col.description "Description">
+<!ENTITY wat.option.searchengine.col.keyword "Keyword">
+<!ENTITY wat.option.searchengine.col.keyword.tooltip "Editable by double click">
+<!ENTITY wat.option.searchengine.col.hassuggest "Has suggest">
+<!ENTITY wat.option.searchengine.enablesuggest "Enable suggest">
 <!ENTITY wat.browser.forward.label "Browser Forward">
 <!ENTITY wat.browser.back.label "Browser Back">
 <!ENTITY wat.urlbar.placeholder "URL or search words">
