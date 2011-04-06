@@ -37,96 +37,65 @@
 
 <?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
 <?xml-stylesheet href="chrome://wat/skin/wat.css" type="text/css"?>
+<?xml-stylesheet href="chrome://wat/skin/searchEngines.css" type="text/css"?>
 
 <!DOCTYPE prefwindow SYSTEM "chrome://wat/locale/wat.dtd">
-
 <prefwindow id="watDialog"
+        type="prefwindow"
+        windowtype="WAT:Preferences"
         title="&wat.option.window.title;"
-        onload="wat.init();"
-        buttons=","
+        style="min-height: 30em;"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-<script type="application/x-javascript" src="chrome://wat/content/option.js"/>
-<prefpane label="&wat.option.window.title;" flex="1">
-  <preferences>
-    <preference id="loadInBackground" name="mail.tabs.loadInBackground" type="bool" instantApply="true"/>
-    <preference id="middle-click" name="extensions.wat.middleClickIsNewTab" type="bool" instantApply="true"/>
-    <preference id="feedaccount" name="extensions.wat.feedaccount" type="string" instantApply="true"/>
-  </preferences>
-  <vbox flex="1">
-    <separator class="thin"/>
-    <hbox>
-      <image src="chrome://wat/skin/watIcon16.png"/><label value="Version: ####VERSION####"/>
-    </hbox>
-    <separator class="thin"/>
-    <groupbox flex="2">
-      <caption label="&wat.option.group.urlregistration.label;"/>
+  <prefpane id="optionPane" label="&wat.option.general.title;"
+            image="chrome://wat/skin/watIcon32.png"
+            onpaneload="wat.init();">
+    <script type="application/javascript" src="chrome://wat/content/option.js"/>
+    <preferences>
+      <preference id="loadInBackground" name="mail.tabs.loadInBackground" type="bool" instantApply="true"/>
+      <preference id="middle-click" name="extensions.wat.middleClickIsNewTab" type="bool" instantApply="true"/>
+      <preference id="feedaccount" name="extensions.wat.feedaccount" type="string" instantApply="true"/>
+    </preferences>
+    <vbox flex="1">
+      <separator class="thin"/>
       <hbox>
-        <vbox flex="1">
-          <grid flex="1">
-            <columns>
-              <column/>
-              <column flex="1"/>
-            </columns>
-            <rows>
-              <row>
-                <label value="&wat.option.pagename.label;"/>
-                <textbox id="siteNameTextBox" multiline="false" oninput="wat.onInput()"/>
-              </row>
-              <row>
-                <label value="&wat.option.pageurl.label;"/>
-                <textbox id="urlTextBox" multiline="false" oninput="wat.onInput()" value="http://"/>
-              </row>
-            </rows>
-          </grid>
-        </vbox>
-        <vbox>
-          <button id="addButton" label="&wat.option.button.add;" oncommand="wat.add()" disabled="true"/>
-          <spacer flex="1"/>
-        </vbox>
-      </hbox>
-      <hbox>
-        <label id="statusLabel" value="" flex="1" class="error"/>
+        <image src="chrome://wat/skin/watIcon16.png"/><label value="Version: ####VERSION####"/>
       </hbox>
       <separator class="thin"/>
-      <hbox flex="1">
-        <hbox flex="1">
-          <listbox id="pageListBox"
-                   seltype="single"
-                   onselect="wat.onSelect()"
-                   flex="1">
-            <listhead>
-              <listheader label="&wat.option.pagename.label;"/>
-              <listheader label="&wat.option.pageurl.label;"/>
-            </listhead>
-            <listcols>
-              <listcol flex="1"/>
-              <listcol flex="2"/>
-            </listcols>
-          </listbox>
-        </hbox>
-        <vbox>
-          <button id="deleteButton" label="&wat.option.button.delete;" oncommand="wat.delete()"     disabled="true"/>
-          <button id="upButton"     label="&wat.option.button.up;"     oncommand="wat.move('up')"   disabled="true"/>
-          <button id="downButton"   label="&wat.option.button.down;"   oncommand="wat.move('down')" disabled="true"/>
-          <spacer flex="1"/>
-        </vbox>
+      <checkbox label="&wat.option.general.loadInBackground;" preference="loadInBackground"/>
+      <checkbox label="&wat.option.general.middleclicktab;" preference="middle-click"/>
+      <hbox>
+        <label value="&wat.option.general.feedsubscribe;"/>
+        <menulist preference="feedaccount">
+          <menupopup id="feedaccountPopup"/>
+        </menulist>
       </hbox>
-    </groupbox>
-    <hbox flex="1">
-      <groupbox flex="1">
-        <caption label="&wat.option.group.settings.label;"/>
-        <checkbox label="&wat.option.loadInBackground;" preference="loadInBackground"/>
-        <checkbox label="&wat.option.middleclicktab;" preference="middle-click"/>
-        <hbox>
-          <label value="RSS Feed Subscribe to"/>
-          <menulist preference="feedaccount">
-            <menupopup id="feedaccountPopup"/>
-          </menulist>
-        </hbox>
-      </groupbox>
-    </hbox>
-  </vbox>
-</prefpane>
+    </vbox>
+  </prefpane>
+  <prefpane id="searchEnginePane" label="&wat.option.searchengine.title;"
+            image="chrome://mozapps/skin/extensions/category-searchengines.png"
+            onpaneload="gSearchEngineManager.init();">
+    <script type="application/javascript" src="chrome://wat/content/searchEnginePane.js"/>
+    <preferences>
+      <preference id="searchSuggest" name="browser.search.suggest.enabled" type="bool" instantApply="true"/>
+    </preferences>
+    <description>&wat.option.searchengine.description;</description>
+    <tree id="engineList" rows="10" seltype="single" clickthrough="never" editable="true">
+      <treecols>
+        <treecol id="engineName" label="&wat.option.searchengine.col.name;"
+                 anonid="name" ordinal="1" flex="1"/>
+        <treecol id="engineDescription" label="&wat.option.searchengine.col.description;"
+                 anonid="description" ordinal="2" flex="2" hidden="true"/>
+        <treecol id="engineKeyword" label="&wat.option.searchengine.col.keyword;"
+                 tooltiptext="&wat.option.searchengine.col.keyword.tooltip;"
+                 anonid="keyword" editable="true" ordinal="3" flex="1"/>
+        <treecol id="engineHasSuggest" label="&wat.option.searchengine.col.hassuggest;"
+                 anonid="suggest" type="checkbox" ordinal="4" hidden="true"/>
+      </treecols>
+      <treechildren ondragstart="gSearchEngineManager.EngineListView.onDragEngineStart(event);"/>
+    </tree>
+    <spacer class="thin"/>
+    <checkbox label="&wat.option.searchengine.enablesuggest;" preference="searchSuggest"/>
+  </prefpane>
 </prefwindow>
 <!--
 vim: sw=2 ts=2 et:
