@@ -207,10 +207,10 @@
 
 <statusbar id="status-bar">
   <statusbarpanel id="wat_feedpanel"
+                  collapsed="true"
                   insertafter="totalMessageCount">
     <button id="wat_feedButton"
             type="menu"
-            collapsed="true"
             class="plain">
       <menupopup id="wat_feedMenuPopup"
                  position="before_end"
