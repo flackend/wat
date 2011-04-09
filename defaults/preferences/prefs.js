@@ -8,4 +8,6 @@ pref('browser.search.order.2', 'Yahoo');
 pref('browser.search.order.3', 'Bing');
 pref('browser.search.loadFromJars', true);
 pref('browser.search.jarURIs', 'chrome://wat/content/searchplugins/');
+pref('browser.search.suggest.enabled', true);
+perf('places.history.enabled', true);
 
