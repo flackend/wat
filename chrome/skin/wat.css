@@ -53,7 +53,7 @@
   -moz-appearance: none;
   border: 1px solid threedshadow;
   border-radius: 4px;
-  width: 15em;
+  width: 16em;
   -moz-transition: width 0.3s;
 }
 #wat_urlbar[focused] {
@@ -64,6 +64,9 @@
   padding-bottom: 1px;
 }
 
+#wat_button .toolbarbutton-text, #wat_searchEngineButton .toolbarbutton-text {
+  display: none;
+}
 #wat_searchEngineButton { border: none; }
 #wat_searchEngineButton .toolbarbutton-icon { -moz-margin-end: 1px; }
 #wat_searchEngineMenuPopup menuitem[selected] {
