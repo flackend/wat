@@ -9,6 +9,13 @@ Requirement
 
  * [Thunderbird > 3.0](http://mozilla.org/thunderbird/)
 
+Version 1.0
+-----------
+
+ * change WAT menu to the button in tab-bar.
+ * _NewFeature_: bookmarks and history system like Firefox
+ * _NewFeature_: URL & search bar
+
 Features
 --------
 
