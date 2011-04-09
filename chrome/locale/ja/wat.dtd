@@ -8,6 +8,7 @@
 <!ENTITY wat.option.general.middleclicktab "中ボタンクリックでタブに開く">
 <!ENTITY wat.option.general.loadInBackground "タブをバックグラウンドに開く(+Shift-keyで動作が入れ替わります)">
 <!ENTITY wat.option.general.feedsubscribe "フィードの購読先">
+<!ENTITY wat.option.general.enablehistory "Webページの履歴を有効にする">
 <!ENTITY wat.option.searchengine.title "検索エンジン">
 <!ENTITY wat.option.searchengine.description "検索エンジンリスト">
 <!ENTITY wat.option.searchengine.col.name "名前">

@@ -53,6 +53,7 @@
       <preference id="loadInBackground" name="mail.tabs.loadInBackground" type="bool" instantApply="true"/>
       <preference id="middle-click" name="extensions.wat.middleClickIsNewTab" type="bool" instantApply="true"/>
       <preference id="feedaccount" name="extensions.wat.feedaccount" type="string" instantApply="true"/>
+      <preference id="enableHistory" name="places.history.enabled" type="bool" instantApply="true"/>
     </preferences>
     <vbox flex="1">
       <separator class="thin"/>
@@ -62,6 +63,9 @@
       <separator class="thin"/>
       <checkbox label="&wat.option.general.loadInBackground;" preference="loadInBackground"/>
       <checkbox label="&wat.option.general.middleclicktab;" preference="middle-click"/>
+      <separator class="thin"/>
+      <checkbox label="&wat.option.general.enablehistory;" preference="enableHistory"/>
+      <separator class="thin"/>
       <hbox>
         <label value="&wat.option.general.feedsubscribe;"/>
         <menulist preference="feedaccount">

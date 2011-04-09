@@ -7,6 +7,8 @@
 <!ENTITY wat.option.general.title "Allmänt">
 <!ENTITY wat.option.general.middleclicktab "Öppna i en ny flik vid mittenklick">
 <!ENTITY wat.option.general.loadInBackground "Öppna flikar i bakgrunden (+Skift gör beteendet omvänt)">
+<!ENTITY wat.option.general.feedsubscribe "RSS-flöde Prenumerera på">
+<!ENTITY wat.option.general.enablehistory "Aktivera webbsidor historia">
 <!ENTITY wat.option.searchengine.title "Sökmotorer">
 <!ENTITY wat.option.searchengine.description "Sökmotorer lista">
 <!ENTITY wat.option.searchengine.col.name "Namn">

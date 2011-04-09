@@ -8,6 +8,7 @@
 <!ENTITY wat.option.general.middleclicktab "Open in New Tab on middle-click">
 <!ENTITY wat.option.general.loadInBackground "Open Tab in Background (+Shift to reverse this)">
 <!ENTITY wat.option.general.feedsubscribe "RSS Feed Subscribe to">
+<!ENTITY wat.option.general.enablehistory "Enable Web pages history">
 <!ENTITY wat.option.searchengine.title "Search engines">
 <!ENTITY wat.option.searchengine.description "Search engines list">
 <!ENTITY wat.option.searchengine.col.name "Name">
