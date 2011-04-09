@@ -650,7 +650,8 @@ let WAT = (function(){
       const SEARCH_ENGINE_TOPIC   = "browser-search-engine-modified",
             SEARCH_ENGINE_ADDED   = "engine-added",
             SEARCH_ENGINE_CHANGED = "engine-changed",
-            SEARCH_ENGINE_REMOVED = "engine-removed";
+            SEARCH_ENGINE_REMOVED = "engine-removed",
+            SEARCH_ENGINE_CURRENT = "engine-current";
       var popupMenu = null, menuButton = null;
       function createMenus () {
         while (popupMenu.hasChildNodes())
@@ -672,15 +673,11 @@ let WAT = (function(){
         }
       }
       function setCurrentEngine (engine) {
-        var currentEngine = searchService.currentEngine;
         menuButton.setAttribute("image", engine.iconURI.spec);
         menuButton.setAttribute("tooltiptext", engine.description);
-        if (currentEngine === engine)
-          return engine;
-
         popupMenu.querySelector("menuitem[selected=true]").removeAttribute("selected");
-        popupMenu.querySelector("menuitem[label=" + engine.name + "]").setAttribute("selected", "true");
-        return searchService.currentEngine = engine;
+        popupMenu.querySelector("menuitem[label=\"" + engine.name + "\"]").setAttribute("selected", "true");
+        return engine;
       }
       var self = {
         init: function () {
@@ -691,7 +688,11 @@ let WAT = (function(){
           os.addObserver(this, SEARCH_ENGINE_TOPIC, false);
         },
         setCurrent: function setCurrentSearchEngine (engineName) {
-          return setCurrentEngine(searchService.getEngineByName(engineName));
+          var engine = searchService.getEngineByName(engineName);
+          if (engine)
+            searchService.currentEngine = engine;
+
+          return engine;
         },
         observe: function (aEngine, aTopic, aVerb) {
           if (aTopic !== SEARCH_ENGINE_TOPIC)
@@ -702,6 +703,9 @@ let WAT = (function(){
           case SEARCH_ENGINE_CHANGED:
           case SEARCH_ENGINE_REMOVED:
             createMenus();
+            break;
+          case SEARCH_ENGINE_CURRENT:
+            setCurrentEngine(aEngine);
             break;
           }
         }
