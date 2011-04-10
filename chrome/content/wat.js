@@ -514,6 +514,9 @@ let WAT = (function(){
      * @param {String} text URL or search word
      */
     openURLorSearch: function WAT_openURLorSearch (text) {
+      if (!text)
+        return;
+
       var keyword = "",
           param = "",
           offset = text.indexOf(" "),
