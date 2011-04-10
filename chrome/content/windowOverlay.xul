@@ -82,6 +82,9 @@
 </commandset>
 
 <keyset id="mailKeys">
+  <key id="wat_focusURLBarKb"
+       key=":" modifiers="accel"
+       oncommand="document.getElementById('wat_urlbar').focus();"/>
   <keyset id="wat_keyset">
     <key id="wat_goBackKb"
          keycode="VK_LEFT"
