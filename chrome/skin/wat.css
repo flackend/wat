@@ -67,7 +67,7 @@
 #wat_button .toolbarbutton-text, #wat_searchEngineButton .toolbarbutton-text {
   display: none;
 }
-#wat_searchEngineButton { border: none; }
+#wat_searchEngineButton { border: none; -moz-appearance: none; }
 #wat_searchEngineButton .toolbarbutton-icon { -moz-margin-end: 1px; }
 #wat_searchEngineMenuPopup menuitem[selected] {
   font-weight: bold;
