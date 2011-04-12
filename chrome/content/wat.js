@@ -107,7 +107,8 @@ let WAT = (function(){
     });
     migrateBookmarks();
 
-    updateTabMail(self.tabMail);
+    self.tabMail.addEventListener("DOMLinkAdded", WAT.handlers.onDOMLinkAdded, false);
+    self.tabMail.registerTabMonitor(WAT.handlers.feeds.tabMonitor);
 
     /**
      * update tabProgressListener
@@ -209,15 +210,6 @@ let WAT = (function(){
 
       base[key] = value;
     }
-  }
-
-  /**
-   * append functions to #tabmail
-   * @param {Element} tabMail
-   */
-  function updateTabMail(tabMail){
-    tabMail.addEventListener("DOMLinkAdded", WAT.handlers.onDOMLinkAdded, false);
-    tabMail.registerTabMonitor(WAT.handlers.feeds.tabMonitor);
   }
 
   const os = Cc["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
