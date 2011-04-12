@@ -7,7 +7,7 @@ WAT(Wab Application Tab) is enable to open web contents in new tab.
 Requirement
 -----------
 
- * [Thunderbird > 3.0](http://mozilla.org/thunderbird/)
+ * [Thunderbird >= 3.3](http://mozilla.org/thunderbird/)
 
 Version 1.0
 -----------
