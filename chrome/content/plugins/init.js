@@ -7,9 +7,6 @@ let scripts = [
     FILENAME: "compactHeader.js"
   }
 ];
-const Cc = Components.classes,
-      Ci = Components.interfaces;
-const comparator = Cc["@mozilla.org/xpcom/version-comparator;1"].getService(Ci.nsIVersionComparator);
 const contexts = {};
 function load(url, scriptObj){
   if (!scriptObj)
@@ -20,7 +17,7 @@ function load(url, scriptObj){
     context["__" + key + "__"] = scriptObj[key];
   }
   contexts[name] = context;
-  WAT.loadScript(url, context);
+  Services.scriptloader.loadSubScript(url, context);
 }
 function isExtensionEnabled(extItem){
   const rdf = Cc["@mozilla.org/rdf/rdf-service;1"].getService(Ci.nsIRDFService),
@@ -42,7 +39,7 @@ function isExtensionEnabled(extItem){
     let s = scripts[i];
     let url = PRE_PATH + s.FILENAME;
     AddonManager.getAddonByID(s.EXTENSION_ID, function (ext) {
-      if (ext && ext.isActive && comparator.compare(s.VERSION, ext.version) < 0) {
+      if (ext && ext.isActive && Services.vc.compare(s.VERSION, ext.version) < 0) {
         load(url, s);
       }
     });

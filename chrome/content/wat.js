@@ -170,7 +170,7 @@ let WAT = (function(){
     } else if (accountKey){
       WAT.prefs.feedAccountKey = "";
     }
-    self.loadScript("chrome://wat/content/plugins/init.js", self.plugins);
+    Services.scriptloader.loadSubScript("chrome://wat/content/plugins/init.js", self.plugins);
 
     self.searchEngines.init();
   }
@@ -211,8 +211,6 @@ let WAT = (function(){
       base[key] = value;
     }
   }
-
-  const os = Cc["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
 
   /**
    * popup#mailContext's popupshowing event handler
@@ -577,7 +575,7 @@ let WAT = (function(){
           popupMenu = $("wat_searchEngineMenuPopup");
           createMenus();
           setCurrentEngine(searchService.currentEngine);
-          os.addObserver(this, SEARCH_ENGINE_TOPIC, false);
+          Services.obs.addObserver(this, SEARCH_ENGINE_TOPIC, false);
         },
         setCurrent: function setCurrentSearchEngine (engineName) {
           var engine = searchService.getEngineByName(engineName);
@@ -732,9 +730,7 @@ let WAT = (function(){
           if (accounts.length){
             //FIXME: should supports multi feed acounts
             //openSubscriptionsDialog(accounts[0].incomingServer.rootFolder);
-            let w = Cc["@mozilla.org/appshell/window-mediator;1"]
-                      .getService(Ci.nsIWindowMediator)
-                      .getMostRecentWindow("Mail:News-BlogSubscriptions");
+            let w = Services.wm.getMostRecentWindow("Mail:News-BlogSubscriptions");
             let rootFolder = accounts[0].incomingServer.rootFolder;
             if (w){
               w.focus();
@@ -838,14 +834,6 @@ let WAT = (function(){
       },
     },
     // 2}}}
-    /**
-     * @param {String} url
-     * @param {Object} context
-     */
-    loadScript: function WAT_loadScript(url, context){
-      const ssl = Cc["@mozilla.org/moz/jssubscript-loader;1"].getService(Ci.mozIJSSubScriptLoader);
-      ssl.loadSubScript(url, context);
-    },
     plugins: { },
   };
   window.addEventListener("load", init, false);
