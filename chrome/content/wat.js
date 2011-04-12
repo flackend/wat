@@ -480,57 +480,44 @@ let WAT = (function(){
      * preferences
      * {{{2
      */
-    prefs: (function(){
-      const WAT_PREFBRANCH_MIDDLECLICK_IN_NEWTAB = "extensions.wat.middleClickIsNewTab",
-            WAT_PREFBRANCH_FEEDACCOUNT = "extensions.wat.feedaccount",
-            TAB_LOADINBACKGROUND = "mail.tabs.loadInBackground";
-      const prefService = Cc["@mozilla.org/preferences-service;1"]
-                          .getService(Ci.nsIPrefService)
-                          .QueryInterface(Ci.nsIPrefBranch2);
-      // ----------------------------------------------------------------------
-      // Preference Public Section
-      // ------------------------------------------------------------------{{{3
-      let publicPrefs = {
-        /**
-         * @type {String}
-         */
-        get feedAccountKey(){
-          return prefService.getCharPref(WAT_PREFBRANCH_FEEDACCOUNT);
-        },
-        set feedAccountKey(value){
-          value = value.toString();
-          prefService.setCharPref(WAT_PREFBRANCH_FEEDACCOUNT, value);
-          return value;
-        },
-        /**
-         * @type {Boolean}
-         * @see WAT_siteClickHandler
-         * if true, opens in a new tab on middle-click
-         */
-        get middleClickIsNewTab(){
-          return prefService.getBoolPref(WAT_PREFBRANCH_MIDDLECLICK_IN_NEWTAB);
-        },
-        set middleClickIsNewTab(value){
-          let bool = !!value;
-          prefService.setBoolPref(WAT_PREFBRANCH_MIDDLECLICK_IN_NEWTAB, bool);
-          return bool;
-        },
-        /**
-         * @return {Boolean}
-         * @see prefs "mail.tabs.loadInBackground"
-         */
-        get loadInBackground(){
-          return prefService.getBoolPref(TAB_LOADINBACKGROUND);
-        },
-        set loadInBackground(value){
-          value = !!value;
-          prefService.setBoolPref(TAB_LOADINBACKGROUND, value);
-          return value;
-        }
-      };
-      return publicPrefs;
-      // 3}}}
-    })(),
+    prefs: {
+      /**
+       * @type {String}
+       */
+      get feedAccountKey(){
+        return Services.prefs.getCharPref("extensions.wat.feedaccount");
+      },
+      set feedAccountKey(value){
+        value = value.toString();
+        Services.prefs.setCharPref("extensions.wat.feedaccount");
+        return value;
+      },
+      /**
+       * @type {Boolean}
+       * @see WAT_siteClickHandler
+       * if true, opens in a new tab on middle-click
+       */
+      get middleClickIsNewTab(){
+        return Services.prefs.getBoolPref("extensions.wat.middleClickIsNewTab");
+      },
+      set middleClickIsNewTab(value){
+        value = !!value;
+        Services.prefs.setBoolPref("extensions.wat.middleClickIsNewTab", value);
+        return value;
+      },
+      /**
+       * @type {Boolean}
+       * @see prefs "mail.tabs.loadInBackground"
+       */
+      get loadInBackground(){
+        return Services.prefs.getBoolPref("mail.tabs.loadInBackground");
+      },
+      set loadInBackground(value){
+        value = !!value;
+        Services.prefs.setBoolPref("mail.tabs.loadInBackground", value);
+        return value;
+      }
+    },
     // 2}}}
     /**
      * search engines
