@@ -101,10 +101,7 @@ let WAT = (function(){
    */
   function init(){
     window.removeEventListener("load", init, false);
-    self.tabMail = $("tabmail");
-    XPCOMUtils.defineLazyGetter(self, "bundle", function() {
-      return $("bundle_wat");
-    });
+
     migrateBookmarks();
 
     self.tabMail.addEventListener("DOMLinkAdded", WAT.handlers.onDOMLinkAdded, false);
@@ -330,8 +327,24 @@ let WAT = (function(){
   // Public Section
   // ----------------------------------------------------------------------{{{1
   let self = {
-    /** tabmail element is set on thunderbird loaded. @see init() */
-    tabMail: null,
+    /**
+     * lazy get the 'tabmail' element
+     * @type {Element}
+     */
+    get tabMail() {
+      var tabmail = $("tabmail");
+      delete this.tabMail;
+      return this.tabMail = tabmail;
+    },
+    /**
+     * lazy get the 'bundle_wat' element
+     * @type {Element}
+     */
+    get bundle() {
+      var bundle = $("bundle_wat");
+      delete this.bundle;
+      return this.bundle = bundle;
+    },
     /**
      * @param {nsIURI|String} uri
      * If the URL scheme given argument {url} is "chrome" or "about",
