@@ -216,62 +216,7 @@ let WAT = (function(){
    * @param {Element} tabMail
    */
   function updateTabMail(tabMail){
-    /**
-     * @param {Document} aDocument
-     */
-    function getTabForDocument(aDocument){
-      let info = tabMail.tabInfo.filter(function(tabInfo){
-        return ("browser" in tabInfo && tabInfo.browser.contentDocument == aDocument)
-      });
-      if (info.length > 0)
-        return info[0];
-      return null;
-    }
-    /**
-     * @param {Event} aEvent DOMLinkAdded event
-     */
-    function onDOMLinkAdded(aEvent){
-      let link = aEvent.originalTarget;
-      let rel = link.rel && link.rel.toLowerCase();
-      let iconAdded = false,
-          feedAdded = false;
-      if (!link || !link.ownerDocument || !rel || !link.href)
-        return;
-      let rels = rel.split(/\s+/);
-      for (let i=0, len=rels.length; i<len; i++){
-        switch(rels[i]){
-          case "alternate":
-            if (rels.some(function(r) r == "stylesheet"))
-              break;
-          case "feed":
-            if (feedAdded)
-              break;
-            let type = link.type.replace(/^\s*|\s*(?:;.*)?$/g, "");
-            if (type == "application/rss+xml" || type == "application/atom+xml"){
-              try {
-                urlSecurityCheck(link.href, link.ownerDocument.nodePrincipal,
-                  Ci.nsIScriptSecurityManager.DISALLOW_INHERIT_PRINCIPAL);
-              } catch(e){
-                break;
-              }
-              let tabInfo = getTabForDocument(link.ownerDocument);
-              if (tabInfo){
-                WAT.handlers.feeds.add(link, tabInfo);
-                feedAdded = true;
-              }
-            }
-            break;
-          case "icon":
-            /**
-             * @deprecated Already in Thunderbird 3.3a3
-             * @see https://bugzilla.mozilla.org/show_bug.cgi?id=516777
-             * @see http://hg.mozilla.org/comm-central/rev/c51913c44f24
-             */
-            break;
-        }
-      }
-    }
-    tabMail.addEventListener("DOMLinkAdded", onDOMLinkAdded, false);
+    tabMail.addEventListener("DOMLinkAdded", WAT.handlers.onDOMLinkAdded, false);
     tabMail.registerTabMonitor(WAT.handlers.feeds.tabMonitor);
   }
 
@@ -855,7 +800,50 @@ let WAT = (function(){
           },
           onTabTitleChanged: function(){ }
         },
-      }
+      },
+      /**
+       * @param {Event} aEvent DOMLinkAdded event
+       */
+      onDOMLinkAdded: function wat_onDOMLinkAdded (aEvent){
+        let link = aEvent.originalTarget;
+        let rel = link.rel && link.rel.toLowerCase();
+        let feedAdded = false;
+        if (!link || !link.ownerDocument || !rel || !link.href)
+          return;
+        let rels = rel.split(/\s+/);
+        for (let i=0, len=rels.length; i < len; i++){
+          switch(rels[i]){
+          case "alternate":
+            if (rels.some(function(r) r == "stylesheet"))
+              break;
+          case "feed":
+            if (feedAdded)
+              break;
+            let type = link.type.replace(/^\s*|\s*(?:;.*)?$/g, "");
+            if (type == "application/rss+xml" || type == "application/atom+xml"){
+              try {
+                urlSecurityCheck(link.href, link.ownerDocument.nodePrincipal,
+                  Ci.nsIScriptSecurityManager.DISALLOW_INHERIT_PRINCIPAL);
+              } catch(e){
+                break;
+              }
+              let tabInfo = WAT.tabMail.getBrowserForDocument(link.ownerDocument.defaultView);
+              if (tabInfo){
+                WAT.handlers.feeds.add(link, tabInfo);
+                feedAdded = true;
+              }
+            }
+            break;
+          case "icon":
+            /**
+             * @deprecated Already in Thunderbird 3.3a3
+             * @see https://bugzilla.mozilla.org/show_bug.cgi?id=516777
+             * @see http://hg.mozilla.org/comm-central/rev/c51913c44f24
+             */
+            break;
+          }
+        }
+      },
     },
     // 2}}}
     /**
