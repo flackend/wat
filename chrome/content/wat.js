@@ -108,6 +108,29 @@ let WAT = (function(){
     migrateBookmarks();
 
     updateTabMail(self.tabMail);
+
+    /**
+     * update tabProgressListener
+     * @see chrome://messenger/content/specialTabs.js
+     */
+    _extends(tabProgressListener, {
+      onLocationChange: function wat_onLocationChange (aWebProgress, aRequest, aLocationURI) {
+        wat_onLocationChange.super.apply(this, arguments);
+        WAT.handlers.feeds.update(this.mTab);
+      },
+      onStateChange: function wat_onStateChange (aWebProgress, aRequest, aStateFlags, aStatus) {
+        wat_onStateChange.super.apply(this, arguments);
+        const nsIWebProgressListener = Components.interfaces.nsIWebProgressListener;
+        if (aStateFlags & nsIWebProgressListener.STATE_START &&
+            aStateFlags & nsIWebProgressListener.STATE_IS_NETWORK &&
+            aRequest && aWebProgress.DOMWindow == this.mBrowser.contentWindow)
+          this.mTab.feeds = null;
+      },
+      onRefreshAttempted: function wat_onRefreshAttempted (aWebProgress, aURI, aDelay, aSameURI) {
+        return (aWebProgress.allowMetaRedirects && aWebProgress.currentURI.host == aURI.host);
+      },
+    });
+
     /**
      * @see browserController
      */
@@ -189,41 +212,26 @@ let WAT = (function(){
   }
 
   /**
+   * @param {Object|Function} base
+   * @param {Object} obj
+   */
+  function _extends (base, obj) {
+    if (typeof base == "function")
+      base = base.prototype;
+
+    for (let [key, value] in Iterator(obj)) {
+      if (typeof value == "function" && (key in base))
+        value.super = base[key];
+
+      base[key] = value;
+    }
+  }
+
+  /**
    * append functions to #tabmail
    * @param {Element} tabMail
    */
   function updateTabMail(tabMail){
-    /**
-     * @param {Object} aTabInfo
-     */
-    tabMail.updateIcon = function watUpdateIcon(aTabInfo){
-      if (!("browser" in aTabInfo))
-        return;
-
-      let browser = aTabInfo.browser;
-      if (!aTabInfo.busy && browser.mIconURL){
-        aTabInfo.tabNode.setAttribute("image", browser.mIconURL);
-        PlacesUtils.favicons.setAndLoadFaviconForPage(browser.currentURI, makeURI(browser.mIconURL), false);
-      } else {
-        aTabInfo.tabNode.removeAttribute("image");
-      }
-    };
-    /**
-     * @param {Object} aTabInfo
-     */
-    tabMail.useDefaultIcon = function watUseDefaultIcon(aTabInfo){
-      if (!("browser" in aTabInfo))
-        return;
-      let browser = aTabInfo.browser;
-      let uri = browser.contentDocument.documentURIObject;
-      if (browser.contentDocument instanceof ImageDocument){
-        // XXX: now not implemented
-        return;
-      } else if (uri.schemeIs("http") || uri.schemeIs("https")){
-        browser.mIconURL = uri.prePath + "/favicon.ico";
-        this.updateIcon(aTabInfo);
-      }
-    };
     /**
      * @param {Document} aDocument
      */
@@ -270,34 +278,12 @@ let WAT = (function(){
             }
             break;
           case "icon":
-            if (iconAdded)
-              break;
-            let targetDoc = link.ownerDocument;
-            let uri = makeURI(link.href, targetDoc.characterSet);
-            if (uri.schemeIs("chrome"))
-              break;
-            try {
-              urlSecurityCheck(uri, targetDoc.nodePrincipal, Ci.nsIScriptSecurityManager.DISALLOW_SCRIPT);
-            } catch(e){
-              break;
-            }
-            try {
-              var contentPolicy = Cc["@mozilla.org/layout/content-policy;1"]
-                                  .getService(Ci.nsIContentPolicy);
-            } catch(e){
-              break;
-            }
-            if (contentPolicy.shouldLoad(Ci.nsIContentPolicy.TYPE_IMAGE,
-                                         uri, targetDoc.documentURIObject,
-                                         link, link.type, null)
-              != Ci.nsIContentPolicy.ACCEPT)
-              break;
-            let tabInfo = getTabForDocument(targetDoc);
-            if (!tabInfo)
-              break;
-            tabInfo.browser.mIconURL = uri.spec;
-            tabMail.updateIcon(tabInfo);
-            iconAdded = true;
+            /**
+             * @deprecated Already in Thunderbird 3.3a3
+             * @see https://bugzilla.mozilla.org/show_bug.cgi?id=516777
+             * @see http://hg.mozilla.org/comm-central/rev/c51913c44f24
+             */
+            break;
         }
       }
     }
