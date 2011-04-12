@@ -145,22 +145,6 @@ let WAT = (function(){
     $("messagepane")
       .setAttribute("onclick", "return WAT.handlers.contentAreaClickHandler(event) || contentAreaClick(event)");
 
-    // on Thunderbird started up and restored tabs,
-    // call setTabIconUpdator each tabInfo of "contentTab" type
-    // once.
-    let restoreTabsFunc = self.tabMail.restoreTabs;
-    self.tabMail.restoreTabs = function(){
-      restoreTabsFunc.apply(self.tabMail, arguments);
-      for each(let info in self.tabMail.tabInfo){
-        if ("browser" in info && info.mode.type == "contentTab"){
-          enableSessionHistory(info.browser);
-          info.tabNode.setAttribute("onerror", "this.removeAttribute('image')");
-        }
-      }
-      self.tabMail.restoreTabs = restoreTabsFunc;
-    }
-    delete restoreTabsFunc;
-
     // overwrite openUILink
     // add a feature case of middle-click
     window.openUILink = function watOpenUILink(url, event){
@@ -292,22 +276,6 @@ let WAT = (function(){
   }
 
   const os = Cc["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
-  /**
-   * enable session history of the browser
-   * @param {Element} browser
-   */
-  function enableSessionHistory(browser){
-    if (!browser.hasAttribute("disablehistory"))
-      return;
-    browser.removeAttribute("disablehistory");
-    try {
-      os.addObserver(browser, "browser:purge-session-history", false);
-      browser.webNavigation.sessionHistory =
-        Cc["@mozilla.org/browser/shistory;1"].createInstance(Ci.nsISHistory);
-    } catch(e){
-      Components.utils.reportError(e);
-    }
-  }
 
   /**
    * popup#mailContext's popupshowing event handler
@@ -441,7 +409,6 @@ let WAT = (function(){
      *       which checks HTMLAnchorElement's href attribute
      *       whether the URL scheme is specific (e.g. "http" or "https") or not,
      *       then opens the URL in a new tab or external browser.
-     *   and enable session-history (@see enableSessionHistory)
      *
      * @param {Boolean} background
      * open tab in background
@@ -491,7 +458,6 @@ let WAT = (function(){
       }
       let tab = this.tabMail.openTab(type, args);
       if (tab && type == "contentTab"){
-        enableSessionHistory(tab.browser);
         tab.tabNode.setAttribute("onerror", "this.removeAttribute('image')");
       }
       return tab;
