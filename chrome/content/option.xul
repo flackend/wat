@@ -50,6 +50,7 @@
             onpaneload="gGeneral.init();">
     <script type="application/javascript" src="chrome://wat/content/option.js"/>
     <preferences>
+      <preference id="openLinkInTab" name="extensions.wat.openLinkInTab" type="bool" instantApply="true"/>
       <preference id="loadInBackground" name="mail.tabs.loadInBackground" type="bool" instantApply="true"/>
       <preference id="middle-click" name="extensions.wat.middleClickIsNewTab" type="bool" instantApply="true"/>
       <preference id="feedaccount" name="extensions.wat.feedaccount" type="string" instantApply="true"/>
@@ -61,6 +62,7 @@
         <image src="chrome://wat/skin/watIcon16.png"/><label value="Version: ####VERSION####"/>
       </hbox>
       <separator class="thin"/>
+      <checkbox label="&wat.option.general.openLinkInTab;" preference="openLinkInTab"/>
       <checkbox label="&wat.option.general.loadInBackground;" preference="loadInBackground"/>
       <checkbox label="&wat.option.general.middleclicktab;" preference="middle-click"/>
       <separator class="thin"/>

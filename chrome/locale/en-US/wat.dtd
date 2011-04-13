@@ -5,6 +5,7 @@
 <!ENTITY wat.option.label "Options">
 <!ENTITY wat.option.window.title "WAT Options">
 <!ENTITY wat.option.general.title "General">
+<!ENTITY wat.option.general.openLinkInTab "Always open link in a tab (Don't open the external browser)">
 <!ENTITY wat.option.general.middleclicktab "Open in New Tab on middle-click">
 <!ENTITY wat.option.general.loadInBackground "Open Tab in Background (+Shift to reverse this)">
 <!ENTITY wat.option.general.feedsubscribe "RSS Feed Subscribe to">

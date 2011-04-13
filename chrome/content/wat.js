@@ -146,14 +146,17 @@ let WAT = (function(){
     // overwrite openUILink
     // add a feature case of middle-click
     window.openUILink = function watOpenUILink(url, event){
-      if (!event.button){
-          messenger.launchExternalURL(url);
-      } else if (event.button == 1){
+      if (event.button == 2)
+        return;
+
+      if (event.button == 1 || WAT.prefs.openLinkInTab) {
         let uri = makeURI(url);
         if (uri.schemeIs("http") || uri.schemeIs("https")){
           WAT.openTab(uri, isLoadInBackground(event));
+          return;
         }
       }
+      messenger.launchExternalURL(url);
     };
 
     appendTabContextMenu();
@@ -507,6 +510,17 @@ let WAT = (function(){
       },
       /**
        * @type {Boolean}
+       */
+      get openLinkInTab(){
+        return Services.prefs.getBoolPref("extensions.wat.openLinkInTab");
+      },
+      set openLinkInTab(value){
+        value = !!value;
+        Services.prefs.setBoolPref("extensions.wat.openLinkInTab", value);
+        return value;
+      },
+      /**
+       * @type {Boolean}
        * @see WAT_siteClickHandler
        * if true, opens in a new tab on middle-click
        */
@@ -614,6 +628,7 @@ let WAT = (function(){
        * add middle-click handler on HTMLAnchorElement
        * to "messagepane" (message panel in mail3pane)
        * if {Event} is middle-click and the URL scheme is specific,
+       * or Ctrl + left-click or {@link WAT.prefs.openLinkInTab} is true
        *   opens the URL in a new tab and
        *   return true
        * else
@@ -623,7 +638,7 @@ let WAT = (function(){
         let href = hRefForClickEvent(aEvent);
         if (href) {
           let uri = makeURI(href);
-          if (aEvent.button == 1 || (aEvent.button == 0 && aEvent.ctrlKey)) {
+          if (aEvent.button == 1 || (aEvent.button == 0 && (aEvent.ctrlKey || WAT.prefs.openLinkInTab))) {
             if (uri.schemeIs("http") || uri.schemeIs("https") || uri.schemeIs("about")){
               aEvent.preventDefault();
               WAT.openTab(href, isLoadInBackground(aEvent));
@@ -656,13 +671,14 @@ let WAT = (function(){
                 uri.schemeIs("about")) && !aSiteRegExp.test(uri.spec))) {
             aEvent.preventDefault();
             if ((aEvent.button == 1 && WAT.prefs.middleClickIsNewTab) ||
-                (aEvent.button == 0 && aEvent.ctrlKey))
+                (aEvent.button == 0 && aEvent.ctrlKey) ||
+                WAT.prefs.openLinkInTab)
               WAT.openTab(href, background);
             else
               openLinkExternally(href);
           } else if (aEvent.button == 1) {
             aEvent.preventDefault();
-            if (WAT.prefs.middleClickIsNewTab || aEvent.ctrlKey)
+            if (WAT.prefs.middleClickIsNewTab || aEvent.ctrlKey || WAT.prefs.openLinkInTab)
               WAT.openTab(href, background);
             else
               openLinkExternally(href);

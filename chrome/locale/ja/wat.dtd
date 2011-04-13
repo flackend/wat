@@ -5,6 +5,7 @@
 <!ENTITY wat.option.label "設定">
 <!ENTITY wat.option.window.title "WAT設定">
 <!ENTITY wat.option.general.title "一般">
+<!ENTITY wat.option.general.openLinkInTab "常にタブに開く (外部ブラウザで開かない)">
 <!ENTITY wat.option.general.middleclicktab "中ボタンクリックでタブに開く">
 <!ENTITY wat.option.general.loadInBackground "タブをバックグラウンドに開く(+Shift-keyで動作が入れ替わります)">
 <!ENTITY wat.option.general.feedsubscribe "フィードの購読先">

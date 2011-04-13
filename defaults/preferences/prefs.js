@@ -1,5 +1,6 @@
 pref('extensions.wat@teramako.description','chrome://wat/locale/wat.properties');
 pref('extensions.wat.pages', '');
+pref('extensions.wat.openLinkInTab', false);
 pref('extensions.wat.middleClickIsNewTab', true);
 pref('extensions.wat.feedaccount', '');
 pref('browser.search.defaultenginename', 'Google');

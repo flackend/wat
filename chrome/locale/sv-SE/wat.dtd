@@ -5,6 +5,7 @@
 <!ENTITY wat.option.label "Inställningar">
 <!ENTITY wat.option.window.title "Inställningar för WAT">
 <!ENTITY wat.option.general.title "Allmänt">
+<!ENTITY wat.option.general.openLinkInTab "Öppna alltid länk i en flik (Öppna inte extern webbläsare)">
 <!ENTITY wat.option.general.middleclicktab "Öppna i en ny flik vid mittenklick">
 <!ENTITY wat.option.general.loadInBackground "Öppna flikar i bakgrunden (+Skift gör beteendet omvänt)">
 <!ENTITY wat.option.general.feedsubscribe "RSS-flöde Prenumerera på">
