@@ -9,6 +9,12 @@ Requirement
 
  * [Thunderbird >= 3.3](http://mozilla.org/thunderbird/)
 
+Version 1.1
+-----------
+
+ * _NewFeature_: always open link in a tab option (Don't open the external browser).
+ * a little refactoring
+
 Version 1.0
 -----------
 
