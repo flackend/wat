@@ -15,6 +15,9 @@ Version 1.0
  * change WAT menu to the button in tab-bar.
  * _NewFeature_: bookmarks and history system like Firefox
  * _NewFeature_: URL & search bar
+ * obsoleted: WAT menu in menubar
+ * obsoleted: Open URL in tab menu
+ * obsoleted: old bookmark system
 
 Features
 --------
