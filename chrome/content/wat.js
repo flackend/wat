@@ -349,6 +349,16 @@ let WAT = (function(){
       return this.bundle = bundle;
     },
     /**
+     * @method
+     * @param {String} host
+     */
+    get validateHost() {
+      var validator = {};
+      Cu.import("resource://wat/hostValidator.jsm", validator);
+      delete this.validateHost;
+      return this.validateHost = validator.validateHost;
+    },
+    /**
      * @param {nsIURI|String} uri
      * If the URL scheme given argument {url} is "chrome" or "about",
      *   use "chromeTab" type and
@@ -449,19 +459,12 @@ let WAT = (function(){
         try {
           uri = Cc["@mozilla.org/docshell/urifixup;1"].getService(Ci.nsIURIFixup)
                   .createFixupURI(text, Ci.nsIURIFixup.FIXUP_FLAG_ALLOW_KEYWORD_LOOKUP);
-          // FIXME: TLDかIPアドレスにマッチする場合のみに修正すべき
-          if (uri.schemeIs("http") || uri.schemeIs("https"))
-            window.Services.eTLD.getBaseDomain(uri);
+        } catch(e) {}
 
-          this.openTab(uri);
-        } catch(e) {
-          if (e.result === Components.results.NS_ERROR_INSUFFICIENT_DOMAIN_LEVELS && searchService.defaultEngine) {
-            uri = searchService.currentEngine.getSubmission(text, null).uri;
-            this.openTab(uri);
-          } else {
-            Components.utils.reportError(e);
-          }
-        }
+        if (!uri || ((uri.schemeIs("http") || uri.schemeIs("https")) && !this.validateHost(uri.host)))
+          uri = searchService.currentEngine.getSubmission(text, null).uri;
+
+        this.openTab(uri);
       }
     },
     /**
