@@ -73,6 +73,8 @@
   font-weight: bold;
 }
 
+#wat_PlacesToolbarItems > toolbarbutton .toolbarbutton-text { display: none; }
+
 .bookmark-item {
   list-style-image: url("chrome://global/skin/icons/folder-item.png");
   -moz-image-region: rect(0, 16px, 16px, 0);
