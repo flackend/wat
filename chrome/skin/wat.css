@@ -73,6 +73,11 @@
   font-weight: bold;
 }
 
+#wat_bookmarksToolbar {
+  list-style-image: url("chrome://wat/skin/places/bookmarksToolbar.png");
+  -moz-image-region: auto;
+}
+
 #wat_PlacesToolbarItems > toolbarbutton .toolbarbutton-text { display: none; }
 
 .bookmark-item {

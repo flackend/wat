@@ -176,6 +176,11 @@
                 label="&wat.showAllBookmarks.label;"
                 accesskey="B"
                 command="Browser:ShowAllBookmarks"/>
+      <menu id="wat_bookmarksToolbar" placesanonid="toolbar-autohide" class="menu-iconic bookmark-item"
+            label="&wat.bookmarksToolbar.label;" container="true">
+        <menupopup id="wat_bookmarksToolbarPopup" placespopup="true" context="placesContext"
+                   onpopupshowing="if (!this.parentNode._placesView) new PlacesMenu(event, 'place:folder=TOOLBAR');"/>
+      </menu>
       <menuseparator/>
       <!-- Bookmarks menu items -->
       <menuseparator builder="end"/>

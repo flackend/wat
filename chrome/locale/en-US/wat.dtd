@@ -2,6 +2,7 @@
 <!ENTITY wat.jsConsole.label "Error Console">
 <!ENTITY wat.aboutConfig.label "Config Editor">
 <!ENTITY wat.openNewTab.label "Open in New Tab">
+<!ENTITY wat.bookmarksToolbar.label "Bookmarks Toolbar">
 <!ENTITY wat.option.label "Options">
 <!ENTITY wat.option.window.title "WAT Options">
 <!ENTITY wat.option.general.title "General">

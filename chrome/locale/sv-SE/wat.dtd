@@ -2,6 +2,7 @@
 <!ENTITY wat.jsConsole.label "Felkonsolen">
 <!ENTITY wat.aboutConfig.label "about:config">
 <!ENTITY wat.openNewTab.label "Öppna i ny flik">
+<!ENTITY wat.bookmarksToolbar.label "Bokmärkesfältet">
 <!ENTITY wat.option.label "Inställningar">
 <!ENTITY wat.option.window.title "Inställningar för WAT">
 <!ENTITY wat.option.general.title "Allmänt">
