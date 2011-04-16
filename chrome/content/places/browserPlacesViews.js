@@ -787,11 +787,11 @@ function PlacesToolbar(aPlace) {
   // Add some smart getters for our elements.
   let thisView = this;
   [
-    ["_viewElt",              "PlacesToolbar"],
-    ["_rootElt",              "PlacesToolbarItems"],
-    ["_dropIndicator",        "PlacesToolbarDropIndicator"],
-    ["_chevron",              "PlacesChevron"],
-    ["_chevronPopup",         "PlacesChevronPopup"]
+    ["_viewElt",              "wat_PlacesToolbar"],
+    ["_rootElt",              "wat_PlacesToolbarItems"],
+    ["_dropIndicator",        "wat_PlacesToolbarDropIndicator"],
+    ["_chevron",              "wat_PlacesChevron"],
+    ["_chevronPopup",         "wat_PlacesChevronPopup"]
   ].forEach(function (elementGlobal) {
     let [name, id] = elementGlobal;
     thisView.__defineGetter__(name, function () {

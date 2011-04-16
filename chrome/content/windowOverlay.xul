@@ -151,6 +151,19 @@
 </menupopup>
 
 <hbox id="tabmail-buttons">
+  <hbox id="wat_PlacesToolbar" context="placesContext" tooltip="bhTooltip"
+        onclick="BookmarksEventHandler.onClick(event, this._placesView);"
+        oncommand="BookmarksEventHandler.onCommand(event, this._placesView);">
+    <hbox align="center">
+      <image id="wat_PlacesToolbarDropIndicator" mousethrough="always" collapsed="true"/>
+    </hbox>
+    <scrollbox id="wat_PlacesToolbarItems" orient="horizontal" flex="1"/>
+    <toolbarbutton type="menu" id="wat_PlacesChevron" class="chevron" mousethrough="never" collapsed="true"
+      onpopupshowing="document.getElementById('wat_PlacesToolbar')._placesView._onChevronPopupShowing(event);">
+      <menupopup id="wa_PlacesChevronPopup" placespopup="true" tooltip="bhTooltip"
+                 popupsinherittooltip="true" context="placesContext"/>
+    </toolbarbutton>
+  </hbox>
   <toolbarbutton id="wat_button" type="menu"
                  tooltiptext="&wat.menu.label;">
     <menupopup id="wat_menuPopup" placespopup="true" context="placesContext"

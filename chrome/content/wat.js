@@ -161,6 +161,8 @@ let WAT = (function(){
 
     appendTabContextMenu();
 
+    new PlacesToolbar("place:folder=TOOLBAR");
+
     let accounts = getAccountsByType("rss");
     let accountKey = WAT.prefs.feedAccountKey;
     if (accounts.length > 0) {
