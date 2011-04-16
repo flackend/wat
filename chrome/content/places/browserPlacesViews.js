@@ -1390,11 +1390,11 @@ PlacesToolbar.prototype = {
     let button = aEvent.target;
     if (button.parentNode == this._rootElt && button._placesNode &&
         PlacesUtils.nodeIsURI(button._placesNode))
-      window.XULBrowserWindow.setOverLink(aEvent.target._placesNode.uri, null);
+      window.MsgStatusFeedback.setOverLink(aEvent.target._placesNode.uri, null);
   },
 
   _onMouseOut: function PT__onMouseOut(aEvent) {
-    window.XULBrowserWindow.setOverLink("", null);
+    window.MsgStatusFeedback.setOverLink("", null);
   },
 
   _cleanupDragDetails: function PT__cleanupDragDetails() {
