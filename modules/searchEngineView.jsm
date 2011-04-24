@@ -26,13 +26,43 @@ function EngineListView () {
    * @type {nsISearchEngine[]}
    * @see http://www.oxymoronical.com/experiments/apidocs/interface/nsISearchEngine
    */
-  this.engines = searchService.getVisibleEngines();
+  this.engines = [];
 }
 EngineListView.prototype = {
+  rebuild: function ELV_rebuild () {
+    this.engines = searchService.getVisibleEngines();
+  },
+  rowCountChanged: function ELV_rowCountChanged (aEngine, aCount) {
+    var i;
+    if (aCount > 0) {
+      this.rebuild();
+      i = this.engines.indexOf(aEngine);
+    } else if (aCount < 0) {
+      i = this.engines.indexOf(aEngine);
+      this.rebuild();
+    }
+    this.treeBox.rowCountChanged(i, aCount);
+  },
+  invalidate: function ELV_invalidate () {
+    this.treeBox.invalidate();
+  },
+  get lastIndex () {
+    return this.rowCount - 1;
+  },
+  get selectedIndex () {
+    var seln = this.selection;
+    if (seln.getRangeCount() > 0) {
+      var min = {};
+      seln.getRangeAt(0, min, {});
+      return min.value;
+    }
+    return -1;
+  },
   getSourceIndexFromDrag: function ELV_getSourceIndexFromDrag (aDataTransfer) {
     return parseInt(aDataTransfer.getData(ENGINE_FLAVOR), 10);
   },
   setTree: function ELV_setTree (aTreeBox) {
+    this.rebuild();
     this.treeBox = aTreeBox;
   },
   get rowCount() {

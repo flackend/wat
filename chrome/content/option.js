@@ -34,6 +34,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+Components.utils.import("resource://gre/modules/Services.jsm");
+
 var gGeneral = {
   init: function gGeneral_init () {
     const Cc = Components.classes;
