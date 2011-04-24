@@ -83,8 +83,15 @@
     <preferences>
       <preference id="searchSuggest" name="browser.search.suggest.enabled" type="bool" instantApply="true"/>
     </preferences>
+    <commandset id="searchEngineCommandSet">
+      <command id="cmd_engineRemove" oncommand="gSearchEngineManager.onRemove();" disabled="true"/>
+    </commandset>
+    <keyset id="searchEngineKeySet">
+      <key id="delete" keycode="VK_DELETE" command="cmd_engineRemove"/>
+    </keyset>
     <description>&wat.option.searchengine.description;</description>
-    <tree id="engineList" rows="10" seltype="single" clickthrough="never" editable="true">
+    <tree id="engineList" rows="10" seltype="single" clickthrough="never" editable="true"
+          onselect="gSearchEngineManager.onSelect();">
       <treecols>
         <treecol id="engineName" label="&wat.option.searchengine.col.name;"
                  anonid="name" ordinal="1" flex="1"/>

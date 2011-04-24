@@ -18,6 +18,14 @@ var gSearchEngineManager = {
     window.removeEventListener("unload", arguments.callee, false);
     Services.obs.removeObserver(gSearchEngineManager, gSearchEngineManager.observerTopic);
   },
+  onSelect: function searchEngineTreeOnSelect () {
+    document.getElementById("cmd_engineRemove").setAttribute("disabled", this.view.selectedIndex == -1)
+  },
+  onRemove: function searchEngineRemove () {
+    var index = this.view.selectedIndex;
+    var engine = this.view.engines[index];
+    Services.search.removeEngine(engine);
+  },
   loadOpenSearch: function loadOpenSearch () {
     var textBox = document.getElementById("openSearchURLText");
     var url = textBox.value;
