@@ -9,6 +9,11 @@ Requirement
 
  * [Thunderbird >= 3.3](http://mozilla.org/thunderbird/)
 
+version 1.3
+-----------
+
+ * _NewFeature_: enable to register OpenSearch XML
+
 version 1.2
 -----------
 
