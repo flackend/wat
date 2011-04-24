@@ -19,6 +19,9 @@
 <!ENTITY wat.option.searchengine.col.keyword.tooltip "Redigerbara genom att dubbelklicka">
 <!ENTITY wat.option.searchengine.col.hassuggest "Har föreslå">
 <!ENTITY wat.option.searchengine.enablesuggest "Aktivera föreslå">
+<!ENTITY wat.option.searchEngine.openSearchGroup "Registrera OpenSeach XML">
+<!ENTITY wat.option.searchEngine.openSearchGroup.URL "URL">
+<!ENTITY wat.option.searchEngine.openSearchGroup.LoadButton "Registrera">
 <!ENTITY wat.browser.forward.label "[Webbläsare] Framåt">
 <!ENTITY wat.browser.back.label "[Webbläsare] Bakåt">
 <!ENTITY wat.urlbar.placeholder "URL eller sökord">

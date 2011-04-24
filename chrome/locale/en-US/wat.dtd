@@ -19,6 +19,9 @@
 <!ENTITY wat.option.searchengine.col.keyword.tooltip "Editable by double click">
 <!ENTITY wat.option.searchengine.col.hassuggest "Has suggest">
 <!ENTITY wat.option.searchengine.enablesuggest "Enable suggest">
+<!ENTITY wat.option.searchEngine.openSearchGroup "Register OpenSearch XML">
+<!ENTITY wat.option.searchEngine.openSearchGroup.URL "URL">
+<!ENTITY wat.option.searchEngine.openSearchGroup.LoadButton "Register">
 <!ENTITY wat.browser.forward.label "Browser Forward">
 <!ENTITY wat.browser.back.label "Browser Back">
 <!ENTITY wat.urlbar.placeholder "URL or search words">

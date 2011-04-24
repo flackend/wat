@@ -109,11 +109,12 @@
     <checkbox label="&wat.option.searchengine.enablesuggest;" preference="searchSuggest"/>
     <spacer class="thin"/>
     <groupbox flex="1">
-      <caption label="Register OpenSearch XML"/>
+      <caption label="&wat.option.searchEngine.openSearchGroup;"/>
       <hbox flex="1" style="-moz-box-align: center;">
-        <label value="URL"/>
+        <label value="&wat.option.searchEngine.openSearchGroup.URL;"/>
         <textbox id="openSearchURLText" multiline="false" flex="1"/>
-        <button label="Load" oncommand="gSearchEngineManager.loadOpenSearch();"/>
+        <button label="&wat.option.searchEngine.openSearchGroup.LoadButton;"
+                oncommand="gSearchEngineManager.loadOpenSearch();"/>
       </hbox>
     </groupbox>
   </prefpane>

@@ -19,6 +19,9 @@
 <!ENTITY wat.option.searchengine.col.keyword.tooltip "ダブルクリックで編集">
 <!ENTITY wat.option.searchengine.col.hassuggest "補完が有効">
 <!ENTITY wat.option.searchengine.enablesuggest "サジェストを有効にする">
+<!ENTITY wat.option.searchEngine.openSearchGroup "OpenSearch XML の登録">
+<!ENTITY wat.option.searchEngine.openSearchGroup.URL "URL">
+<!ENTITY wat.option.searchEngine.openSearchGroup.LoadButton "登録">
 <!ENTITY wat.browser.forward.label "進む(ブラウザ)">
 <!ENTITY wat.browser.back.label "戻る(ブラウザ)">
 <!ENTITY wat.urlbar.placeholder "URL または 検索キーワード">
