@@ -9,6 +9,12 @@ Requirement
 
  * [Thunderbird >= 3.3](http://mozilla.org/thunderbird/)
 
+version 1.2
+-----------
+
+ * _NewFeature_: Show Bookmarks Toolbar on left side of WAT button
+   * ![Tabbar](https://lh5.googleusercontent.com/_Rv7aS9PPjZQ/TbQf3Dckj2I/AAAAAAAACeQ/KPgmCPooDvs/s144/WAT_tabbar_version1.2.png "Tabbar")
+
 Version 1.1
 -----------
 
