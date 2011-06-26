@@ -11,3 +11,5 @@ style   chrome://wat/content/windowOverlay.xul chrome://wat/skin/wat.osx.css os=
 overlay chrome://wat/content/windowOverlay.xul chrome://wat/content/macOverlay.xul os=Darwin
 overlay chrome://wat/content/windowOverlay.xul chrome://wat/content/linuxOverlay.xul os=Linux
 
+style chrome://global/content/customizeToolbar.xul chrome://wat/skin/wattoolbar.css
+

@@ -1,0 +1,9 @@
+
+#wat_PlacesToolbar {
+  display: none;
+}
+
+#wat_button {
+  list-style-image: url("chrome://wat/skin/watIcon16.png");
+}
+
