@@ -188,55 +188,21 @@
 </menubar>
 
 <hbox id="tabmail-buttons">
-  <hbox id="wat_PlacesToolbar" context="placesContext" tooltip="bhTooltip"
-        onclick="BookmarksEventHandler.onClick(event, this._placesView);"
-        oncommand="BookmarksEventHandler.onCommand(event, this._placesView);">
-    <hbox align="center">
-      <image id="wat_PlacesToolbarDropIndicator" mousethrough="always" collapsed="true"/>
-    </hbox>
-    <scrollbox id="wat_PlacesToolbarItems" orient="horizontal" flex="1"/>
-    <toolbarbutton type="menu" id="wat_PlacesChevron" class="chevron" mousethrough="never" collapsed="true"
-      onpopupshowing="document.getElementById('wat_PlacesToolbar')._placesView._onChevronPopupShowing(event);">
-      <menupopup id="wa_PlacesChevronPopup" placespopup="true" tooltip="bhTooltip"
-                 popupsinherittooltip="true" context="placesContext"/>
-    </toolbarbutton>
-  </hbox>
-  <toolbarbutton id="wat_button" type="menu"
-                 tooltiptext="&wat.menu.label;">
-    <menupopup id="wat_menuPopup" placespopup="true" context="placesContext"
-               oncommand="BookmarksEventHandler.onCommand(event);"
-               onclick="BookmarksEventHandler.onClick(event);"
-               onpopupshowing="if (!this.parentNode._placesView) new PlacesMenu(event, 'place:folder=BOOKMARKS_MENU');"
-               tooltip="bhTooltip"
-               popupsinherittooltip="true">
-      <menuitem id="wat_showAllBookmarks"
-                label="&wat.showAllBookmarks.label;"
-                accesskey="B"
-                command="Browser:ShowAllBookmarks"/>
-      <menu id="wat_bookmarksToolbar" placesanonid="toolbar-autohide" class="menu-iconic bookmark-item"
-            label="&wat.bookmarksToolbar.label;" container="true">
-        <menupopup id="wat_bookmarksToolbarPopup" placespopup="true" context="placesContext"
-                   onpopupshowing="if (!this.parentNode._placesView) new PlacesMenu(event, 'place:folder=TOOLBAR');"/>
-      </menu>
-      <menuseparator/>
-      <!-- Bookmarks menu items -->
-      <menuseparator builder="end"/>
-      <menuitem id="wat_jsConsoleMenu"
-                label="&wat.jsConsole.label;"
-                accesskey="E"
-                command="wat_jsConsoleCmd"/>
-      <menuitem id="wat_aboutConfigMenu"
-                label="&wat.aboutConfig.label;"
-                accesskey="C"
-                command="wat_aboutConfigCmd"/>
-      <menuseparator id="wat_menu_opt_sep"/>
-      <menuitem id="wat_OptionMenu"
-                label="&wat.option.label;"
-                accesskey="O"
-                command="wat_OptionCmd"/>
-    </menupopup>
-  </toolbarbutton>
-  <toolbaritem id="wat_urlbar_container">
+  <toolbar id="wat_tabmailToolbar"
+           toolboxid="mail-toolbox"
+           class="chromeclass-toolbar"
+           toolbarname="WAT TabMail Toolbar"
+           customizable="true"
+           context="toolbar-context-menu"
+           iconsize="small"
+           defaultset="wat_buttonBox,wat_urlbar_container"
+           style="min-width: 15px;">
+    <toolbarspring id="wat_tabmailToolbarSpring" flex="1"/>
+  </toolbar>
+</hbox>
+
+<toolbarpalette id="MailToolbarPalette">
+  <toolbaritem id="wat_urlbar_container" label="WAT Search bar">
     <textbox id="wat_urlbar"
              type="autocomplete"
              autocompletesearch="history search-autocomplete"
@@ -260,7 +226,57 @@
       </box>
     </textbox>
   </toolbaritem>
-</hbox>
+  <toolbaritem id="wat_buttonBox" label="WAT Button">
+    <hbox id="wat_PlacesToolbar" context="placesContext" tooltip="bhTooltip"
+          onclick="BookmarksEventHandler.onClick(event, this._placesView);"
+          oncommand="BookmarksEventHandler.onCommand(event, this._placesView);">
+      <hbox align="center">
+        <image id="wat_PlacesToolbarDropIndicator" mousethrough="always" collapsed="true"/>
+      </hbox>
+      <scrollbox id="wat_PlacesToolbarItems" orient="horizontal" flex="1"/>
+      <toolbarbutton type="menu" id="wat_PlacesChevron" class="chevron" mousethrough="never" collapsed="true"
+        onpopupshowing="document.getElementById('wat_PlacesToolbar')._placesView._onChevronPopupShowing(event);">
+        <menupopup id="wa_PlacesChevronPopup" placespopup="true" tooltip="bhTooltip"
+                   popupsinherittooltip="true" context="placesContext"/>
+      </toolbarbutton>
+    </hbox>
+    <toolbarbutton id="wat_button" type="menu"
+                   tooltiptext="&wat.menu.label;">
+      <menupopup id="wat_menuPopup" placespopup="true" context="placesContext"
+                 oncommand="BookmarksEventHandler.onCommand(event);"
+                 onclick="BookmarksEventHandler.onClick(event);"
+                 onpopupshowing="if (!this.parentNode._placesView) new PlacesMenu(event, 'place:folder=BOOKMARKS_MENU');"
+                 tooltip="bhTooltip"
+                 popupsinherittooltip="true">
+        <menuitem id="wat_showAllBookmarks"
+                  label="&wat.showAllBookmarks.label;"
+                  accesskey="B"
+                  command="Browser:ShowAllBookmarks"/>
+        <menu id="wat_bookmarksToolbar" placesanonid="toolbar-autohide" class="menu-iconic bookmark-item"
+              label="&wat.bookmarksToolbar.label;" container="true">
+          <menupopup id="wat_bookmarksToolbarPopup" placespopup="true" context="placesContext"
+                     onpopupshowing="if (!this.parentNode._placesView) new PlacesMenu(event, 'place:folder=TOOLBAR');"/>
+        </menu>
+        <menuseparator/>
+        <!-- Bookmarks menu items -->
+        <menuseparator builder="end"/>
+        <menuitem id="wat_jsConsoleMenu"
+                  label="&wat.jsConsole.label;"
+                  accesskey="E"
+                  command="wat_jsConsoleCmd"/>
+        <menuitem id="wat_aboutConfigMenu"
+                  label="&wat.aboutConfig.label;"
+                  accesskey="C"
+                  command="wat_aboutConfigCmd"/>
+        <menuseparator id="wat_menu_opt_sep"/>
+        <menuitem id="wat_OptionMenu"
+                  label="&wat.option.label;"
+                  accesskey="O"
+                  command="wat_OptionCmd"/>
+      </menupopup>
+    </toolbarbutton>
+  </toolbaritem>
+</toolbarpalette>
 
 <statusbar id="status-bar">
   <statusbarpanel id="wat_feedpanel"
