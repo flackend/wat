@@ -9,6 +9,13 @@ Requirement
 
  * [Thunderbird >= 3.3](http://mozilla.org/thunderbird/)
 
+version 1.3.1
+-------------
+
+ * FixBug: when `mail.tabs.autoHide` is `true`, can't do anything ([Issue 20](https://github.com/teramako/wat/issues/20)]
+   * make possible to drag & drop the tab bar's buttons
+   * restore the WAT menu
+
 version 1.3
 -----------
 
