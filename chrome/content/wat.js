@@ -362,7 +362,7 @@ let WAT = (function(){
     },
     /**
      * @param {nsIURI|String} uri
-     * If the URL scheme given argument {url} is "chrome" or "about",
+     * If the URL scheme given argument {url} is "chrome",
      *   use "chromeTab" type and
      *   set {url} to "chromePage" property
      * else
@@ -393,7 +393,7 @@ let WAT = (function(){
         msgComposeService.OpenComposeWindowWithURI(null, uri);
         return;
       }
-      let pageName = (uri.schemeIs("chrome") || uri.schemeIs("about")) ? "chrome" : "content";
+      let pageName = uri.schemeIs("chrome") ? "chrome" : "content";
       let type = pageName + "Tab", page = pageName + "Page";
       let args = { background: !!background };
       args[page] = uri.spec;
