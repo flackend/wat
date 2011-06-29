@@ -1,6 +1,7 @@
 content wat chrome/content/
 overlay chrome://messenger/content/baseMenuOverlay.xul chrome://wat/content/utilityOverlay.xul
 overlay chrome://messenger/content/messenger.xul chrome://wat/content/windowOverlay.xul
+overlay chrome://messenger/content/messageWindow.xul chrome://wat/content/messageWindowOverlay.xul
 locale  wat en-US       chrome/locale/en-US/
 locale  wat ja          chrome/locale/ja/
 locale  wat sv-SE       chrome/locale/sv-SE/
