@@ -12,8 +12,20 @@
   -moz-border-right-colors: rgba(0,0,0,0.25) rgba(255,255,255,0.15);
   margin: 0;
 }
+#mail-toolbox #wat_button {
+  border: none;
+}
 #wat_button:hover {
   background: none;
   background-color: rgba(0,0,0,0.10);
+}
+#wat_urlbar {
+  margin: 2px;
+}
+#wat_searchEngineButton {
+  padding: 0 2px;
+}
+#wat_tabmailToolbar {
+  -moz-appearance: none;
 }
 
