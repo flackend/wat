@@ -408,8 +408,7 @@ let WAT = (function(){
       let tabMode = this.tabMail.tabModes[type];
       if (tabMode.tabs.length >= tabMode.maxTabs){
         let res = {};
-        let promptService = Cc["@mozilla.org/embedcomp/prompt-service;1"].getService(Ci.nsIPromptService2);
-        promptService.alertCheck(window,
+        Services.prompt.alertCheck(window,
           this.bundle.getFormattedString("maxTabs.overwrite.title", [tabMode.maxTabs]),
           this.bundle.getString("maxTabs.overwrite.msg"),
           this.bundle.getString("mexTabs.overwrite.check"),
