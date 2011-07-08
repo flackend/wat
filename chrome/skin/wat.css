@@ -169,3 +169,7 @@
   list-style-image: url("chrome://wat/skin/places/toolbarDropMarker.png");
 }
 
+#wat_tabmailToolbar[customizing] {
+  min-width: 15px;
+}
+

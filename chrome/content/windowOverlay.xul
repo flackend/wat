@@ -195,8 +195,7 @@
            customizable="true"
            context="toolbar-context-menu"
            iconsize="small"
-           defaultset="wat_buttonBox,wat_urlbar_container"
-           style="min-width: 15px;">
+           defaultset="wat_buttonBox,wat_urlbar_container">
     <toolbarspring id="wat_tabmailToolbarSpring" flex="1"/>
   </toolbar>
 </hbox>
