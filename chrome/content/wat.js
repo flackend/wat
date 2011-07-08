@@ -161,7 +161,8 @@ let WAT = (function(){
 
     appendTabContextMenu();
 
-    new PlacesToolbar("place:folder=TOOLBAR");
+    window.addEventListener("customizationchange", initToolbar, false);
+    initToolbar();
 
     let accounts = getAccountsByType("rss");
     let accountKey = WAT.prefs.feedAccountKey;
@@ -175,6 +176,16 @@ let WAT = (function(){
     Services.scriptloader.loadSubScript("chrome://wat/content/plugins/init.js", self.plugins);
 
     self.searchEngines.init();
+  }
+
+  function initToolbar () {
+    initPlacesToolbar();
+  }
+
+  function initPlacesToolbar () {
+    var placesToolbar = $("wat_PlacesToolbar");
+    if (placesToolbar && !placesToolbar._viewElt)
+      new PlacesToolbar("place:folder=TOOLBAR");
   }
 
   /**
