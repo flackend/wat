@@ -717,11 +717,11 @@ var PlacesUIUtils = {
    */
   _confirmOpenInTabs:
   function PUIU__confirmOpenInTabs(numTabsToOpen, aWindow) {
-    const WARN_ON_OPEN_PREF = "browser.tabs.warnOnOpen";
+    const WARN_ON_OPEN_PREF = "extensions.wat.tabs.warnOnOpen";
     var reallyOpen = true;
 
     if (Services.prefs.getBoolPref(WARN_ON_OPEN_PREF)) {
-      if (numTabsToOpen >= Services.prefs.getIntPref("browser.tabs.maxOpenBeforeWarn")) {
+      if (numTabsToOpen >= Services.prefs.getIntPref("extensions.wat.tabs.maxOpenBeforeWarn")) {
         // default to true: if it were false, we wouldn't get this far
         var warnOnOpen = { value: true };
 

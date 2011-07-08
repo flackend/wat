@@ -3,6 +3,8 @@ pref('extensions.wat.pages', '');
 pref('extensions.wat.openLinkInTab', false);
 pref('extensions.wat.middleClickIsNewTab', true);
 pref('extensions.wat.feedaccount', '');
+pref('extensions.wat.tabs.warnOnOpen', true);
+pref('extensions.wat.tabs.maxOpenBeforeWarn', 10);
 pref('browser.search.defaultenginename', 'Google');
 pref('browser.search.order.1', 'Google');
 pref('browser.search.order.2', 'Yahoo');
