@@ -153,8 +153,8 @@
 <menubar id="mail-menubar">
   <menu id="wat_menu" label="WAT" accesskey="W" insertbefore="helpMenu">
     <menupopup id="wat_menu_menuPopup" placespopup="true" context="placesContext"
-               oncommand="BookmarksEventHandler.onCommand(event);"
-               onclick="BookmarksEventHandler.onClick(event);"
+               oncommand="BookmarksEventHandler.onCommand(event, this);"
+               onclick="BookmarksEventHandler.onClick(event, this);"
                onpopupshowing="if (!this.parentNode._placesView) new PlacesMenu(event, 'place:folder=BOOKMARKS_MENU');"
                tooltip="bhTooltip"
                popupsinherittooltip="true">
