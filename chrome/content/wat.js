@@ -163,6 +163,7 @@ let WAT = (function(){
 
     window.addEventListener("customizationchange", initToolbar, false);
     initToolbar();
+    self.searchEngines.init();
 
     let accounts = getAccountsByType("rss");
     let accountKey = WAT.prefs.feedAccountKey;
@@ -174,12 +175,11 @@ let WAT = (function(){
       WAT.prefs.feedAccountKey = "";
     }
     Services.scriptloader.loadSubScript("chrome://wat/content/plugins/init.js", self.plugins);
-
-    self.searchEngines.init();
   }
 
   function initToolbar () {
     initPlacesToolbar();
+    self.searchEngines.init();
   }
 
   function initPlacesToolbar () {
@@ -571,7 +571,7 @@ let WAT = (function(){
             SEARCH_ENGINE_CHANGED = "engine-changed",
             SEARCH_ENGINE_REMOVED = "engine-removed",
             SEARCH_ENGINE_CURRENT = "engine-current";
-      var popupMenu = null, menuButton = null;
+      var popupMenu = null, menuButton = null, inited = false;
       function createMenus () {
         while (popupMenu.hasChildNodes())
           popupMenu.removeChild(popupMenu.firstChild);
@@ -602,9 +602,15 @@ let WAT = (function(){
         init: function () {
           menuButton = $("wat_searchEngineButton");
           popupMenu = $("wat_searchEngineMenuPopup");
-          createMenus();
-          setCurrentEngine(searchService.currentEngine);
-          Services.obs.addObserver(this, SEARCH_ENGINE_TOPIC, false);
+          if (popupMenu && menuButton) {
+            createMenus();
+            setCurrentEngine(searchService.currentEngine);
+            Services.obs.addObserver(this, SEARCH_ENGINE_TOPIC, false);
+            inited = true;
+          } else if (inited && !(menuButton && popupMenu)) {
+            Services.obs.removeObserver(this, SEARCH_ENGINE_TOPIC);
+            inited = false;
+          }
         },
         setCurrent: function setCurrentSearchEngine (engineName) {
           var engine = searchService.getEngineByName(engineName);
