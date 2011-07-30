@@ -26,4 +26,6 @@
 <!ENTITY wat.browser.back.label "戻る(ブラウザ)">
 <!ENTITY wat.urlbar.placeholder "URL または 検索キーワード">
 <!ENTITY wat.showAllBookmarks.label "すべてのブックマークを表示">
+<!ENTITY wat.bookmarkPageCmd.label "このページをブックマーク"
+<!ENTITY wat.bookmarkPageCmd.accesskey "m">
 

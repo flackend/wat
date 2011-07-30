@@ -26,4 +26,6 @@
 <!ENTITY wat.browser.back.label "[Webbläsare] Bakåt">
 <!ENTITY wat.urlbar.placeholder "URL eller sökord">
 <!ENTITY wat.showAllBookmarks.label "Visa alla bokmärken">
+<!ENTITY wat.bookmarkPageCmd.label "Lägg till bokmärke">
+<!ENTITY wat.bookmarkPageCmd.accesskey "L">
 

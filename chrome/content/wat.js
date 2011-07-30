@@ -43,7 +43,8 @@ let WAT = (function(){
         Cu = Components.utils;
   const searchService = Cc["@mozilla.org/browser/search-service;1"].getService(Ci.nsIBrowserSearchService);
   const WAT_FORWARD_CMD = "wat_cmd_browserGoForward",
-        WAT_BACK_CMD    = "wat_cmd_browserGoBack";
+        WAT_BACK_CMD    = "wat_cmd_browserGoBack",
+        WAT_BOOKMARK_PAGE_CMD = "wat_cmd_bookmarkThisPage";
 
   /**
    * Support browser forward and back.
@@ -54,6 +55,7 @@ let WAT = (function(){
       switch(aCommand){
         case WAT_FORWARD_CMD:
         case WAT_BACK_CMD:
+        case WAT_BOOKMARK_PAGE_CMD:
           return true;
         default:
           return false;
@@ -70,6 +72,17 @@ let WAT = (function(){
             return forward ? browser.canGoForward : browser.canGoBack;
           else
             return false;
+        case WAT_BOOKMARK_PAGE_CMD:
+          let (browser = WAT.tabMail.getBrowserForSelectedTab()) {
+            switch (browser.currentURI.scheme) {
+              case "http":
+              case "https":
+              case "about":
+              case "chrome":
+                return true;
+            }
+            return false;
+          }
         default:
           return false;
       }
@@ -81,6 +94,9 @@ let WAT = (function(){
           break;
         case WAT_BACK_CMD:
           WAT.tabMail.getBrowserForSelectedTab().goBack();
+          break;
+        case WAT_BOOKMARK_PAGE_CMD:
+          WAT.bookmarkPage(WAT.tabMail.getBrowserForSelectedTab());
           break;
       }
     },
@@ -236,7 +252,7 @@ let WAT = (function(){
                              c.onPlayableMedia || c.onTextInput);
     c.showItem("wat_openNewTabMenu", c.onLink && !c.onMailtoLink &&
                 c.linkProtocol != "about" && c.linkProtocol != "chrome");
-    ["wat_goForwardContextMenu", "wat_goBackContextMenu"]
+    ["wat_goForwardContextMenu", "wat_goBackContextMenu", "wat_bookmarkThisPage"]
       .forEach(function(id){
         let elm = $(id);
         c.showItem(elm, notOnSpecialItem);
@@ -871,6 +887,22 @@ let WAT = (function(){
       },
     },
     // 2}}}
+    bookmarkPage: function WAT_BookmarkPage (aBrowser) {
+      var uri = aBrowser.currentURI,
+          webNav = aBrowser.webNavigation,
+          info = {
+            action: "add",
+            type: "bookmark",
+            uri: uri,
+          };
+      try {
+        info.title = webNav.document.title || uri.spec;
+        info.description = PlacesUIUtils.getDescriptionFromDocument(webNav.document);
+        info.charset = webNav.document.characterSet;
+      } catch (e) { }
+
+      return PlacesUIUtils.showBookmarkDialog(info, window, true);
+    },
     plugins: { },
   };
   window.addEventListener("load", init, false);

@@ -26,4 +26,6 @@
 <!ENTITY wat.browser.back.label "Browser Back">
 <!ENTITY wat.urlbar.placeholder "URL or search words">
 <!ENTITY wat.showAllBookmarks.label "Show All Bookmarks">
+<!ENTITY wat.bookmarkPageCmd.label "Bookmark This Page">
+<!ENTITY wat.bookmarkPageCmd.accesskey "m">
 

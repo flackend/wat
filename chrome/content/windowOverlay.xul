@@ -72,6 +72,8 @@
                oncommand="goDoCommand('wat_cmd_browserGoBack')"/>
       <command id="wat_cmd_browserGoForward"
                oncommand="goDoCommand('wat_cmd_browserGoForward')"/>
+      <command id="wat_cmd_bookmarkThisPage"
+               oncommand="goDoCommand('wat_cmd_bookmarkThisPage')"/>
     </commandset>
   </commandset>
   <commandset id="placesCommands">
@@ -125,6 +127,12 @@
             label="&goBackCmd.label;"
             command="wat_cmd_browserGoBack"
             accesskey="&goBackCmd.accesskey;"
+            hidden="true"
+            insertafter="mailContext-sep-open-browser"/>
+  <menuitem id="wat_bookmarkThisPage"
+            label="&wat.bookmarkPageCmd.label;"
+            command="wat_cmd_bookmarkThisPage"
+            accesskey="&wat.bookmarkPageCmd.accesskey;"
             hidden="true"
             insertafter="mailContext-sep-open-browser"/>
 </popup>
