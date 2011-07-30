@@ -9,6 +9,12 @@ Requirement
 
  * [Thunderbird >= 3.3](http://mozilla.org/thunderbird/)
 
+version 1.3.2
+-------------
+
+ * FixBugs of version 1.3.1
+ * FuxBug: "open all in tabs" on bookmark folder menu
+
 version 1.3.1
 -------------
 
