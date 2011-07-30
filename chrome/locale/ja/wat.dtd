@@ -28,4 +28,8 @@
 <!ENTITY wat.showAllBookmarks.label "すべてのブックマークを表示">
 <!ENTITY wat.bookmarkPageCmd.label "このページをブックマーク"
 <!ENTITY wat.bookmarkPageCmd.accesskey "m">
+<!ENTITY wat.sendPageCmd.label "ページの URL をメールで送信...">
+<!ENTITY wat.sendPageCmd.accesskey "e">
+<!ENTITY wat.sendLinkCmd.label "リンクの URL をメールで送信...">
+<!ENTITY wat.sendLinkCmd.accesskey "d">
 

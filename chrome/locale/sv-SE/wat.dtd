@@ -28,4 +28,8 @@
 <!ENTITY wat.showAllBookmarks.label "Visa alla bokmärken">
 <!ENTITY wat.bookmarkPageCmd.label "Lägg till bokmärke">
 <!ENTITY wat.bookmarkPageCmd.accesskey "L">
+<!ENTITY wat.sendPageCmd.label "Skicka länk…">
+<!ENTITY wat.sendPageCmd.accesskey "c">
+<!ENTITY wat.sendLinkCmd.label "Skicka länk…">
+<!ENTITY wat.sendLinkCmd.accesskey "c">
 

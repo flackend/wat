@@ -28,4 +28,8 @@
 <!ENTITY wat.showAllBookmarks.label "Show All Bookmarks">
 <!ENTITY wat.bookmarkPageCmd.label "Bookmark This Page">
 <!ENTITY wat.bookmarkPageCmd.accesskey "m">
+<!ENTITY wat.sendPageCmd.label "Send Link…">
+<!ENTITY wat.sendPageCmd.accesskey "e">
+<!ENTITY wat.sendLinkCmd.label "Send Link…">
+<!ENTITY wat.sendLinkCmd.accesskey "d">
 

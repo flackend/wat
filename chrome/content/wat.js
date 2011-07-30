@@ -44,7 +44,9 @@ let WAT = (function(){
   const searchService = Cc["@mozilla.org/browser/search-service;1"].getService(Ci.nsIBrowserSearchService);
   const WAT_FORWARD_CMD = "wat_cmd_browserGoForward",
         WAT_BACK_CMD    = "wat_cmd_browserGoBack",
-        WAT_BOOKMARK_PAGE_CMD = "wat_cmd_bookmarkThisPage";
+        WAT_BOOKMARK_PAGE_CMD = "wat_cmd_bookmarkThisPage",
+        WAT_SEND_PAGE_CMD = "wat_cmd_sendpage",
+        WAT_SEND_LINK_CMD = "wat_cmd_sendlink";
 
   /**
    * Support browser forward and back.
@@ -56,6 +58,8 @@ let WAT = (function(){
         case WAT_FORWARD_CMD:
         case WAT_BACK_CMD:
         case WAT_BOOKMARK_PAGE_CMD:
+        case WAT_SEND_PAGE_CMD:
+        case WAT_SEND_LINK_CMD:
           return true;
         default:
           return false;
@@ -83,6 +87,20 @@ let WAT = (function(){
             }
             return false;
           }
+        case WAT_SEND_LINK_CMD:
+          if (!gContextMenu)
+            return false;
+          var uri = gContextMenu.getLinkURI();
+        case WAT_SEND_PAGE_CMD:
+          if (!uri)
+            uri = WAT.tabMail.getBrowserForSelectedTab().currentURI;
+          switch (uri.scheme) {
+            case "http":
+            case "https":
+            case "ftp":
+              return true;
+          }
+          return false;
         default:
           return false;
       }
@@ -97,6 +115,12 @@ let WAT = (function(){
           break;
         case WAT_BOOKMARK_PAGE_CMD:
           WAT.bookmarkPage(WAT.tabMail.getBrowserForSelectedTab());
+          break;
+        case WAT_SEND_PAGE_CMD:
+          WAT.mail.sendPage(WAT.tabMail.getBrowserForSelectedTab().contentWindow);
+          break;
+        case WAT_SEND_LINK_CMD:
+          WAT.mail.sendMessage({ body: gContextMenu.getLinkURL() });
           break;
       }
     },
@@ -250,10 +274,16 @@ let WAT = (function(){
     let notOnSpecialItem = !(c.inMessageArea || c.isContentSelected ||
                              c.onCanvas || c.onLink || c.onImage ||
                              c.onPlayableMedia || c.onTextInput);
-    c.showItem("wat_openNewTabMenu", c.onLink && !c.onMailtoLink &&
-                c.linkProtocol != "about" && c.linkProtocol != "chrome");
-    ["wat_goForwardContextMenu", "wat_goBackContextMenu", "wat_bookmarkThisPage"]
-      .forEach(function(id){
+    let isExternalLink = (c.onLink && !c.onMailtoLink &&
+                          c.linkProtocol !== "about" && c.linkProtocol !== "chrome");
+    c.showItem("wat_openNewTabMenu", isExternalLink);
+    c.showItem("wat_sendLinkMenu", isExternalLink);
+    [
+      "wat_goForwardContextMenu",
+      "wat_goBackContextMenu",
+      "wat_bookmarkThisPage",
+      "wat_sendPageMenu",
+    ].forEach(function(id){
         let elm = $(id);
         c.showItem(elm, notOnSpecialItem);
         if (notOnSpecialItem){
@@ -523,6 +553,25 @@ let WAT = (function(){
       return openDialog("chrome://wat/content/option.xul", "Preferences",
                         "chrome,titlebar,toolbar,centerscreen,resizable,dialog=no", aPanelID);
     },
+    /**
+     * mail
+     * {{{2
+     */
+    mail: {
+      sendMessage: function (aFields) {
+        var params = Cc["@mozilla.org/messengercompose/composeparams;1"].createInstance(Ci.nsIMsgComposeParams);
+        params.composeFields = Cc["@mozilla.org/messengercompose/composefields;1"].createInstance(Ci.nsIMsgCompFields);
+        for (let key in aFields)
+          params.composeFields[key] = aFields[key];
+
+        params.type = Ci.nsIMsgCompType.New;
+        msgComposeService.OpenComposeWindowWithParams(null, params);
+      },
+      sendPage: function (aWindow) {
+        this.sendMessage({ subject: aWindow.document.title, body: aWindow.location.href });
+      },
+    },
+    // 2}}}
     /**
      * preferences
      * {{{2

@@ -74,6 +74,10 @@
                oncommand="goDoCommand('wat_cmd_browserGoForward')"/>
       <command id="wat_cmd_bookmarkThisPage"
                oncommand="goDoCommand('wat_cmd_bookmarkThisPage')"/>
+      <command id="wat_cmd_sendpage"
+               oncommand="goDoCommand('wat_cmd_sendpage')"/>
+      <command id="wat_cmd_sendlink"
+               oncommand="goDoCommand('wat_cmd_sendlink')"/>
     </commandset>
   </commandset>
   <commandset id="placesCommands">
@@ -135,6 +139,18 @@
             accesskey="&wat.bookmarkPageCmd.accesskey;"
             hidden="true"
             insertafter="mailContext-sep-open-browser"/>
+  <menuitem id="wat_sendPageMenu"
+            label="&wat.sendPageCmd.label;"
+            command="wat_cmd_sendpage"
+            accesskey="&wat.sendPageCmd.accesskey;"
+            hidden="true"
+            insertbefore="mailContext-sep-link"/>
+  <menuitem id="wat_sendLinkMenu"
+            label="&wat.sendLinkCmd.label;"
+            command="wat_cmd_sendlink"
+            accesskey="&wat.sendLinkCmd.accesskey;"
+            hidden="true"
+            insertafter="mailContext-sep-edit"/>
 </popup>
 
 <popup id="copyUrlPopup">
