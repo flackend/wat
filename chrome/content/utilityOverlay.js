@@ -34,7 +34,7 @@ var BookmarksEventHandler = {
   onCommand: function BEH_onCommand (aEvent, aView) {
     var target = aEvent.originalTarget;
     if (target._placesNode)
-      PlacesUIUtils.openNodeWithEvent(target._placesNode, aEvent, aView);
+      PlacesUIUtils.openNodeWithEvent(target._placesNode, aEvent, aView || {});
   },
   fillInBHTooltip: function BEH_fillInBHTooltip (aDocument, aEvent) {
     var node, cropped = false, targetURI;
