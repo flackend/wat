@@ -22,10 +22,11 @@ function swapFunc(obj, name, func){
 
 function replaceOnClick(){
   let deck = document.getElementById('msgHeaderViewDeck');
-  if (deck.selectedPanel.id == "collapsedHeaderView"){
-    let label = document.getElementById("collapsedsubjectlinkBox");
+  if (deck.selectedPanel.id == "CompactHeader_collapsedHeaderView"){
+    let label = document.getElementById("CompactHeader_collapsedsubjectlinkBox");
     if (!label.collapsed){
       label.setAttribute("onclick", "if (event.button != 2) openUILink(event.target.getAttribute('url'), event)");
+      label.setAttribute("context", "CompactHeader_CohecopyUrlPopup");
     }
   }
 }
@@ -38,7 +39,7 @@ swapFunc(org.mozdev.compactHeader.pane, "coheToggleHeaderView", function(origFun
 });
 
 (function (){
-  let coheCopyUrlPopup = document.getElementById("CohecopyUrlPopup");
+  let coheCopyUrlPopup = document.getElementById("CompactHeader_CohecopyUrlPopup");
   let openTabMenu = document.createElement("menuitem");
   let label = document.getElementById("wat_copyPopupOpenNewTabMenu").getAttribute("label");
   openTabMenu.setAttribute("label", label);
