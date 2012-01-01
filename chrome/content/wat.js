@@ -318,7 +318,8 @@ let WAT = (function(){
    * @see WAT_copy
    */
   function appendTabContextMenu(){
-    let popup = document.getAnonymousElementByAttribute(self.tabMail, "anonid", "tabContextMenu"),
+    let popup = document.getElementById("tabContextMenu") ||
+                document.getAnonymousElementByAttribute(self.tabMail, "anonid", "tabContextMenu"),
         items = [
           createElement("menuitem", {
             label: self.bundle.getString("tabContextMenu.copyTitle.label"),
