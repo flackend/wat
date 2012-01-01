@@ -3,15 +3,6 @@
   -moz-image-region: auto;
 }
 
-#wat_button {
-  background: none;
-  border-top: none;
-  -moz-border-start: 2px solid;
-  -moz-border-end: none;
-  -moz-border-left-colors: rgba(0,0,0,0.25) rgba(255,255,255,0.15);
-  -moz-border-right-colors: rgba(0,0,0,0.25) rgba(255,255,255,0.15);
-  margin: 0;
-}
 #mail-toolbox #wat_button {
   border: none;
 }
