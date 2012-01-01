@@ -25,10 +25,17 @@
 }
 
 #wat_button {
-  list-style-image: url("chrome://wat/skin/watIcon16.png");
+  list-style-image: url("chrome://wat/skin/wat.svg");
+}
+#wat_button:-moz-lwtheme-brighttext {
+  list-style-image: url("chrome://wat/skin/wat-invert.svg");
 }
 #wat_button image {
   margin-right: 0 !important;
+}
+#wat_button .toolbarbutton-icon {
+  width: 16px;
+  height: 16px;
 }
 
 #wat_urlbar {
