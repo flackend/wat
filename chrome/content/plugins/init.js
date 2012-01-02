@@ -5,6 +5,12 @@ let scripts = [
     EXTENSION_ID: "{58D4392A-842E-11DE-B51A-C7B855D89593}",
     VERSION: "1.4",
     FILENAME: "compactHeader.js"
+  },
+  {
+    NAME: "Conversations",
+    EXTENSION_ID: "gconversation@xulforum.org",
+    VERSION: "2.2.2",
+    FILENAME: "conversations.js"
   }
 ];
 const contexts = {};

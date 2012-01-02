@@ -9,6 +9,11 @@ Requirement
 
  * [Thunderbird >= 3.3](http://mozilla.org/thunderbird/)
 
+version 1.3.3
+-------------
+
+  * Compatible for [Thuderbird Conversations](https://addons.mozilla.org/ja/thunderbird/addon/gmail-conversation-view/) 2.2.2 or later.
+
 version 1.3.2
 -------------
 
