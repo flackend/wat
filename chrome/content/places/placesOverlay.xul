@@ -1,4 +1,4 @@
-
+<?xml version="1.0"?>
 <!DOCTYPE overlay [
 <!ENTITY % placesDTD SYSTEM "chrome://wat/locale/places/places.dtd">
 %placesDTD;
@@ -12,8 +12,6 @@
 
   <script type="application/javascript"
           src="chrome://global/content/globalOverlay.js"/>
-  <!--script type="application/javascript"
-          src="chrome://browser/content/utilityOverlay.js"/-->
   <script type="application/javascript"><![CDATA[
     // TODO: Bug 406371.
     // A bunch of browser code depends on us defining these, sad but true :(

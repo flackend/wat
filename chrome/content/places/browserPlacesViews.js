@@ -339,7 +339,7 @@ PlacesViewBase.prototype = {
         }
         else
           popup.setAttribute("placespopup", "true");
-//@line 346 "e:\builds\moz2_slave\rel-2.0-w32-bld\build\browser\components\places\content\browserPlacesViews.js"
+//@line 346 "e:\builds\moz2_slave\m-cen-w32-ntly\build\browser\components\places\content\browserPlacesViews.js"
         element.appendChild(popup);
         element.className = "menu-iconic bookmark-item";
 
@@ -399,9 +399,9 @@ PlacesViewBase.prototype = {
     let as = PlacesUtils.annotations;
 
     let lmStatus = null;
-    if (as.itemHasAnnotation(itemId, "livemark/loadfailed"))
+    if (as.itemHasAnnotation(itemId, PlacesUtils.LMANNO_LOADFAILED))
       lmStatus = "bookmarksLivemarkFailed";
-    else if (as.itemHasAnnotation(itemId, "livemark/loading"))
+    else if (as.itemHasAnnotation(itemId, PlacesUtils.LMANNO_LOADING))
       lmStatus = "bookmarksLivemarkLoading";
 
     let lmStatusElt = aPopup._lmStatusMenuItem;
@@ -425,6 +425,19 @@ PlacesViewBase.prototype = {
       aPopup.removeChild(aPopup._lmStatusMenuItem);
       aPopup._lmStatusMenuItem = null;
       aPopup._startMarker--;
+    }
+  },
+
+  toggleCutNode: function PVB_toggleCutNode(aNode, aValue) {
+    let elt = aNode._DOMElement;
+    if (elt) {
+      // We may get the popup for menus, but we need the menu itself.
+      if (elt.localName == "menupopup")
+        elt = elt.parentNode;
+      if (aValue)
+        elt.setAttribute("cutting", "true");
+      else
+        elt.removeAttribute("cutting");
     }
   },
 
@@ -463,17 +476,21 @@ PlacesViewBase.prototype = {
 
   nodeAnnotationChanged:
   function PVB_nodeAnnotationChanged(aPlacesNode, aAnno) {
-    // All livemarks have a feedURI, so use it as our indicator.
-    if (aAnno == PlacesUtils.LMANNO_FEEDURI) {
-      let elt = aPlacesNode._DOMElement;
-      if (!elt)
-        throw "aPlacesNode must have _DOMElement set";
+    let elt = aPlacesNode._DOMElement;
+    if (!elt)
+      throw "aPlacesNode must have _DOMElement set";
 
+    // All livemarks have a feedURI, so use it as our indicator of a livemark
+    // being modified.
+    if (aAnno == PlacesUtils.LMANNO_FEEDURI) {
       let menu = elt.parentNode;
       if (!menu.hasAttribute("livemark"))
         menu.setAttribute("livemark", "true");
+    }
 
-      // Add or remove the livemark status menuitem.
+    if ([PlacesUtils.LMANNO_LOADING,
+         PlacesUtils.LMANNO_LOADFAILED].indexOf(aAnno) != -1) {
+      // Loading status changed, update the livemark status menuitem.
       this._ensureLivemarkStatusMenuItem(elt);
     }
   },
@@ -566,9 +583,6 @@ PlacesViewBase.prototype = {
   nodeKeywordChanged: function() { },
   sortingChanged: function() { },
   batching: function() { },
-  // Replaced by containerStateChanged.
-  containerOpened: function() { },
-  containerClosed: function() { },
 
   nodeInserted:
   function PVB_nodeInserted(aParentPlacesNode, aPlacesNode, aIndex) {
@@ -651,6 +665,7 @@ PlacesViewBase.prototype = {
     }
 
     if (this._controller) {
+      this._controller.terminate();
       this._viewElt.controllers.removeController(this._controller);
       this._controller = null;
     }
@@ -751,7 +766,8 @@ PlacesViewBase.prototype = {
       aPopup._endOptOpenAllInTabs = document.createElement("menuitem");
       aPopup._endOptOpenAllInTabs.className = "openintabs-menuitem";
       aPopup._endOptOpenAllInTabs.setAttribute("oncommand",
-        "PlacesUIUtils.openContainerNodeInTabs(this.parentNode._placesNode, event);");
+        "PlacesUIUtils.openContainerNodeInTabs(this.parentNode._placesNode, event, " +
+                                               "PlacesUIUtils.getViewForNode(this));");
       aPopup._endOptOpenAllInTabs.setAttribute("onclick",
         "checkForMiddleClick(this, event); event.stopPropagation();");
       aPopup._endOptOpenAllInTabs.setAttribute("label",
@@ -823,7 +839,7 @@ PlacesToolbar.prototype = {
   __proto__: PlacesViewBase.prototype,
 
   _cbEvents: ["dragstart", "dragover", "dragexit", "dragend", "drop",
-//@line 829 "e:\builds\moz2_slave\rel-2.0-w32-bld\build\browser\components\places\content\browserPlacesViews.js"
+//@line 850 "e:\builds\moz2_slave\m-cen-w32-ntly\build\browser\components\places\content\browserPlacesViews.js"
               "mousemove", "mouseover", "mouseout"],
 
   QueryInterface: function PT_QueryInterface(aIID) {
@@ -903,9 +919,9 @@ PlacesToolbar.prototype = {
         popup.setAttribute("placespopup", "true");
         button.appendChild(popup);
         popup._placesNode = PlacesUtils.asContainer(aChild);
-//@line 909 "e:\builds\moz2_slave\rel-2.0-w32-bld\build\browser\components\places\content\browserPlacesViews.js"
+//@line 930 "e:\builds\moz2_slave\m-cen-w32-ntly\build\browser\components\places\content\browserPlacesViews.js"
         popup.setAttribute("context", "placesContext");
-//@line 911 "e:\builds\moz2_slave\rel-2.0-w32-bld\build\browser\components\places\content\browserPlacesViews.js"
+//@line 932 "e:\builds\moz2_slave\m-cen-w32-ntly\build\browser\components\places\content\browserPlacesViews.js"
 
         aChild._DOMElement = popup;
       }
@@ -1008,7 +1024,7 @@ PlacesToolbar.prototype = {
       case "mouseout":
         this._onMouseOut(aEvent);
         break;
-//@line 1023 "e:\builds\moz2_slave\rel-2.0-w32-bld\build\browser\components\places\content\browserPlacesViews.js"
+//@line 1044 "e:\builds\moz2_slave\m-cen-w32-ntly\build\browser\components\places\content\browserPlacesViews.js"
       case "popupshowing":
         this._onPopupShowing(aEvent);
         break;
@@ -1152,10 +1168,17 @@ PlacesToolbar.prototype = {
       if (aAnno == PlacesUtils.LMANNO_FEEDURI) {
         elt.setAttribute("livemark", true);
       }
-      return;
-    }
 
-    PlacesViewBase.prototype.nodeAnnotationChanged.apply(this, arguments);
+      if ([PlacesUtils.LMANNO_LOADING,
+           PlacesUtils.LMANNO_LOADFAILED].indexOf(aAnno) != -1) {
+        // Loading status changed, update the livemark status menuitem.
+        this._ensureLivemarkStatusMenuItem(elt.firstChild);
+      }
+    }
+    else {
+      // Node is in a submenu.
+      PlacesViewBase.prototype.nodeAnnotationChanged.apply(this, arguments);
+    }
   },
 
   nodeTitleChanged: function PT_nodeTitleChanged(aPlacesNode, aNewTitle) {
@@ -1422,7 +1445,7 @@ PlacesToolbar.prototype = {
         draggedElt.getAttribute("type") == "menu") {
       // If the drag gesture on a container is toward down we open instead
       // of dragging.
-//@line 1444 "e:\builds\moz2_slave\rel-2.0-w32-bld\build\browser\components\places\content\browserPlacesViews.js"
+//@line 1472 "e:\builds\moz2_slave\m-cen-w32-ntly\build\browser\components\places\content\browserPlacesViews.js"
       let translateY = this._cachedMouseMoveEvent.clientY - aEvent.clientY;
       let translateX = this._cachedMouseMoveEvent.clientX - aEvent.clientX;
       if ((translateY) >= Math.abs(translateX/2)) {
@@ -1592,7 +1615,7 @@ PlacesToolbar.prototype = {
     }
   },
 
-//@line 1653 "e:\builds\moz2_slave\rel-2.0-w32-bld\build\browser\components\places\content\browserPlacesViews.js"
+//@line 1681 "e:\builds\moz2_slave\m-cen-w32-ntly\build\browser\components\places\content\browserPlacesViews.js"
 
   _onMouseMove: function PT__onMouseMove(aEvent) {
     // Used in dragStart to prevent dragging folders when dragging down.
@@ -1623,7 +1646,7 @@ function PlacesMenu(aPopupShowingEvent, aPlace) {
   this._addEventListeners(this._rootElt, ["popupshowing", "popuphidden"], true);
   this._addEventListeners(window, ["unload"], false);
 
-//@line 1690 "e:\builds\moz2_slave\rel-2.0-w32-bld\build\browser\components\places\content\browserPlacesViews.js"
+//@line 1718 "e:\builds\moz2_slave\m-cen-w32-ntly\build\browser\components\places\content\browserPlacesViews.js"
 
   PlacesViewBase.call(this, aPlace);
   this._onPopupShowing(aPopupShowingEvent);

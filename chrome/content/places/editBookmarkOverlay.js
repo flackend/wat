@@ -77,7 +77,7 @@ var gEditItemOverlay = {
     if (aInfo && aInfo.hiddenRows)
       this._hiddenRows = aInfo.hiddenRows;
     else
-      this._hiddenRows.splice(0);
+      this._hiddenRows.splice(0, this._hiddenRows.length);
     // force-read-only
     this._readOnly = aInfo && aInfo.forceReadOnly;
   },
@@ -215,8 +215,9 @@ var gEditItemOverlay = {
         this._allTags = this._getCommonTags();
         this._initTextField("tagsField", this._allTags.join(", "), false);
         this._element("itemsCountText").value =
-          PlacesUIUtils.getFormattedString("detailsPane.multipleItems",
-                                           [this._itemIds.length]);
+          PlacesUIUtils.getPluralString("detailsPane.itemsCountLabel",
+                                        this._itemIds.length,
+                                        [this._itemIds.length]);
       }
 
       // tags selector
@@ -380,7 +381,6 @@ var gEditItemOverlay = {
 
   _initNamePicker: function EIO_initNamePicker() {
     var namePicker = this._element("namePicker");
-
     namePicker.value = this._getItemStaticTitle();
     namePicker.readOnly = this._readOnly;
 
@@ -613,10 +613,12 @@ var gEditItemOverlay = {
     catch(ex) {  }
 
     var currentSiteURI = PlacesUtils.livemarks.getSiteURI(this._itemId);
-    if (!uri || !currentSiteURI.equals(uri)) {
-      var txn = PlacesUIUtils.ptm.editLivemarkSiteURI(this._itemId, uri);
-      PlacesUIUtils.ptm.doTransaction(txn);
+    if ((!uri && !currentSiteURI) ||
+        (uri && currentSiteURI && currentSiteURI.equals(uri))) {
+      return;
     }
+    var txn = PlacesUIUtils.ptm.editLivemarkSiteURI(this._itemId, uri);
+    PlacesUIUtils.ptm.doTransaction(txn);
   },
 
   toggleFolderTreeVisibility: function EIO_toggleFolderTreeVisibility() {
@@ -790,6 +792,12 @@ var gEditItemOverlay = {
     if (tagsSelectorRow.collapsed)
       return;
 
+    // Save the current scroll position and restore it after the rebuild.
+    let firstIndex = tagsSelector.getIndexOfFirstVisibleRow();
+    let selectedIndex = tagsSelector.selectedIndex;
+    let selectedTag = selectedIndex >= 0 ? tagsSelector.selectedItem.label
+                                         : null;
+
     while (tagsSelector.hasChildNodes())
       tagsSelector.removeChild(tagsSelector.lastChild);
 
@@ -802,8 +810,22 @@ var gEditItemOverlay = {
       elt.setAttribute("label", tag);
       if (tagsInField.indexOf(tag) != -1)
         elt.setAttribute("checked", "true");
-
       tagsSelector.appendChild(elt);
+      if (selectedTag === tag)
+        selectedIndex = tagsSelector.getIndexOfItem(elt);
+    }
+
+    // Restore position.
+    // The listbox allows to scroll only if the required offset doesn't
+    // overflow its capacity, thus need to adjust the index for removals.
+    firstIndex =
+      Math.min(firstIndex,
+               tagsSelector.itemCount - tagsSelector.getNumberOfVisibleRows());
+    tagsSelector.scrollToIndex(firstIndex);
+    if (selectedIndex >= 0 && tagsSelector.itemCount > 0) {
+      selectedIndex = Math.min(selectedIndex, tagsSelector.itemCount - 1);
+      tagsSelector.selectedIndex = selectedIndex;
+      tagsSelector.ensureIndexIsVisible(selectedIndex);
     }
   },
 
@@ -976,6 +998,11 @@ var gEditItemOverlay = {
     case PlacesUIUtils.DESCRIPTION_ANNO:
       this._initTextField("descriptionField",
                           PlacesUIUtils.getItemDescription(this._itemId));
+      break;
+    case PlacesUIUtils.LOAD_IN_SIDEBAR_ANNO:
+      this._element("loadInSidebarCheckbox").checked =
+        PlacesUtils.annotations.itemHasAnnotation(this._itemId,
+                                                  PlacesUIUtils.LOAD_IN_SIDEBAR_ANNO);
       break;
     case PlacesUtils.LMANNO_FEEDURI:
       var feedURISpec = PlacesUtils.livemarks.getFeedURI(this._itemId).spec;

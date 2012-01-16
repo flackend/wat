@@ -31,10 +31,12 @@
 <!ENTITY cmd.findCurrent.label          "Sök i aktuell grupp…">
 <!ENTITY cmd.findCurrent.accesskey      "ö">
 
-<!ENTITY cmd.exportHTML.label           "Exportera HTML…">
-<!ENTITY cmd.exportHTML.accesskey       "E">
-<!ENTITY cmd.importHTML.label           "Importera HTML…">
-<!ENTITY cmd.importHTML.accesskey       "I">
+<!ENTITY importBookmarksFromHTML.label     "Exportera HTML…">
+<!ENTITY importBookmarksFromHTML.accesskey "I">
+<!ENTITY exportBookmarksToHTML.label       "Importera HTML…">
+<!ENTITY exportBookmarksToHTML.accesskey   "E">
+<!ENTITY importOtherBrowser.label          "Import Data from Another Browser…">
+<!ENTITY importOtherBrowser.accesskey      "A">
 
 <!ENTITY cmd.backup.label               "Säkerhetskopiera…">
 <!ENTITY cmd.backup.accesskey           "S">

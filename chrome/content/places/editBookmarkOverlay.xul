@@ -1,4 +1,4 @@
-
+<?xml version="1.0"?>
 <!DOCTYPE overlay [
 <!ENTITY % editBookmarkOverlayDTD SYSTEM "chrome://wat/locale/places/editBookmarkOverlay.dtd">
 %editBookmarkOverlayDTD;
