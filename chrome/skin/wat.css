@@ -45,8 +45,10 @@
   border-radius: 4px;
   width: 16em;
   -moz-transition: width 0.3s;
-  height: 20px !important;
+  max-height: 24px;
   font: icon;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 #wat_urlbar[focused] {
   width: 30em;
