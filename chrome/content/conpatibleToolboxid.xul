@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<overlay id="watOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <!-- see: Bug 644169 - Provide tabs on top feature like FF 4.0
+            https://bugzilla.mozilla.org/show_bug.cgi?id=644169 -->
+  <toolbar id="wat_tabmailToolbar"
+           toolboxid="mail-toolbox"/>
+</overlay>
+
