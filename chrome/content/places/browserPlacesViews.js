@@ -644,6 +644,23 @@ PlacesViewBase.prototype = {
     }
   },
 
+  /**
+   * Obsolete since Gecko 11.0 (Thunderbird 11.0)
+   * @see https://developer.mozilla.org/en/nsINavHistoryResultObserver
+   */
+  containerClosed:
+  function PVB_containerClosed(aPlacesNode) {
+    this.invalidateContainer(aPlacesNode);
+  },
+  /**
+   * Obsolete since Gecko 11.0 (Thunderbird 11.0)
+   * @see https://developer.mozilla.org/en/nsINavHistoryResultObserver
+   */
+  containerOpened:
+  function PVB_containerOpened(aPlacesNode) {
+    this.invalidateContainer(aPlacesNode);
+  },
+
   invalidateContainer: function PVB_invalidateContainer(aPlacesNode) {
     let elt = aPlacesNode._DOMElement;
     if (!elt)
