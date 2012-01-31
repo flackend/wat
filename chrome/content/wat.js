@@ -586,7 +586,7 @@ let WAT = (function(){
       },
       set feedAccountKey(value){
         value = value.toString();
-        Services.prefs.setCharPref("extensions.wat.feedaccount");
+        Services.prefs.setCharPref("extensions.wat.feedaccount", value);
         return value;
       },
       /**
