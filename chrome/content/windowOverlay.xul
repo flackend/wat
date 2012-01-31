@@ -213,7 +213,7 @@
 
 <hbox id="tabmail-buttons">
   <toolbar id="wat_tabmailToolbar"
-           toolboxid="navigation-toolbox"
+           toolboxid="mail-toolbox"
            class="chromeclass-toolbar"
            toolbarname="WAT TabMail Toolbar"
            customizable="true"
