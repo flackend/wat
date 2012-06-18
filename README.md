@@ -9,6 +9,13 @@ Requirement
 
  * [Thunderbird >= 3.3](http://mozilla.org/thunderbird/)
 
+version 1.4
+-----------
+
+  * bump up minVersion to 13.0
+  * bump up maxVersion to 16.a1
+  * fix bookmarks
+
 version 1.3.4
 -------------
 
