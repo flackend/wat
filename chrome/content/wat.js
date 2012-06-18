@@ -666,6 +666,10 @@ let WAT = (function(){
       }
       var self = {
         init: function () {
+          if (("isInitialized" in searchService) && !searchService.isInitialized) {
+            searchService.init(this.init.bind(this));
+            return;
+          }
           menuButton = $("wat_searchEngineButton");
           popupMenu = $("wat_searchEngineMenuPopup");
           if (popupMenu && menuButton) {
