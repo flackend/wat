@@ -316,18 +316,6 @@ var PlacesOrganizer = {
   },
 
   /**
-   * Show the migration wizard for importing passwords,
-   * cookies, history, preferences, and bookmarks.
-   */
-  importFromBrowser: function PO_importFromBrowser() {
-//@line 398 "e:\builds\moz2_slave\m-cen-w32-ntly\build\browser\components\places\content\places.js"
-    let features = "modal,centerscreen,chrome,resizable=no";
-//@line 400 "e:\builds\moz2_slave\m-cen-w32-ntly\build\browser\components\places\content\places.js"
-    window.openDialog("chrome://browser/content/migration/migration.xul",
-                      "migration", features);
-  },
-
-  /**
    * Open a file-picker and import the selected file into the bookmarks store
    */
   importFromFile: function PO_importFromFile() {
