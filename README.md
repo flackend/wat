@@ -9,6 +9,11 @@ Requirement
 
  * [Thunderbird >= 3.3](http://mozilla.org/thunderbird/)
 
+version 1.5
+-----------
+
+  * Implement URLBar
+
 version 1.4
 -----------
 
