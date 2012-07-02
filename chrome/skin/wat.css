@@ -165,3 +165,12 @@
   min-width: 15px;
 }
 
+.WAT_urlbar {
+  -moz-appearance: none;
+}
+.WAT_urlbar[level=high] {
+  background-image: -moz-linear-gradient(rgb(228, 247, 211), rgb(203, 235, 177));
+}
+.WAT_urlbar[level=low] {
+  background-image: -moz-linear-gradient(rgb(222, 232, 246), rgb(206, 221, 242));
+}

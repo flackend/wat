@@ -159,6 +159,7 @@ let WAT = (function(){
       },
       onLocationChange: function wat_onLocationChange (aWebProgress, aRequest, aLocationURI) {
         wat_onLocationChange.super.apply(this, arguments);
+        this.urlbar.value = aLocationURI ? aLocationURI.spec : "";
         goUpdateCommand(WAT_FORWARD_CMD);
         goUpdateCommand(WAT_BACK_CMD);
         WAT.handlers.feeds.update(this.mTab);
@@ -173,6 +174,30 @@ let WAT = (function(){
       },
       onRefreshAttempted: function wat_onRefreshAttempted (aWebProgress, aURI, aDelay, aSameURI) {
         return (aWebProgress.allowMetaRedirects && aWebProgress.currentURI.host == aURI.host);
+      },
+      onSecurityChange: function wat_onSecurityChange (aWebProgress, aRequest, aState) {
+        wat_onSecurityChange.super.apply(this, arguments);
+        this._state = aState;
+        const wpl = Ci.nsIWebProgressListener;
+        const wpl_security_bits = wpl.STATE_IS_SECURE | wpl.STATE_IS_BROKEN | wpl.STATE_IS_INSECURE | wpl.STATE_SECURE_HIGH | wpl.STATE_SECURE_MED | wpl.STATE_SECURE_LOW;
+        var level;
+        switch (this._state & wpl_security_bits) {
+          case wpl.STATE_IS_SECURE | wpl.STATE_SECURE_HIGH:
+            level = "high";
+            break;
+          case wpl.STATE_IS_SECURE | wpl.STATE_SECURE_MED:
+          case wpl.STATE_IS_SECURE | wpl.STATE_SECURE_LOW:
+            level = "low";
+            break;
+          case wpl.STATE_IS_BORKEN:
+            lvel = "borken";
+            break;
+          default:;
+        }
+        if (level)
+          this.urlbar.setAttribute("level", level);
+        else
+          this.urlbar.removeAttribute("level");
       },
     });
 
