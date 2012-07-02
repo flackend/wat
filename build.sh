@@ -2,7 +2,7 @@
 
 ZIP=zip
 JAR=wat.jar
-VERSION=1.4
+VERSION=1.5pre
 TMPDIR=tmp
 XPI=wat-${VERSION}.xpi
 
