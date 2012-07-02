@@ -152,8 +152,15 @@ let WAT = (function(){
      * @see chrome://messenger/content/specialTabs.js
      */
     _extends(tabProgressListener, {
+      get urlbar() {
+        var bar = this.mTab.toolbar.querySelector(".WAT_urlbar");
+        Object.defineProperty(this, "urlbar", { value: bar, enumerable: true });
+        return bar;
+      },
       onLocationChange: function wat_onLocationChange (aWebProgress, aRequest, aLocationURI) {
         wat_onLocationChange.super.apply(this, arguments);
+        goUpdateCommand(WAT_FORWARD_CMD);
+        goUpdateCommand(WAT_BACK_CMD);
         WAT.handlers.feeds.update(this.mTab);
       },
       onStateChange: function wat_onStateChange (aWebProgress, aRequest, aStateFlags, aStatus) {
@@ -257,11 +264,11 @@ let WAT = (function(){
     if (typeof base == "function")
       base = base.prototype;
 
-    for (let [key, value] in Iterator(obj)) {
-      if (typeof value == "function" && (key in base))
-        value.super = base[key];
+    for (let [, key] in Iterator(Object.getOwnPropertyNames(obj))) {
+      if (typeof base[key] === "function")
+        obj[key].super = base[key];
 
-      base[key] = value;
+      Object.defineProperty(base, key, Object.getOwnPropertyDescriptor(obj, key));
     }
   }
 
