@@ -400,6 +400,31 @@ let WAT = (function(){
       return this.tabMail = tabmail;
     },
     /**
+     * URLBar methods
+     */
+    URLBar: {
+      onBlur: function WAT_URLBar_onBlur (aEvent) {
+        var browser = WAT.tabMail.currentTabInfo.browser;
+        if (browser) {
+          aEvent.target.value = browser.currentURI.spec;
+        }
+      },
+      onKeyPress: function WAT_URLBar_onKeyPress (aEvent) {
+        switch (aEvent.keyCode) {
+          case KeyEvent.DOM_VK_RETURN:
+          case KeyEvent.DOM_VK_ENTER:
+            aEvent.preventDefault();
+            let browser = WAT.tabMail.currentTabInfo.browser;
+            if (!browser)
+              return;
+
+            let textbox = aEvent.target;
+            browser.loadURI(textbox.value);
+            textbox.blur();
+        }
+      },
+    },
+    /**
      * lazy get the 'bundle_wat' element
      * @type {Element}
      */

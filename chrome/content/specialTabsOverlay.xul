@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<overlay id="WAT_specialTabsOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <toolbar id="dummycontenttoolbar">
+    <toolbarbutton label="Back"
+                   command="wat_cmd_browserGoBack"
+                   class="wat_goBackButton"/>
+    <toolbarbutton label="Forward"
+                   command="wat_cmd_browserGoForward"
+                   class="wat_goForwardButton"/>
+    <toolbaritem flex="100" class="chromeclass-location">
+      <textbox class="WAT_urlbar"
+               flex="1"
+               onkeypress="WAT.URLBar.onKeyPress(event)"
+               onblur="WAT.URLBar.onBlur(event)"/>
+    </toolbaritem>
+  </toolbar>
+</overlay>
+
