@@ -152,8 +152,16 @@ let WAT = (function(){
      * @see chrome://messenger/content/specialTabs.js
      */
     _extends(tabProgressListener, {
+      get urlbar() {
+        var bar = this.mTab.toolbar.querySelector(".WAT_urlbar");
+        Object.defineProperty(this, "urlbar", { value: bar, enumerable: true });
+        return bar;
+      },
       onLocationChange: function wat_onLocationChange (aWebProgress, aRequest, aLocationURI) {
         wat_onLocationChange.super.apply(this, arguments);
+        this.urlbar.value = aLocationURI ? aLocationURI.spec : "";
+        goUpdateCommand(WAT_FORWARD_CMD);
+        goUpdateCommand(WAT_BACK_CMD);
         WAT.handlers.feeds.update(this.mTab);
       },
       onStateChange: function wat_onStateChange (aWebProgress, aRequest, aStateFlags, aStatus) {
@@ -166,6 +174,30 @@ let WAT = (function(){
       },
       onRefreshAttempted: function wat_onRefreshAttempted (aWebProgress, aURI, aDelay, aSameURI) {
         return (aWebProgress.allowMetaRedirects && aWebProgress.currentURI.host == aURI.host);
+      },
+      onSecurityChange: function wat_onSecurityChange (aWebProgress, aRequest, aState) {
+        wat_onSecurityChange.super.apply(this, arguments);
+        this._state = aState;
+        const wpl = Ci.nsIWebProgressListener;
+        const wpl_security_bits = wpl.STATE_IS_SECURE | wpl.STATE_IS_BROKEN | wpl.STATE_IS_INSECURE | wpl.STATE_SECURE_HIGH | wpl.STATE_SECURE_MED | wpl.STATE_SECURE_LOW;
+        var level;
+        switch (this._state & wpl_security_bits) {
+          case wpl.STATE_IS_SECURE | wpl.STATE_SECURE_HIGH:
+            level = "high";
+            break;
+          case wpl.STATE_IS_SECURE | wpl.STATE_SECURE_MED:
+          case wpl.STATE_IS_SECURE | wpl.STATE_SECURE_LOW:
+            level = "low";
+            break;
+          case wpl.STATE_IS_BORKEN:
+            lvel = "borken";
+            break;
+          default:;
+        }
+        if (level)
+          this.urlbar.setAttribute("level", level);
+        else
+          this.urlbar.removeAttribute("level");
       },
     });
 
@@ -257,11 +289,11 @@ let WAT = (function(){
     if (typeof base == "function")
       base = base.prototype;
 
-    for (let [key, value] in Iterator(obj)) {
-      if (typeof value == "function" && (key in base))
-        value.super = base[key];
+    for (let [, key] in Iterator(Object.getOwnPropertyNames(obj))) {
+      if (typeof base[key] === "function")
+        obj[key].super = base[key];
 
-      base[key] = value;
+      Object.defineProperty(base, key, Object.getOwnPropertyDescriptor(obj, key));
     }
   }
 
@@ -398,6 +430,31 @@ let WAT = (function(){
       var tabmail = $("tabmail");
       delete this.tabMail;
       return this.tabMail = tabmail;
+    },
+    /**
+     * URLBar methods
+     */
+    URLBar: {
+      onBlur: function WAT_URLBar_onBlur (aEvent) {
+        var browser = WAT.tabMail.currentTabInfo.browser;
+        if (browser) {
+          aEvent.target.value = browser.currentURI.spec;
+        }
+      },
+      onKeyPress: function WAT_URLBar_onKeyPress (aEvent) {
+        switch (aEvent.keyCode) {
+          case KeyEvent.DOM_VK_RETURN:
+          case KeyEvent.DOM_VK_ENTER:
+            aEvent.preventDefault();
+            let browser = WAT.tabMail.currentTabInfo.browser;
+            if (!browser)
+              return;
+
+            let textbox = aEvent.target;
+            browser.loadURI(textbox.value);
+            textbox.blur();
+        }
+      },
     },
     /**
      * lazy get the 'bundle_wat' element
