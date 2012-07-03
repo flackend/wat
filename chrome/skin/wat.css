@@ -165,6 +165,27 @@
   min-width: 15px;
 }
 
+.wat_goBackButton,
+.wat_goForwardButton {
+  list-style-image: url("chrome://messenger/skin/icons/mail-toolbar.png");
+}
+.wat_goBackButton {
+  -moz-image-region: rect(0px, 408px, 24px, 384px);
+}
+.wat_goBackButton[disabled] {
+  -moz-image-region: rect(48px, 408px, 72px, 384px) !important;
+}
+.wat_goForwardButton {
+  -moz-image-region: rect(0px, 432px, 24px, 408px);
+}
+.wat_goForwardButton[disabled] {
+  -moz-image-region: rect(48px, 432px, 72px, 408px) !important;
+}
+.wat_goBackButton .toolbarbutton-text,
+.wat_goForwardButton .toolbarbutton-text {
+  display: none;
+}
+
 .WAT_urlbar {
   -moz-appearance: none;
 }
