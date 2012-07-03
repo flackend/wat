@@ -1,13 +1,19 @@
 <?xml version="1.0"?>
+<!DOCTYPE overlay [
+  <!ENTITY % watDTD SYSTEM "chrome://wat/locale/wat.dtd">
+  %watDTD;
+]>
 <overlay id="WAT_specialTabsOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
   <toolbar id="dummycontenttoolbar">
-    <toolbarbutton label="Back"
+    <toolbarbutton label="&wat.browser.backButton.label;"
                    command="wat_cmd_browserGoBack"
+                   tooltiptext="&wat.browser.back.label;"
                    class="wat_goBackButton"/>
-    <toolbarbutton label="Forward"
+    <toolbarbutton label="&wat.browser.forwardButton.label;"
                    command="wat_cmd_browserGoForward"
+                   tooltiptext="&wat.browser.forward.label;"
                    class="wat_goForwardButton"/>
     <toolbaritem flex="100" class="chromeclass-location">
       <textbox class="WAT_urlbar"

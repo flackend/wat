@@ -24,6 +24,8 @@
 <!ENTITY wat.option.searchEngine.openSearchGroup.LoadButton "登録">
 <!ENTITY wat.browser.forward.label "進む(ブラウザ)">
 <!ENTITY wat.browser.back.label "戻る(ブラウザ)">
+<!ENTITY wat.browser.forwardButton.label "進む">
+<!ENTITY wat.browser.backButton.label "戻る">
 <!ENTITY wat.urlbar.placeholder "URL または 検索キーワード">
 <!ENTITY wat.showAllBookmarks.label "すべてのブックマークを表示">
 <!ENTITY wat.bookmarkPageCmd.label "このページをブックマーク">

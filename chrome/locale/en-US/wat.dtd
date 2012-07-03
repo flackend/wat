@@ -24,6 +24,8 @@
 <!ENTITY wat.option.searchEngine.openSearchGroup.LoadButton "Register">
 <!ENTITY wat.browser.forward.label "Browser Forward">
 <!ENTITY wat.browser.back.label "Browser Back">
+<!ENTITY wat.browser.forwardButton.label "Forward">
+<!ENTITY wat.browser.backButton.label "Back">
 <!ENTITY wat.urlbar.placeholder "URL or search words">
 <!ENTITY wat.showAllBookmarks.label "Show All Bookmarks">
 <!ENTITY wat.bookmarkPageCmd.label "Bookmark This Page">

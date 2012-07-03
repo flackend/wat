@@ -24,6 +24,8 @@
 <!ENTITY wat.option.searchEngine.openSearchGroup.LoadButton "Registrera">
 <!ENTITY wat.browser.forward.label "[Webbläsare] Framåt">
 <!ENTITY wat.browser.back.label "[Webbläsare] Bakåt">
+<!ENTITY wat.browser.forwardButton.label "Framåt">
+<!ENTITY wat.browser.backButton.label "Bakåt">
 <!ENTITY wat.urlbar.placeholder "URL eller sökord">
 <!ENTITY wat.showAllBookmarks.label "Visa alla bokmärken">
 <!ENTITY wat.bookmarkPageCmd.label "Lägg till bokmärke">
