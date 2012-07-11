@@ -533,9 +533,13 @@ let WAT = (function(){
         }
         this.tabMail.tabModes[type].maxTabs++;
       }
+      let currentIndex = this.tabMail.tabContainer.selectedIndex;
       let tab = this.tabMail.openTab(type, args);
       if (tab && type == "contentTab"){
         tab.tabNode.setAttribute("onerror", "this.removeAttribute('image')");
+      }
+      if (this.prefs.insertRelatedAfterCurrent){
+        this.tabMail.moveTabTo(tab.tabNode, currentIndex + 1);
       }
       return tab;
     },
@@ -680,6 +684,17 @@ let WAT = (function(){
       set loadInBackground(value){
         value = !!value;
         Services.prefs.setBoolPref("mail.tabs.loadInBackground", value);
+        return value;
+      },
+      /**
+       * @type {Boolean}
+       */
+      get insertRelatedAfterCurrent() {
+        return Services.prefs.getBoolPref("extensions.wat.tabs.insertRelatedAfterCurrent");
+      },
+      set insertRelatedAfterCurrent(value){
+        value = !!value;
+        Services.prefs.setBoolPref("extensions.wat.tabs.insertRelatedAfterCurrent", value);
         return value;
       }
     },
