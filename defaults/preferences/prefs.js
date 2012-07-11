@@ -5,6 +5,7 @@ pref('extensions.wat.middleClickIsNewTab', true);
 pref('extensions.wat.feedaccount', '');
 pref('extensions.wat.tabs.warnOnOpen', true);
 pref('extensions.wat.tabs.maxOpenBeforeWarn', 10);
+pref('extensions.wat.tabs.insertRelatedAfterCurrent', true);
 pref('browser.search.defaultenginename', 'Google');
 pref('browser.search.order.1', 'Google');
 pref('browser.search.order.2', 'Yahoo');
