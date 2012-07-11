@@ -13,6 +13,8 @@ version 1.5
 -----------
 
   * Implement URLBar
+  * [#41 Open new Tab right after current Tab](https://github.com/teramako/wat/issues/41)
+  * Ended support sv-SE locale
 
 version 1.4
 -----------
