@@ -52,6 +52,7 @@
     <preferences>
       <preference id="openLinkInTab" name="extensions.wat.openLinkInTab" type="bool" instantApply="true"/>
       <preference id="loadInBackground" name="mail.tabs.loadInBackground" type="bool" instantApply="true"/>
+      <preference id="insertRelatedAfterCurrent" name="extensions.wat.tabs.insertRelatedAfterCurrent" type="bool" instantApply="true"/>
       <preference id="middle-click" name="extensions.wat.middleClickIsNewTab" type="bool" instantApply="true"/>
       <preference id="feedaccount" name="extensions.wat.feedaccount" type="string" instantApply="true"/>
       <preference id="enableHistory" name="places.history.enabled" type="bool" instantApply="true"/>
@@ -65,6 +66,7 @@
       <checkbox label="&wat.option.general.openLinkInTab;" preference="openLinkInTab"/>
       <checkbox label="&wat.option.general.loadInBackground;" preference="loadInBackground"/>
       <checkbox label="&wat.option.general.middleclicktab;" preference="middle-click"/>
+      <checkbox label="&wat.option.general.insertRelatedAfterCurrent;" preference="insertRelatedAfterCurrent"/>
       <separator class="thin"/>
       <checkbox label="&wat.option.general.enablehistory;" preference="enableHistory"/>
       <separator class="thin"/>
