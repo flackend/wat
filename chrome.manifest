@@ -5,7 +5,6 @@ overlay chrome://messenger/content/messageWindow.xul chrome://wat/content/messag
 overlay chrome://messenger/content/specialTabs.xul  chrome://wat/content/specialTabsOverlay.xul
 locale  wat en-US       chrome/locale/en-US/
 locale  wat ja          chrome/locale/ja/
-locale  wat sv-SE       chrome/locale/sv-SE/
 skin    wat classic/1.0 chrome/skin/
 resource wat modules/
 
