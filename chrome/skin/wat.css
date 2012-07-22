@@ -167,19 +167,19 @@
 
 .wat_goBackButton,
 .wat_goForwardButton {
-  list-style-image: url("chrome://messenger/skin/icons/mail-toolbar.png");
+  list-style-image: url("chrome://wat/skin/navigation-toolbar.png");
 }
 .wat_goBackButton {
-  -moz-image-region: rect(0px, 408px, 24px, 384px);
+  -moz-image-region: rect(0px, 24px, 24px, 0px);
 }
 .wat_goBackButton[disabled] {
-  -moz-image-region: rect(48px, 408px, 72px, 384px) !important;
+  -moz-image-region: rect(24px, 24px, 48px, 0px) !important;
 }
 .wat_goForwardButton {
-  -moz-image-region: rect(0px, 432px, 24px, 408px);
+  -moz-image-region: rect(0px, 48px, 24px, 24px);
 }
 .wat_goForwardButton[disabled] {
-  -moz-image-region: rect(48px, 432px, 72px, 408px) !important;
+  -moz-image-region: rect(24px, 48px, 48px, 24px) !important;
 }
 .wat_goBackButton .toolbarbutton-text,
 .wat_goForwardButton .toolbarbutton-text {
