@@ -505,7 +505,7 @@ let WAT = (function(){
         }
       }
       if (uri.schemeIs("mailto")) {
-        msgComposeService.OpenComposeWindowWithURI(null, uri);
+        MailServices.compose.OpenComposeWindowWithURI(null, uri);
         return;
       }
       let pageName = uri.schemeIs("chrome") ? "chrome" : "content";
@@ -627,7 +627,7 @@ let WAT = (function(){
           params.composeFields[key] = aFields[key];
 
         params.type = Ci.nsIMsgCompType.New;
-        msgComposeService.OpenComposeWindowWithParams(null, params);
+        MailServices.compose.OpenComposeWindowWithParams(null, params);
       },
       sendPage: function (aWindow) {
         this.sendMessage({ subject: aWindow.document.title, body: aWindow.location.href });
