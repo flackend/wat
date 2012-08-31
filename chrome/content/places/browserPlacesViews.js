@@ -307,7 +307,12 @@ PlacesViewBase.prototype = {
             function (aStatus, aLivemark) {
               if (Components.isSuccessCode(aStatus)) {
                 element.setAttribute("livemark", "true");
-//@line 316 "e:\builds\moz2_slave\m-aurora-w32-ntly\build\browser\components\places\content\browserPlacesViews.js"
+                // OS X native menubar doesn't track list-style-images since
+                // it doesn't have a frame (bug 733415).  Thus enforce updating.
+                if (Services.appinfo.OS === "Darwin") {
+                  element.setAttribute("image", "");
+                  element.removeAttribute("image");
+                }
                 this.controller.cacheLivemarkInfo(aPlacesNode, aLivemark);
               }
             }.bind(this)
@@ -473,7 +478,12 @@ PlacesViewBase.prototype = {
       let menu = elt.parentNode;
       if (!menu.hasAttribute("livemark")) {
         menu.setAttribute("livemark", "true");
-//@line 490 "e:\builds\moz2_slave\m-aurora-w32-ntly\build\browser\components\places\content\browserPlacesViews.js"
+        // OS X native menubar doesn't track list-style-images since
+        // it doesn't have a frame (bug 733415).  Thus enforce updating.
+        if (Services.appinfo.OS === "Darwin") {
+          element.setAttribute("image", "");
+          element.removeAttribute("image");
+        }
       }
 
       PlacesUtils.livemarks.getLivemark(
@@ -995,9 +1005,9 @@ PlacesToolbar.prototype = {
         popup.setAttribute("placespopup", "true");
         button.appendChild(popup);
         popup._placesNode = PlacesUtils.asContainer(aChild);
-//@line 1012 "e:\builds\moz2_slave\m-aurora-w32-ntly\build\browser\components\places\content\browserPlacesViews.js"
-        popup.setAttribute("context", "placesContext");
-//@line 1014 "e:\builds\moz2_slave\m-aurora-w32-ntly\build\browser\components\places\content\browserPlacesViews.js"
+        if (Services.appinfo.OS === "Darwin") {
+          popup.setAttribute("context", "placesContext");
+        }
 
         this._domNodes.set(aChild, popup);
       }
@@ -1704,7 +1714,15 @@ function PlacesMenu(aPopupShowingEvent, aPlace) {
   this._addEventListeners(this._rootElt, ["popupshowing", "popuphidden"], true);
   this._addEventListeners(window, ["unload"], false);
 
-//@line 1729 "e:\builds\moz2_slave\m-aurora-w32-ntly\build\browser\components\places\content\browserPlacesViews.js"
+  // Must walk up to support views in sub-menus, like Bookmarks Toolbar menu.
+  if (Services.appinfo.OS === "Darwin") {
+    for (let elt = this._viewElt.parentNode; elt; elt = elt.parentNode) {
+      if (elt.localName == "menubar") {
+        this._nativeView = true;
+        break;
+      }
+    }
+  }
 
   PlacesViewBase.call(this, aPlace);
   this._onPopupShowing(aPopupShowingEvent);
