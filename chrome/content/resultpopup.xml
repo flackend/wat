@@ -8,11 +8,6 @@
            extends="chrome://global/content/bindings/autocomplete.xml#autocomplete-rich-result-popup">
     <implementation>
       <field name="_maxResults">0</field>
-      <field name="_bundle" readonly="true">
-        Components.classes["@mozilla.org/intl/stringbundle;1"]
-          .getService(Components.interfaces.nsIStringBundle)
-          .createBundle("chrome://wat/locale/places/places.properties");
-      </field>
       <field name="searchService" readonly="true">
         Components.classes["@mozilla.org/browser/search-service;1"].getService(Ci.nsIBrowserSearchService);
       </field>
@@ -39,8 +34,6 @@
         <parameter name="aType"/>
         <body><![CDATA[
           var label = aTitle + " " + aUrl;
-          if (aType != "favicon" && aType != "suggest")
-            label += " " + this._bundle.GetStringFromName(aType + "ResultLabel");
           return label;
         ]]></body>
       </method>

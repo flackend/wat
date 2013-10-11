@@ -55,7 +55,6 @@
       <preference id="insertRelatedAfterCurrent" name="extensions.wat.tabs.insertRelatedAfterCurrent" type="bool" instantApply="true"/>
       <preference id="middle-click" name="extensions.wat.middleClickIsNewTab" type="bool" instantApply="true"/>
       <preference id="feedaccount" name="extensions.wat.feedaccount" type="string" instantApply="true"/>
-      <preference id="enableHistory" name="places.history.enabled" type="bool" instantApply="true"/>
     </preferences>
     <vbox flex="1">
       <separator class="thin"/>
