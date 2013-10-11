@@ -44,7 +44,6 @@ let WAT = (function(){
   const searchService = Cc["@mozilla.org/browser/search-service;1"].getService(Ci.nsIBrowserSearchService);
   const WAT_FORWARD_CMD = "wat_cmd_browserGoForward",
         WAT_BACK_CMD    = "wat_cmd_browserGoBack",
-        WAT_BOOKMARK_PAGE_CMD = "wat_cmd_bookmarkThisPage",
         WAT_SEND_PAGE_CMD = "wat_cmd_sendpage",
         WAT_SEND_LINK_CMD = "wat_cmd_sendlink";
 
@@ -57,7 +56,6 @@ let WAT = (function(){
       switch(aCommand){
         case WAT_FORWARD_CMD:
         case WAT_BACK_CMD:
-        case WAT_BOOKMARK_PAGE_CMD:
         case WAT_SEND_PAGE_CMD:
         case WAT_SEND_LINK_CMD:
           return true;
@@ -76,17 +74,6 @@ let WAT = (function(){
             return forward ? browser.canGoForward : browser.canGoBack;
           else
             return false;
-        case WAT_BOOKMARK_PAGE_CMD:
-          let (browser = WAT.tabMail.getBrowserForSelectedTab()) {
-            switch (browser.currentURI.scheme) {
-              case "http":
-              case "https":
-              case "about":
-              case "chrome":
-                return true;
-            }
-            return false;
-          }
         case WAT_SEND_LINK_CMD:
           if (!gContextMenu)
             return false;
@@ -113,9 +100,6 @@ let WAT = (function(){
         case WAT_BACK_CMD:
           WAT.tabMail.getBrowserForSelectedTab().goBack();
           break;
-        case WAT_BOOKMARK_PAGE_CMD:
-          WAT.bookmarkPage(WAT.tabMail.getBrowserForSelectedTab());
-          break;
         case WAT_SEND_PAGE_CMD:
           WAT.mail.sendPage(WAT.tabMail.getBrowserForSelectedTab().contentWindow);
           break;
@@ -141,8 +125,6 @@ let WAT = (function(){
    */
   function init(){
     window.removeEventListener("load", init, false);
-
-    migrateBookmarks();
 
     self.tabMail.addEventListener("DOMLinkAdded", WAT.handlers.onDOMLinkAdded, false);
     self.tabMail.registerTabMonitor(WAT.handlers.feeds.tabMonitor);
@@ -250,35 +232,7 @@ let WAT = (function(){
   }
 
   function initToolbar () {
-    initPlacesToolbar();
     self.searchEngines.init();
-  }
-
-  function initPlacesToolbar () {
-    var placesToolbar = $("wat_PlacesToolbar");
-    if (placesToolbar && !placesToolbar._viewElt)
-      new PlacesToolbar("place:folder=TOOLBAR");
-  }
-
-  /**
-   * import old bookmarks data to Places
-   */
-  function migrateBookmarks () {
-    const WAT_PREFBRANCH_PAGES = "extensions.wat.pages";
-    const prefs = window.Services.prefs;
-    const BS = PlacesUtils.bookmarks;
-    if (!prefs.prefHasUserValue(WAT_PREFBRANCH_PAGES))
-      return;
-    let pageString = prefs.getComplexValue(WAT_PREFBRANCH_PAGES, Ci.nsIPrefLocalizedString).data;
-    let pages = JSON.parse(pageString);
-    if (!(pages instanceof Array))
-      return;
-
-    for (let i = 0, len = pages.length; i < len; i++) {
-      let page = pages[i];
-      BS.insertBookmark(BS.bookmarksMenuFolder, makeURI(page.url), BS.DEFAULT_INDEX, page.label);
-    }
-    prefs.clearUserPref(WAT_PREFBRANCH_PAGES);
   }
 
   /**
@@ -313,7 +267,6 @@ let WAT = (function(){
     [
       "wat_goForwardContextMenu",
       "wat_goBackContextMenu",
-      "wat_bookmarkThisPage",
       "wat_sendPageMenu",
     ].forEach(function(id){
         let elm = $(id);
@@ -585,18 +538,6 @@ let WAT = (function(){
           uri = searchService.currentEngine.getSubmission(text, null).uri;
 
         this.openTab(uri);
-      }
-    },
-    /**
-     * @param {String} aLeftPaneRoot
-     */
-    showPlacesOrganizer: function WAT_showPlacesOrganizer (aLeftPaneRoot) {
-      var organizer = Services.wm.getMostRecentWindow("Places:Organizer");
-      if (!organizer) {
-        openDialog("chrome://wat/content/places/places.xul", "", "chrome,toolbar=yes,dialog=no,resizable", aLeftPaneRoot);
-      } else {
-        organizer.PlacesOrganizer.selectLeftPaneQuery(aLeftPaneRoot);
-        organizer.focus();
       }
     },
     /**
@@ -1013,22 +954,6 @@ let WAT = (function(){
       },
     },
     // 2}}}
-    bookmarkPage: function WAT_BookmarkPage (aBrowser) {
-      var uri = aBrowser.currentURI,
-          webNav = aBrowser.webNavigation,
-          info = {
-            action: "add",
-            type: "bookmark",
-            uri: uri,
-          };
-      try {
-        info.title = webNav.document.title || uri.spec;
-        info.description = PlacesUIUtils.getDescriptionFromDocument(webNav.document);
-        info.charset = webNav.document.characterSet;
-      } catch (e) { }
-
-      return PlacesUIUtils.showBookmarkDialog(info, window, true);
-    },
     plugins: { },
   };
   window.addEventListener("load", init, false);

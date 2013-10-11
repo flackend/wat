@@ -9,6 +9,11 @@ Requirement
 
  * [Thunderbird >= 3.3](http://mozilla.org/thunderbird/)
 
+version 2.0
+-----------
+
+  * Remove bookmark feature.
+
 version 1.5
 -----------
 
